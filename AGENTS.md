@@ -64,7 +64,7 @@ user.email = qoobeehermes@worldcup2026
 
 | 组件 | 说明 |
 |------|------|
-| HTML 展示页 | nginx 8080 端口，路径 `/root/world-cup/` |
+| HTML 展示页 | Caddy 80端口 `/worldcup`，nginx 8080端口备用 |
 | GitHub | `Piaoxuemoli/world-cup` |
 | 服务器 | `43.156.230.108` |
 
@@ -73,7 +73,8 @@ user.email = qoobeehermes@worldcup2026
 ```bash
 cd ~/world-cup && git pull origin main
 cp 世界杯预测.html index.html
-nginx -s reload
+docker cp index.html colosseum-caddy-1:/srv/world-cup/index.html
+docker exec colosseum-caddy-1 caddy reload --config /etc/caddy/Caddyfile
 ```
 
 ## 工作区隔离
