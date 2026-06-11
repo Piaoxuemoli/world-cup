@@ -1,0 +1,2996 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI MODEL ARENA · 2026世界杯预测擂台赛</title>
+<style>
+  :root {
+    --green-dark: #0b3d2e;
+    --green: #1a6b4d;
+    --green-light: #2d8a66;
+    --green-lighter: #4db88a;
+    --gold: #d4a843;
+    --gold-light: #f0d78c;
+    --cream: #f8f6f0;
+    --white: #ffffff;
+    --dark: #1a1a2e;
+    --gray: #6b7280;
+    --gray-light: #e5e7eb;
+    --red: #dc2626;
+    --blue: #2563eb;
+    --card-bg: rgba(255,255,255,0.95);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    line-height: 1.6;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 50%, var(--green-light) 100%);
+    color: var(--white);
+    padding: 60px 20px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+    animation: float 20s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(-20px, -20px) rotate(1deg); }
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero h1 {
+    font-size: 2.8em;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  }
+  .hero .subtitle {
+    font-size: 1.2em;
+    color: var(--gold-light);
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+  .hero .meta {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    font-size: 0.95em;
+  }
+  .meta-item {
+    background: rgba(255,255,255,0.15);
+    padding: 8px 18px;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+  }
+
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    padding: 0 10px;
+    flex-wrap: wrap;
+  }
+  .nav-btn {
+    padding: 14px 22px;
+    border: none;
+    background: none;
+    color: var(--gray);
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: all 0.3s;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    color: var(--green);
+    border-bottom-color: var(--green);
+  }
+
+  .section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    display: none;
+  }
+  .section.active { display: block; }
+  .section-title {
+    font-size: 2em;
+    color: var(--green-dark);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title .icon {
+    width: 40px; height: 40px;
+    background: var(--green);
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3em;
+  }
+  .section-desc {
+    color: var(--gray);
+    margin-bottom: 30px;
+    font-size: 1em;
+  }
+
+  /* Bracket */
+  .bracket-container {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow-x: auto;
+  }
+  .bracket-note {
+    background: #fef3c7;
+    border-left: 4px solid var(--gold);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: #92400e;
+  }
+  .bracket-svg { min-width: 1200px; width: 100%; }
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    margin-bottom: 25px;
+    font-size: 0.92em;
+  }
+  .data-table th {
+    background: var(--green-dark);
+    color: white;
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+  }
+  .data-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--gray-light);
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: #f0fdf4; }
+
+  /* Team Cards - Full Squad */
+  .confederation { margin-bottom: 35px; }
+  .conf-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--green-lighter);
+  }
+  .conf-header h3 { font-size: 1.5em; color: var(--green-dark); }
+  .conf-count {
+    background: var(--green);
+    color: white;
+    padding: 4px 14px;
+    border-radius: 14px;
+    font-size: 0.85em;
+    font-weight: 700;
+  }
+  .teams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 18px;
+  }
+  .team-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    border: 1px solid var(--gray-light);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .team-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    border-color: var(--green-lighter);
+  }
+  .team-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .team-flag { font-size: 2.2em; }
+  .team-name { font-size: 1.2em; font-weight: 700; color: var(--dark); }
+  .team-badge {
+    margin-left: auto;
+    font-size: 0.75em;
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+  }
+  .badge-host { background: #dbeafe; color: var(--blue); }
+  .badge-champion { background: #fef3c7; color: #92400e; }
+  .badge-first { background: #fce7f3; color: #be185d; }
+  .team-meta {
+    display: flex;
+    gap: 15px;
+    font-size: 0.85em;
+    color: var(--gray);
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .team-meta span { background: #f3f4f6; padding: 3px 10px; border-radius: 6px; }
+  .team-source {
+    font-size: 0.78em;
+    color: var(--gray);
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+  .team-players {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+  }
+  .team-card.expanded .team-players {
+    max-height: 1200px;
+  }
+  .player-position-group {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--gray-light);
+  }
+  .position-label {
+    font-size: 0.8em;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .position-label .pos-count {
+    background: var(--green-lighter);
+    color: white;
+    padding: 1px 8px;
+    border-radius: 8px;
+    font-size: 0.75em;
+  }
+  .players-table {
+    width: 100%;
+    font-size: 0.82em;
+    border-collapse: collapse;
+  }
+  .players-table td {
+    padding: 4px 6px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .players-table tr:last-child td { border-bottom: none; }
+  .player-num {
+    color: var(--gray);
+    font-size: 0.85em;
+    width: 28px;
+  }
+  .player-name {
+    font-weight: 500;
+  }
+  .player-name .captain-mark {
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .player-club {
+    color: var(--gray);
+    font-size: 0.88em;
+    text-align: right;
+  }
+  .expand-hint {
+    text-align: center;
+    color: var(--green);
+    font-size: 0.82em;
+    margin-top: 10px;
+    font-weight: 600;
+    padding: 6px;
+    background: #f0fdf4;
+    border-radius: 8px;
+  }
+  .team-card.expanded .expand-hint { display: none; }
+
+  /* Format cards */
+  .format-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  .format-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+    border-top: 4px solid var(--green);
+  }
+  .format-card.highlight {
+    border-top-color: var(--gold);
+    background: linear-gradient(to bottom, #fff, #fefcf6);
+  }
+  .format-card h4 {
+    font-size: 1.15em;
+    color: var(--green-dark);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--gray-light);
+    font-size: 0.92em;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { color: var(--gray); }
+  .stat-value { font-weight: 700; color: var(--green-dark); }
+
+  /* Lottery */
+  .lottery-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    background: var(--white);
+    padding: 5px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    flex-wrap: wrap;
+  }
+  .lottery-tab {
+    padding: 10px 18px;
+    border: none;
+    background: none;
+    color: var(--gray);
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: all 0.3s;
+  }
+  .lottery-tab:hover, .lottery-tab.active {
+    background: var(--green);
+    color: white;
+  }
+  .lottery-content { display: none; }
+  .lottery-content.active { display: block; }
+  .method-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+    margin-bottom: 20px;
+  }
+  .method-card h4 {
+    color: var(--green-dark);
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--gold);
+  }
+  .method-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .method-item {
+    background: #f0fdf4;
+    padding: 14px;
+    border-radius: 10px;
+    border-left: 4px solid var(--green);
+  }
+  .method-item h5 { color: var(--green-dark); margin-bottom: 6px; font-size: 1em; }
+  .method-item p { font-size: 0.85em; color: var(--gray); }
+  .odds-formula {
+    background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+    border: 2px solid var(--green-lighter);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    margin: 20px 0;
+  }
+  .formula {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: var(--green-dark);
+    font-family: 'Courier New', monospace;
+  }
+  .warning-box {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    color: #991b1b;
+  }
+  .info-box {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    color: #1e40af;
+  }
+  .special-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold), #f59e0b);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-size: 0.75em;
+    font-weight: 700;
+    margin-left: 6px;
+  }
+
+  /* Sources Section */
+  .sources-section {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    margin-top: 30px;
+  }
+  .sources-section h3 {
+    color: var(--green-dark);
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 10px;
+    font-size: 0.85em;
+  }
+  .source-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #f9fafb;
+    border-radius: 8px;
+    border-left: 3px solid var(--green-lighter);
+  }
+  .source-item .s-name { font-weight: 600; color: var(--dark); }
+  .source-item .s-url { color: var(--gray); font-size: 0.9em; }
+  .source-item .s-date { color: var(--green); font-size: 0.85em; margin-left: auto; white-space: nowrap; }
+
+  /* Footer */
+  .footer {
+    background: var(--dark);
+    color: var(--gray-light);
+    padding: 40px 20px;
+    margin-top: 50px;
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .footer h4 { color: var(--gold-light); margin-bottom: 12px; font-size: 1.1em; }
+  .footer p { margin-bottom: 8px; font-size: 0.88em; line-height: 1.7; }
+  .footer a { color: var(--gold-light); text-decoration: none; }
+  .footer .disclaimer {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #374151;
+    font-size: 0.82em;
+    color: #9ca3af;
+  }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--green-light); border-radius: 4px; }
+
+  /* Subsection title (for merged tabs) */
+  .subsection-title {
+    font-size: 1.5em;
+    color: var(--green-dark);
+    margin: 35px 0 10px;
+    padding-top: 20px;
+    border-top: 2px dashed var(--gray-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .subsection-title:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+
+  /* ===== AI Leaderboard ===== */
+  .ai-lb-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
+  }
+  .ai-lb-header {
+    background: linear-gradient(135deg, var(--green-dark), var(--green));
+    color: white;
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ai-lb-header h3 { font-size: 1.15em; }
+  .ai-lb-badge {
+    background: rgba(255,255,255,0.2);
+    padding: 4px 14px;
+    border-radius: 12px;
+    font-size: 0.85em;
+  }
+  .ai-lb-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92em;
+  }
+  .ai-lb-table th {
+    background: #f8faf8;
+    color: var(--gray);
+    padding: 11px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.85em;
+    letter-spacing: 0.3px;
+    border-bottom: 2px solid var(--gray-light);
+  }
+  .ai-lb-table td {
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--gray-light);
+    vertical-align: middle;
+  }
+  .ai-lb-table tr:last-child td { border-bottom: none; }
+  .ai-lb-table tr:hover td { background: #f0fdf4; }
+  .ai-rank { font-size: 1.3em; font-weight: 800; text-align: center; width: 50px; }
+  .ai-rank-1 { color: #f59e0b; }
+  .ai-rank-2 { color: #94a3b8; }
+  .ai-rank-3 { color: #b45309; }
+  .ai-model-cell { display: flex; align-items: center; gap: 10px; }
+  .ai-avatar {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.8em;
+    flex-shrink: 0;
+  }
+  .ai-model-name { font-weight: 700; font-size: 0.95em; }
+  .ai-model-sub { font-size: 0.75em; color: var(--gray); }
+  .ai-asset { font-weight: 700; color: var(--green-dark); font-size: 1.05em; }
+  .ai-pos { color: #16a34a; font-weight: 700; }
+  .ai-neg { color: var(--red); font-weight: 700; }
+  .ai-zero { color: var(--gray); }
+  .ai-roi {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    font-weight: 700;
+  }
+  .ai-roi-pos { background: #dcfce7; color: #16a34a; }
+  .ai-roi-neg { background: #fee2e2; color: #dc2626; }
+  .ai-roi-zero { background: #f3f4f6; color: var(--gray); }
+
+  /* Round nav */
+  .ai-round-nav {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+    background: var(--white);
+    padding: 6px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .ai-round-btn {
+    padding: 10px 18px;
+    border: none;
+    background: none;
+    color: var(--gray);
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.88em;
+    transition: all 0.3s;
+  }
+  .ai-round-btn:hover { background: #f0fdf4; color: var(--green); }
+  .ai-round-btn.active { background: var(--green); color: white; }
+  .ai-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+  .ai-dot-done { background: #16a34a; }
+  .ai-dot-live { background: var(--gold); animation: pulse 1.5s infinite; }
+  .ai-dot-wait { background: var(--gray-light); }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  /* Round info bar */
+  .ai-round-bar {
+    background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .ai-round-bar-title { font-weight: 700; color: var(--green-dark); font-size: 1.1em; }
+  .ai-round-bar-meta { font-size: 0.85em; color: var(--gray); }
+  .ai-status {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 8px;
+    font-size: 0.78em;
+    font-weight: 700;
+  }
+  .ai-status-done { background: #dcfce7; color: #16a34a; }
+  .ai-status-live { background: #fef3c7; color: #92400e; }
+  .ai-status-wait { background: #f3f4f6; color: var(--gray); }
+
+  /* Prediction cards */
+  .ai-pred-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 18px;
+    margin-bottom: 30px;
+  }
+  .ai-pred-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    border: 1px solid var(--gray-light);
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .ai-pred-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  }
+  .ai-pred-header {
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--gray-light);
+  }
+  .ai-pred-header .ai-avatar { width: 40px; height: 40px; font-size: 0.9em; border-radius: 12px; }
+  .ai-pred-info { flex: 1; }
+  .ai-pred-name { font-weight: 700; font-size: 1em; }
+  .ai-pred-sub { font-size: 0.78em; color: var(--gray); }
+  .ai-pred-asset { text-align: right; }
+  .ai-pred-asset-val { font-size: 1.15em; font-weight: 800; color: var(--green-dark); }
+  .ai-pred-asset-lbl { font-size: 0.72em; color: var(--gray); }
+  .ai-pred-analysis {
+    padding: 12px 18px;
+    background: #f8faf8;
+    border-bottom: 1px solid var(--gray-light);
+  }
+  .ai-pred-analysis-title {
+    font-size: 0.76em;
+    color: var(--gray);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .ai-pred-analysis-text { font-size: 0.88em; color: var(--dark); line-height: 1.6; }
+  .ai-pred-strategy {
+    padding: 8px 18px 0;
+    font-size: 0.82em;
+    color: var(--green);
+    font-weight: 600;
+  }
+  .ai-pred-bets { padding: 12px 18px; }
+  .ai-bet-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.88em;
+  }
+  .ai-bet-item:last-child { border-bottom: none; }
+  .ai-bet-match { flex: 1; min-width: 0; }
+  .ai-bet-teams { font-weight: 600; color: var(--dark); margin-bottom: 2px; }
+  .ai-bet-detail { font-size: 0.82em; color: var(--gray); }
+  .ai-bet-pick { text-align: center; min-width: 65px; }
+  .ai-bet-pick-lbl { font-size: 0.72em; color: var(--gray); }
+  .ai-bet-pick-val { font-weight: 700; color: var(--green-dark); }
+  .ai-bet-amt { text-align: right; min-width: 55px; }
+  .ai-bet-amt-val { font-weight: 700; color: var(--dark); }
+  .ai-bet-odds { font-size: 0.75em; color: var(--gray); }
+  .ai-bet-tag {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 6px;
+    font-size: 0.72em;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .ai-tag-win { background: #dcfce7; color: #16a34a; }
+  .ai-tag-loss { background: #fee2e2; color: #dc2626; }
+  .ai-tag-pending { background: #fef3c7; color: #92400e; }
+  .ai-pred-results {
+    padding: 12px 18px;
+    border-top: 2px solid var(--gray-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .ai-result-item { text-align: center; min-width: 55px; }
+  .ai-result-lbl { font-size: 0.72em; color: var(--gray); }
+  .ai-result-val { font-weight: 700; font-size: 1em; }
+  .ai-no-bets {
+    padding: 20px;
+    text-align: center;
+    color: var(--gray);
+    font-size: 0.9em;
+    font-style: italic;
+  }
+
+  /* Model gallery */
+  .ai-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+  .ai-gallery-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    border: 1px solid var(--gray-light);
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: all 0.3s;
+  }
+  .ai-gallery-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  }
+  .ai-gallery-avatar {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 1.05em;
+    flex-shrink: 0;
+  }
+  .ai-gallery-info { flex: 1; }
+  .ai-gallery-name { font-weight: 700; font-size: 1.05em; margin-bottom: 2px; }
+  .ai-gallery-ctx { font-size: 0.8em; color: var(--gray); margin-bottom: 8px; }
+  .ai-gallery-stats { display: flex; gap: 8px; flex-wrap: wrap; font-size: 0.82em; }
+  .ai-gallery-stat {
+    background: #f3f4f6;
+    padding: 3px 10px;
+    border-radius: 6px;
+    color: var(--gray);
+  }
+  .ai-gallery-stat strong { color: var(--green-dark); }
+
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 1.8em; }
+    .nav-btn { padding: 10px 14px; font-size: 0.85em; }
+    .teams-grid { grid-template-columns: 1fr; }
+    .section-title { font-size: 1.5em; }
+    .bracket-svg { min-width: 900px; }
+    .ai-pred-grid { grid-template-columns: 1fr; }
+    .ai-gallery { grid-template-columns: 1fr; }
+    .ai-lb-table { font-size: 0.82em; }
+    .ai-lb-table th, .ai-lb-table td { padding: 8px 6px; }
+    .ai-model-cell .ai-avatar { width: 28px; height: 28px; font-size: 0.7em; }
+    .subsection-title { font-size: 1.2em; }
+  }
+
+  /* ===== Purchase Guide ===== */
+  .pg-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .pg-stat-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    text-align: center;
+    border-top: 4px solid var(--green);
+  }
+  .pg-stat-card.warn { border-top-color: var(--gold); }
+  .pg-stat-card.danger { border-top-color: var(--red); }
+  .pg-stat-val { font-size: 2em; font-weight: 800; color: var(--green-dark); }
+  .pg-stat-card.warn .pg-stat-val { color: #92400e; }
+  .pg-stat-card.danger .pg-stat-val { color: var(--red); }
+  .pg-stat-lbl { font-size: 0.88em; color: var(--gray); margin-top: 4px; }
+
+  .pg-ticket-group { margin-bottom: 30px; }
+  .pg-group-title {
+    font-size: 1.3em; color: var(--green-dark); font-weight: 700;
+    margin-bottom: 14px; padding-bottom: 8px;
+    border-bottom: 3px solid var(--green-lighter);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .pg-group-title .pg-badge {
+    background: var(--green); color: white; padding: 3px 12px;
+    border-radius: 10px; font-size: 0.65em; font-weight: 700;
+  }
+  .pg-ticket {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-left: 5px solid var(--green);
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  .pg-ticket.problem { border-left-color: var(--red); background: #fef2f2; }
+  .pg-ticket-num {
+    background: var(--green-dark); color: white; width: 32px; height: 32px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.85em; flex-shrink: 0;
+  }
+  .pg-ticket.problem .pg-ticket-num { background: var(--red); }
+  .pg-ticket-body { flex: 1; min-width: 200px; }
+  .pg-ticket-models {
+    font-size: 0.78em; color: var(--gray); margin-bottom: 3px;
+  }
+  .pg-ticket-models span {
+    display: inline-block; background: #f3f4f6; padding: 1px 8px;
+    border-radius: 4px; margin-right: 4px; margin-bottom: 2px;
+  }
+  .pg-ticket-matches { font-weight: 600; color: var(--dark); font-size: 0.95em; }
+  .pg-ticket-detail { font-size: 0.82em; color: var(--gray); margin-top: 2px; }
+  .pg-ticket-amount {
+    text-align: right; flex-shrink: 0; min-width: 80px;
+  }
+  .pg-ticket-amt-val { font-size: 1.3em; font-weight: 800; color: var(--green-dark); }
+  .pg-ticket.problem .pg-ticket-amt-val { color: var(--red); }
+  .pg-ticket-mult { font-size: 0.78em; color: var(--gray); }
+  .pg-ticket-say {
+    background: #f0fdf4; border: 1px dashed var(--green-lighter);
+    border-radius: 8px; padding: 6px 12px; margin-top: 6px;
+    font-size: 0.82em; color: var(--green-dark); font-family: 'Courier New', monospace;
+  }
+  .pg-ticket.problem .pg-ticket-say { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
+
+  .pg-instructions {
+    background: var(--card-bg); border-radius: 14px; padding: 24px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.07); margin-top: 30px;
+  }
+  .pg-instructions h3 { color: var(--green-dark); margin-bottom: 12px; font-size: 1.15em; }
+  .pg-instructions ol { padding-left: 20px; }
+  .pg-instructions li { margin-bottom: 8px; font-size: 0.92em; color: var(--dark); }
+  .pg-instructions code {
+    background: #f3f4f6; padding: 2px 6px; border-radius: 4px;
+    font-size: 0.9em; color: var(--green-dark);
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="hero-content">
+    <h1>AI MODEL ARENA</h1>
+    <p class="subtitle">2026美加墨世界杯 · AI模型预测擂台赛</p>
+    <p style="font-size:1em;opacity:0.9;margin-bottom:15px;">6大AI模型 × 各100元本金 × 竞彩足球实盘 × 收益排名</p>
+    <div class="meta">
+      <span class="meta-item">🤖 GPT-5.5 / GLM-5.1 / Qwen-3.7</span>
+      <span class="meta-item">🧠 Deepseek / Mimo / Kimi</span>
+      <span class="meta-item">💰 各100元</span>
+      <span class="meta-item">🎯 竞彩实盘</span>
+      <span class="meta-item">🏆 谁是预测之王</span>
+    </div>
+  </div>
+</header>
+
+<!-- Navigation -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="showSection('leaderboard',this)">🤖 预测排行榜</button>
+  <button class="nav-btn" onclick="showSection('rounds',this)">🔄 逐轮分析</button>
+  <button class="nav-btn" onclick="showSection('purchase',this)">🎫 购彩清单</button>
+  <button class="nav-btn" onclick="showSection('contestants',this)">⚔️ 参赛选手</button>
+  <button class="nav-btn" onclick="showSection('bracket',this)">🌍 参赛队伍与对阵</button>
+  <button class="nav-btn" onclick="showSection('format',this)">📋 赛制与体彩</button>
+  <button class="nav-btn" onclick="showSection('sources',this)">📚 数据来源</button>
+</nav>
+
+<!-- ============ SECTION 1: BRACKET ============ -->
+<section id="bracket" class="section">
+  <h2 class="section-title"><span class="icon">🌍</span>参赛队伍与对阵</h2>
+  <p class="section-desc">2026美加墨世界杯48支参赛队伍完整名单及淘汰赛进位图。</p>
+
+  <h3 class="subsection-title">📋 小组赛分组与赛程（72场）</h3>
+  <p class="section-desc">2026世界杯12个小组（A-L组）每组4队，进行单循环赛（每队3场）。小组前二 + 8个最佳第三晋级32强淘汰赛。北京时间 = 美东时间 + 12小时。</p>
+
+  <div style="overflow-x:auto;">
+  <table class="data-table" id="group-stage-table">
+    <thead><tr><th>场</th><th>日期</th><th>北京</th><th>组</th><th>主队</th><th>比分</th><th>客队</th><th>城市</th></tr></thead>
+    <tbody>
+      <!-- MD1 -->
+      <tr><td>M1</td><td>6/11</td><td>6/12 03:00</td><td>A</td><td>🇲🇽 墨西哥</td><td>—</td><td>🇿🇦 南非</td><td>墨西哥城</td></tr>
+      <tr><td>M2</td><td>6/11</td><td>6/12 06:00</td><td>A</td><td>🇰🇷 韩国</td><td>—</td><td>🇨🇿 捷克</td><td>蒙特雷</td></tr>
+      <tr><td>M3</td><td>6/12</td><td>6/13 03:00</td><td>B</td><td>🇨🇦 加拿大</td><td>—</td><td>🇧🇦 波黑</td><td>多伦多</td></tr>
+      <tr><td>M4</td><td>6/12</td><td>6/13 06:00</td><td>B</td><td>🇶🇦 卡塔尔</td><td>—</td><td>🇨🇭 瑞士</td><td>温哥华</td></tr>
+      <tr><td>M5</td><td>6/12</td><td>6/13 09:00</td><td>D</td><td>🇺🇸 美国</td><td>—</td><td>🇵🇾 巴拉圭</td><td>洛杉矶</td></tr>
+      <tr><td>M6</td><td>6/13</td><td>6/14 00:00</td><td>D</td><td>🇦🇺 澳大利亚</td><td>—</td><td>🇹🇷 土耳其</td><td>迈阿密</td></tr>
+      <tr><td>M7</td><td>6/13</td><td>6/14 03:00</td><td>C</td><td>🇧🇷 巴西</td><td>—</td><td>🇲🇦 摩洛哥</td><td>亚特兰大</td></tr>
+      <tr><td>M8</td><td>6/13</td><td>6/14 06:00</td><td>C</td><td>🇭🇹 海地</td><td>—</td><td>🏴󠁧󠁢󠁳󠁣󠁴󠁿 苏格兰</td><td>波士顿</td></tr>
+      <tr><td>M9</td><td>6/14</td><td>6/15 00:00</td><td>E</td><td>🇩🇪 德国</td><td>—</td><td>🇨🇼 库拉索</td><td>达拉斯</td></tr>
+      <tr><td>M10</td><td>6/14</td><td>6/15 03:00</td><td>E</td><td>🇨🇮 科特迪瓦</td><td>—</td><td>🇪🇨 厄瓜多尔</td><td>堪萨斯城</td></tr>
+      <tr><td>M11</td><td>6/14</td><td>6/15 06:00</td><td>F</td><td>🇳🇱 荷兰</td><td>—</td><td>🇯🇵 日本</td><td>西雅图</td></tr>
+      <tr><td>M12</td><td>6/14</td><td>6/15 09:00</td><td>F</td><td>🇸🇪 瑞典</td><td>—</td><td>🇹🇳 突尼斯</td><td>休斯顿</td></tr>
+      <tr><td>M13</td><td>6/15</td><td>6/16 00:00</td><td>H</td><td>🇪🇸 西班牙</td><td>—</td><td>🇨🇻 佛得角</td><td>纽约/新泽西</td></tr>
+      <tr><td>M14</td><td>6/15</td><td>6/16 03:00</td><td>H</td><td>🇸🇦 沙特</td><td>—</td><td>🇺🇾 乌拉圭</td><td>费城</td></tr>
+      <tr><td>M15</td><td>6/15</td><td>6/16 06:00</td><td>G</td><td>🇧🇪 比利时</td><td>—</td><td>🇪🇬 埃及</td><td>多伦多</td></tr>
+      <tr><td>M16</td><td>6/15</td><td>6/16 09:00</td><td>G</td><td>🇮🇷 伊朗</td><td>—</td><td>🇳🇿 新西兰</td><td>温哥华</td></tr>
+      <tr><td>M17</td><td>6/16</td><td>6/17 00:00</td><td>I</td><td>🇫🇷 法国</td><td>—</td><td>🇸🇳 塞内加尔</td><td>洛杉矶</td></tr>
+      <tr><td>M18</td><td>6/16</td><td>6/17 03:00</td><td>I</td><td>🇮🇶 伊拉克</td><td>—</td><td>🇳🇴 挪威</td><td>波士顿</td></tr>
+      <tr><td>M19</td><td>6/16</td><td>6/17 06:00</td><td>J</td><td>🇦🇷 阿根廷</td><td>—</td><td>🇩🇿 阿尔及利亚</td><td>迈阿密</td></tr>
+      <tr><td>M20</td><td>6/16</td><td>6/17 09:00</td><td>J</td><td>🇦🇹 奥地利</td><td>—</td><td>🇯🇴 约旦</td><td>亚特兰大</td></tr>
+      <tr><td>M21</td><td>6/17</td><td>6/18 00:00</td><td>K</td><td>🇵🇹 葡萄牙</td><td>—</td><td>🇨🇩 民主刚果</td><td>达拉斯</td></tr>
+      <tr><td>M22</td><td>6/17</td><td>6/18 03:00</td><td>K</td><td>🇺🇿 乌兹别克</td><td>—</td><td>🇨🇴 哥伦比亚</td><td>堪萨斯城</td></tr>
+      <tr><td>M23</td><td>6/17</td><td>6/18 06:00</td><td>L</td><td>🏴󠁧󠁢󠁥󠁮󠁧󠁿 英格兰</td><td>—</td><td>🇭🇷 克罗地亚</td><td>西雅图</td></tr>
+      <tr><td>M24</td><td>6/17</td><td>6/18 09:00</td><td>L</td><td>🇬🇭 加纳</td><td>—</td><td>🇵🇦 巴拿马</td><td>休斯顿</td></tr>
+      <!-- MD2 -->
+      <tr style="background:#f0fdf4;"><td>M25</td><td>6/18</td><td>6/19 00:00</td><td>A</td><td>🇨🇿 捷克</td><td>—</td><td>🇿🇦 南非</td><td>蒙特雷</td></tr>
+      <tr style="background:#f0fdf4;"><td>M26</td><td>6/18</td><td>6/19 03:00</td><td>A</td><td>🇲🇽 墨西哥</td><td>—</td><td>🇰🇷 韩国</td><td>墨西哥城</td></tr>
+      <tr style="background:#f0fdf4;"><td>M27</td><td>6/18</td><td>6/19 06:00</td><td>B</td><td>🇨🇭 瑞士</td><td>—</td><td>🇧🇦 波黑</td><td>温哥华</td></tr>
+      <tr style="background:#f0fdf4;"><td>M28</td><td>6/18</td><td>6/19 09:00</td><td>B</td><td>🇨🇦 加拿大</td><td>—</td><td>🇶🇦 卡塔尔</td><td>多伦多</td></tr>
+      <tr style="background:#f0fdf4;"><td>M29</td><td>6/19</td><td>6/20 00:00</td><td>D</td><td>🇺🇸 美国</td><td>—</td><td>🇦🇺 澳大利亚</td><td>纽约/新泽西</td></tr>
+      <tr style="background:#f0fdf4;"><td>M30</td><td>6/19</td><td>6/20 03:00</td><td>D</td><td>🇹🇷 土耳其</td><td>—</td><td>🇵🇾 巴拉圭</td><td>费城</td></tr>
+      <tr style="background:#f0fdf4;"><td>M31</td><td>6/19</td><td>6/20 06:00</td><td>C</td><td>🇧🇷 巴西</td><td>—</td><td>🇭🇹 海地</td><td>迈阿密</td></tr>
+      <tr style="background:#f0fdf4;"><td>M32</td><td>6/19</td><td>6/20 09:00</td><td>C</td><td>🏴󠁧󠁢󠁳󠁣󠁴󠁿 苏格兰</td><td>—</td><td>🇲🇦 摩洛哥</td><td>波士顿</td></tr>
+      <tr style="background:#f0fdf4;"><td>M33</td><td>6/20</td><td>6/21 00:00</td><td>E</td><td>🇩🇪 德国</td><td>—</td><td>🇨🇮 科特迪瓦</td><td>堪萨斯城</td></tr>
+      <tr style="background:#f0fdf4;"><td>M34</td><td>6/20</td><td>6/21 03:00</td><td>E</td><td>🇪🇨 厄瓜多尔</td><td>—</td><td>🇨🇼 库拉索</td><td>达拉斯</td></tr>
+      <tr style="background:#f0fdf4;"><td>M35</td><td>6/20</td><td>6/21 06:00</td><td>F</td><td>🇳🇱 荷兰</td><td>—</td><td>🇸🇪 瑞典</td><td>休斯顿</td></tr>
+      <tr style="background:#f0fdf4;"><td>M36</td><td>6/20</td><td>6/21 09:00</td><td>F</td><td>🇯🇵 日本</td><td>—</td><td>🇹🇳 突尼斯</td><td>西雅图</td></tr>
+      <tr style="background:#f0fdf4;"><td>M37</td><td>6/21</td><td>6/22 00:00</td><td>G</td><td>🇧🇪 比利时</td><td>—</td><td>🇮🇷 伊朗</td><td>温哥华</td></tr>
+      <tr style="background:#f0fdf4;"><td>M38</td><td>6/21</td><td>6/22 03:00</td><td>G</td><td>🇳🇿 新西兰</td><td>—</td><td>🇪🇬 埃及</td><td>多伦多</td></tr>
+      <tr style="background:#f0fdf4;"><td>M39</td><td>6/21</td><td>6/22 06:00</td><td>H</td><td>🇪🇸 西班牙</td><td>—</td><td>🇸🇦 沙特</td><td>洛杉矶</td></tr>
+      <tr style="background:#f0fdf4;"><td>M40</td><td>6/21</td><td>6/22 09:00</td><td>H</td><td>🇺🇾 乌拉圭</td><td>—</td><td>🇨🇻 佛得角</td><td>费城</td></tr>
+      <tr style="background:#f0fdf4;"><td>M41</td><td>6/22</td><td>6/23 00:00</td><td>I</td><td>🇫🇷 法国</td><td>—</td><td>🇮🇶 伊拉克</td><td>纽约/新泽西</td></tr>
+      <tr style="background:#f0fdf4;"><td>M42</td><td>6/22</td><td>6/23 03:00</td><td>I</td><td>🇳🇴 挪威</td><td>—</td><td>🇸🇳 塞内加尔</td><td>波士顿</td></tr>
+      <tr style="background:#f0fdf4;"><td>M43</td><td>6/22</td><td>6/23 06:00</td><td>J</td><td>🇦🇷 阿根廷</td><td>—</td><td>🇦🇹 奥地利</td><td>亚特兰大</td></tr>
+      <tr style="background:#f0fdf4;"><td>M44</td><td>6/22</td><td>6/23 09:00</td><td>J</td><td>🇯🇴 约旦</td><td>—</td><td>🇩🇿 阿尔及利亚</td><td>迈阿密</td></tr>
+      <tr style="background:#f0fdf4;"><td>M45</td><td>6/23</td><td>6/24 00:00</td><td>K</td><td>🇵🇹 葡萄牙</td><td>—</td><td>🇺🇿 乌兹别克</td><td>达拉斯</td></tr>
+      <tr style="background:#f0fdf4;"><td>M46</td><td>6/23</td><td>6/24 03:00</td><td>K</td><td>🇨🇴 哥伦比亚</td><td>—</td><td>🇨🇩 民主刚果</td><td>堪萨斯城</td></tr>
+      <tr style="background:#f0fdf4;"><td>M47</td><td>6/23</td><td>6/24 06:00</td><td>L</td><td>🏴󠁧󠁢󠁥󠁮󠁧󠁿 英格兰</td><td>—</td><td>🇬🇭 加纳</td><td>休斯顿</td></tr>
+      <tr style="background:#f0fdf4;"><td>M48</td><td>6/23</td><td>6/24 09:00</td><td>L</td><td>🇵🇦 巴拿马</td><td>—</td><td>🇭🇷 克罗地亚</td><td>西雅图</td></tr>
+      <!-- MD3 (simultaneous within group) -->
+      <tr style="background:#fef9c3;"><td>M49</td><td>6/24</td><td>6/25 04:00</td><td>B</td><td>🇧🇦 波黑</td><td>—</td><td>🇶🇦 卡塔尔</td><td>温哥华</td></tr>
+      <tr style="background:#fef9c3;"><td>M50</td><td>6/24</td><td>6/25 04:00</td><td>B</td><td>🇨🇭 瑞士</td><td>—</td><td>🇨🇦 加拿大</td><td>多伦多</td></tr>
+      <tr style="background:#fef9c3;"><td>M51</td><td>6/24</td><td>6/25 08:00</td><td>D</td><td>🇵🇾 巴拉圭</td><td>—</td><td>🇦🇺 澳大利亚</td><td>费城</td></tr>
+      <tr style="background:#fef9c3;"><td>M52</td><td>6/24</td><td>6/25 10:00</td><td>D</td><td>🇹🇷 土耳其</td><td>—</td><td>🇺🇸 美国</td><td>洛杉矶</td></tr>
+      <tr style="background:#fef9c3;"><td>M53</td><td>6/25</td><td>6/26 04:00</td><td>A</td><td>🇿🇦 南非</td><td>—</td><td>🇰🇷 韩国</td><td>蒙特雷</td></tr>
+      <tr style="background:#fef9c3;"><td>M54</td><td>6/25</td><td>6/26 04:00</td><td>A</td><td>🇨🇿 捷克</td><td>—</td><td>🇲🇽 墨西哥</td><td>墨西哥城</td></tr>
+      <tr style="background:#fef9c3;"><td>M55</td><td>6/25</td><td>6/26 07:00</td><td>C</td><td>🇲🇦 摩洛哥</td><td>—</td><td>🇭🇹 海地</td><td>波士顿</td></tr>
+      <tr style="background:#fef9c3;"><td>M56</td><td>6/25</td><td>6/26 07:00</td><td>C</td><td>🏴󠁧󠁢󠁳󠁣󠁴󠁿 苏格兰</td><td>—</td><td>🇧🇷 巴西</td><td>迈阿密</td></tr>
+      <tr style="background:#fef9c3;"><td>M57</td><td>6/25</td><td>6/26 10:00</td><td>F</td><td>🇯🇵 日本</td><td>—</td><td>🇸🇪 瑞典</td><td>西雅图</td></tr>
+      <tr style="background:#fef9c3;"><td>M58</td><td>6/25</td><td>6/26 10:00</td><td>F</td><td>🇹🇳 突尼斯</td><td>—</td><td>🇳🇱 荷兰</td><td>休斯顿</td></tr>
+      <tr style="background:#fef9c3;"><td>M59</td><td>6/26</td><td>6/27 04:00</td><td>E</td><td>🇨🇼 库拉索</td><td>—</td><td>🇨🇮 科特迪瓦</td><td>堪萨斯城</td></tr>
+      <tr style="background:#fef9c3;"><td>M60</td><td>6/26</td><td>6/27 04:00</td><td>E</td><td>🇪🇨 厄瓜多尔</td><td>—</td><td>🇩🇪 德国</td><td>达拉斯</td></tr>
+      <tr style="background:#fef9c3;"><td>M61</td><td>6/26</td><td>6/27 07:00</td><td>H</td><td>🇨🇻 佛得角</td><td>—</td><td>🇸🇦 沙特</td><td>费城</td></tr>
+      <tr style="background:#fef9c3;"><td>M62</td><td>6/26</td><td>6/27 07:00</td><td>H</td><td>🇺🇾 乌拉圭</td><td>—</td><td>🇪🇸 西班牙</td><td>纽约/新泽西</td></tr>
+      <tr style="background:#fef9c3;"><td>M63</td><td>6/26</td><td>6/27 10:00</td><td>G</td><td>🇪🇬 埃及</td><td>—</td><td>🇮🇷 伊朗</td><td>多伦多</td></tr>
+      <tr style="background:#fef9c3;"><td>M64</td><td>6/26</td><td>6/27 10:00</td><td>G</td><td>🇳🇿 新西兰</td><td>—</td><td>🇧🇪 比利时</td><td>温哥华</td></tr>
+      <tr style="background:#fef9c3;"><td>M65</td><td>6/27</td><td>6/28 04:00</td><td>I</td><td>🇸🇳 塞内加尔</td><td>—</td><td>🇮🇶 伊拉克</td><td>波士顿</td></tr>
+      <tr style="background:#fef9c3;"><td>M66</td><td>6/27</td><td>6/28 04:00</td><td>I</td><td>🇳🇴 挪威</td><td>—</td><td>🇫🇷 法国</td><td>洛杉矶</td></tr>
+      <tr style="background:#fef9c3;"><td>M67</td><td>6/27</td><td>6/28 07:00</td><td>J</td><td>🇩🇿 阿尔及利亚</td><td>—</td><td>🇦🇹 奥地利</td><td>亚特兰大</td></tr>
+      <tr style="background:#fef9c3;"><td>M68</td><td>6/27</td><td>6/28 07:00</td><td>J</td><td>🇯🇴 约旦</td><td>—</td><td>🇦🇷 阿根廷</td><td>迈阿密</td></tr>
+      <tr style="background:#fef9c3;"><td>M69</td><td>6/27</td><td>6/28 10:00</td><td>K</td><td>🇨🇩 民主刚果</td><td>—</td><td>🇺🇿 乌兹别克</td><td>堪萨斯城</td></tr>
+      <tr style="background:#fef9c3;"><td>M70</td><td>6/27</td><td>6/28 10:00</td><td>K</td><td>🇨🇴 哥伦比亚</td><td>—</td><td>🇵🇹 葡萄牙</td><td>达拉斯</td></tr>
+      <tr style="background:#fef9c3;"><td>M71</td><td>6/27</td><td>6/28 04:00</td><td>L</td><td>🇭🇷 克罗地亚</td><td>—</td><td>🇬🇭 加纳</td><td>休斯顿</td></tr>
+      <tr style="background:#fef9c3;"><td>M72</td><td>6/27</td><td>6/28 04:00</td><td>L</td><td>🇵🇦 巴拿马</td><td>—</td><td>🏴󠁧󠁢󠁥󠁮󠁧󠁿 英格兰</td><td>西雅图</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="section-desc" style="margin-top:8px;font-size:0.85em;color:var(--gray);">🟢 绿色行=第2轮 · 🟡 黄色行=第3轮（同组同时开赛）· 北京时间 = UTC+8 · 部分开球时间可能微调</p>
+
+  <h3 class="subsection-title">📊 淘汰赛进位图（32强 → 决赛）</h3>
+  <p class="section-desc">2026世界杯首创32强淘汰赛（1/16决赛），以下进位图展示完整的淘汰赛路径。绿色实线框=固定对阵，虚线框=涉及"最佳小组第三"的待定对阵。</p>
+
+  <div class="bracket-container">
+    <div class="bracket-note">
+      <strong>💡 说明：</strong>小组赛12个小组（A-L组）前二名 + 8个成绩最好的小组第三共32队晋级。灰色虚线框表示对阵需根据"最佳小组第三"的产生情况确定。
+    </div>
+    <svg class="bracket-svg" viewBox="0 0 1400 850" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a6b4d"/><stop offset="100%" stop-color="#2d8a66"/></linearGradient>
+        <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d4a843"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
+      </defs>
+
+      <text x="700" y="25" text-anchor="middle" font-size="18" font-weight="bold" fill="#0b3d2e">2026世界杯淘汰赛完整进位图</text>
+
+      <text x="100" y="55" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a6b4d">1/16决赛（32强）</text>
+      <text x="370" y="55" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a6b4d">1/8决赛（16强）</text>
+      <text x="640" y="55" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a6b4d">1/4决赛（8强）</text>
+      <text x="910" y="55" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a6b4d">半决赛</text>
+      <text x="1200" y="55" text-anchor="middle" font-size="14" font-weight="bold" fill="#d4a843">决赛</text>
+
+      <!-- UPPER HALF -->
+      <rect x="10" y="70" width="180" height="36" rx="6" fill="url(#g1)" stroke="#0b3d2e" stroke-width="1"/>
+      <text x="100" y="93" text-anchor="middle" font-size="11" fill="white" font-weight="600">A2 vs B2</text>
+
+      <rect x="10" y="140" width="180" height="36" rx="6" fill="#e8f5e9" stroke="#2d8a66" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="100" y="163" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="600">E1 vs 最佳第三</text>
+
+      <rect x="10" y="210" width="180" height="36" rx="6" fill="url(#g1)" stroke="#0b3d2e" stroke-width="1"/>
+      <text x="100" y="233" text-anchor="middle" font-size="11" fill="white" font-weight="600">F1 vs C2</text>
+
+      <rect x="10" y="280" width="180" height="36" rx="6" fill="url(#g1)" stroke="#0b3d2e" stroke-width="1"/>
+      <text x="100" y="303" text-anchor="middle" font-size="11" fill="white" font-weight="600">C1 vs F2</text>
+
+      <rect x="10" y="370" width="180" height="36" rx="6" fill="url(#g1)" stroke="#0b3d2e" stroke-width="1"/>
+      <text x="100" y="393" text-anchor="middle" font-size="11" fill="white" font-weight="600">E2 vs I2</text>
+
+      <rect x="10" y="440" width="180" height="36" rx="6" fill="#e8f5e9" stroke="#2d8a66" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="100" y="463" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="600">I1 vs 最佳第三</text>
+
+      <rect x="10" y="510" width="180" height="36" rx="6" fill="#e8f5e9" stroke="#2d8a66" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="100" y="533" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="600">A1 vs 最佳第三</text>
+
+      <rect x="10" y="580" width="180" height="36" rx="6" fill="#e8f5e9" stroke="#2d8a66" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="100" y="603" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="600">L1 vs 最佳第三</text>
+
+      <!-- Connecting lines upper -->
+      <path d="M190 88 L260 88 L260 123 L280 123" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M190 158 L260 158 L260 123" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M190 228 L260 228 L260 263 L280 263" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M190 298 L260 298 L260 263" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M190 388 L260 388 L260 423 L280 423" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M190 458 L260 458 L260 423" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M190 528 L260 528 L260 563 L280 563" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M190 598 L260 598 L260 563" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+
+      <!-- Round of 16 - Upper -->
+      <rect x="280" y="105" width="180" height="36" rx="6" fill="#c8e6c9" stroke="#2d8a66" stroke-width="1.5"/>
+      <text x="370" y="128" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="700">M89 (7/4)</text>
+
+      <rect x="280" y="245" width="180" height="36" rx="6" fill="#c8e6c9" stroke="#2d8a66" stroke-width="1.5"/>
+      <text x="370" y="268" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="700">M90 (7/4)</text>
+
+      <rect x="280" y="405" width="180" height="36" rx="6" fill="#c8e6c9" stroke="#2d8a66" stroke-width="1.5"/>
+      <text x="370" y="428" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="700">M91 (7/5)</text>
+
+      <rect x="280" y="545" width="180" height="36" rx="6" fill="#c8e6c9" stroke="#2d8a66" stroke-width="1.5"/>
+      <text x="370" y="568" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="700">M92 (7/5)</text>
+
+      <!-- Lines to QF upper -->
+      <path d="M460 123 L530 123 L530 175 L550 175" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M460 263 L530 263 L530 175" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M460 423 L530 423 L530 475 L550 475" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M460 563 L530 563 L530 475" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+
+      <!-- Quarter Final - Upper -->
+      <rect x="550" y="157" width="180" height="36" rx="6" fill="#a5d6a7" stroke="#1a6b4d" stroke-width="1.5"/>
+      <text x="640" y="180" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="700">M97 (7/9)</text>
+
+      <rect x="550" y="457" width="180" height="36" rx="6" fill="#a5d6a7" stroke="#1a6b4d" stroke-width="1.5"/>
+      <text x="640" y="480" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="700">M98 (7/10)</text>
+
+      <!-- Lines to Semi upper -->
+      <path d="M730 175 L800 175 L800 307 L820 307" stroke="#1a6b4d" stroke-width="2.5" fill="none"/>
+      <path d="M730 475 L800 475 L800 307" stroke="#1a6b4d" stroke-width="2.5" fill="none"/>
+
+      <!-- Semi Final - Upper -->
+      <rect x="820" y="289" width="180" height="36" rx="6" fill="#81c784" stroke="#0b3d2e" stroke-width="2"/>
+      <text x="910" y="312" text-anchor="middle" font-size="12" fill="#0b3d2e" font-weight="700">M101 (7/14)</text>
+
+      <!-- LOWER HALF -->
+      <rect x="1210" y="70" width="180" height="36" rx="6" fill="url(#g1)" stroke="#0b3d2e" stroke-width="1"/>
+      <text x="1300" y="93" text-anchor="middle" font-size="11" fill="white" font-weight="600">K2 vs L2</text>
+
+      <rect x="1210" y="140" width="180" height="36" rx="6" fill="url(#g1)" stroke="#0b3d2e" stroke-width="1"/>
+      <text x="1300" y="163" text-anchor="middle" font-size="11" fill="white" font-weight="600">H1 vs J2</text>
+
+      <rect x="1210" y="210" width="180" height="36" rx="6" fill="url(#g1)" stroke="#0b3d2e" stroke-width="1"/>
+      <text x="1300" y="233" text-anchor="middle" font-size="11" fill="white" font-weight="600">J1 vs H2</text>
+
+      <rect x="1210" y="280" width="180" height="36" rx="6" fill="#e8f5e9" stroke="#2d8a66" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="1300" y="303" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="600">K1 vs 最佳第三</text>
+
+      <rect x="1210" y="370" width="180" height="36" rx="6" fill="url(#g1)" stroke="#0b3d2e" stroke-width="1"/>
+      <text x="1300" y="393" text-anchor="middle" font-size="11" fill="white" font-weight="600">D2 vs G2</text>
+
+      <rect x="1210" y="440" width="180" height="36" rx="6" fill="#e8f5e9" stroke="#2d8a66" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="1300" y="463" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="600">B1 vs 最佳第三</text>
+
+      <rect x="1210" y="510" width="180" height="36" rx="6" fill="#e8f5e9" stroke="#2d8a66" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="1300" y="533" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="600">D1 vs 最佳第三</text>
+
+      <rect x="1210" y="580" width="180" height="36" rx="6" fill="#e8f5e9" stroke="#2d8a66" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="1300" y="603" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="600">G1 vs 最佳第三</text>
+
+      <!-- Lines for lower half -->
+      <path d="M1210 88 L1140 88 L1140 123 L1120 123" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M1210 158 L1140 158 L1140 123" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M1210 228 L1140 228 L1140 263 L1120 263" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M1210 298 L1140 298 L1140 263" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M1210 388 L1140 388 L1140 423 L1120 423" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M1210 458 L1140 458 L1140 423" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M1210 528 L1140 528 L1140 563 L1120 563" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M1210 598 L1140 598 L1140 563" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+
+      <!-- Round of 16 - Lower -->
+      <rect x="940" y="105" width="180" height="36" rx="6" fill="#c8e6c9" stroke="#2d8a66" stroke-width="1.5"/>
+      <text x="1030" y="128" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="700">M94 (7/6)</text>
+
+      <rect x="940" y="245" width="180" height="36" rx="6" fill="#c8e6c9" stroke="#2d8a66" stroke-width="1.5"/>
+      <text x="1030" y="268" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="700">M95 (7/7)</text>
+
+      <rect x="940" y="405" width="180" height="36" rx="6" fill="#c8e6c9" stroke="#2d8a66" stroke-width="1.5"/>
+      <text x="1030" y="428" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="700">M96 (7/7)</text>
+
+      <rect x="940" y="545" width="180" height="36" rx="6" fill="#c8e6c9" stroke="#2d8a66" stroke-width="1.5"/>
+      <text x="1030" y="568" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="700">M93 (7/6)</text>
+
+      <!-- Lines to QF lower -->
+      <path d="M940 123 L870 123 L870 175 L850 175" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M940 263 L870 263 L870 175" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M940 423 L870 423 L870 475 L850 475" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+      <path d="M940 563 L870 563 L870 475" stroke="#1a6b4d" stroke-width="2" fill="none"/>
+
+      <!-- Quarter Final - Lower -->
+      <rect x="670" y="157" width="180" height="36" rx="6" fill="#a5d6a7" stroke="#1a6b4d" stroke-width="1.5"/>
+      <text x="760" y="180" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="700">M99 (7/11)</text>
+
+      <rect x="670" y="457" width="180" height="36" rx="6" fill="#a5d6a7" stroke="#1a6b4d" stroke-width="1.5"/>
+      <text x="760" y="480" text-anchor="middle" font-size="11" fill="#0b3d2e" font-weight="700">M100 (7/11)</text>
+
+      <!-- Lines to Semi lower -->
+      <path d="M670 175 L600 175 L600 343 L580 343" stroke="#1a6b4d" stroke-width="2.5" fill="none"/>
+      <path d="M670 475 L600 475 L600 343" stroke="#1a6b4d" stroke-width="2.5" fill="none"/>
+
+      <!-- Semi Final - Lower -->
+      <rect x="400" y="325" width="180" height="36" rx="6" fill="#81c784" stroke="#0b3d2e" stroke-width="2"/>
+      <text x="490" y="348" text-anchor="middle" font-size="12" fill="#0b3d2e" font-weight="700">M102 (7/15)</text>
+
+      <!-- Lines to Final -->
+      <path d="M1000 307 L1050 307 L1050 400 L1090 400" stroke="#d4a843" stroke-width="3" fill="none"/>
+      <path d="M400 343 L350 343 L350 400 L320 400" stroke="#d4a843" stroke-width="3" fill="none"/>
+
+      <!-- Final -->
+      <rect x="1090" y="380" width="140" height="45" rx="10" fill="url(#g2)" stroke="#b45309" stroke-width="2"/>
+      <text x="1160" y="400" text-anchor="middle" font-size="11" fill="white" font-weight="700">🏆 决赛 M104</text>
+      <text x="1160" y="416" text-anchor="middle" font-size="10" fill="#fef3c7">7月19日 纽约/新泽西</text>
+
+      <!-- 3rd place -->
+      <rect x="170" y="380" width="150" height="45" rx="10" fill="#fff3e0" stroke="#f59e0b" stroke-width="2"/>
+      <text x="245" y="400" text-anchor="middle" font-size="11" fill="#92400e" font-weight="700">🥉 三四名 M103</text>
+      <text x="245" y="416" text-anchor="middle" font-size="10" fill="#b45309">7月18日 迈阿密</text>
+
+      <text x="700" y="705" text-anchor="middle" font-size="14" fill="#1a6b4d" opacity="0.2" font-weight="bold">FIFA WORLD CUP 2026</text>
+
+      <!-- Legend -->
+      <rect x="50" y="780" width="22" height="14" rx="3" fill="url(#g1)"/>
+      <text x="80" y="792" font-size="11" fill="#374151">固定对阵</text>
+
+      <rect x="180" y="780" width="22" height="14" rx="3" fill="#e8f5e9" stroke="#2d8a66" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="210" y="792" font-size="11" fill="#374151">涉及"最佳小组第三"的对阵</text>
+
+      <rect x="400" y="780" width="22" height="14" rx="3" fill="#c8e6c9" stroke="#2d8a66"/>
+      <text x="430" y="792" font-size="11" fill="#374151">1/8决赛</text>
+
+      <rect x="520" y="780" width="22" height="14" rx="3" fill="#a5d6a7" stroke="#1a6b4d"/>
+      <text x="550" y="792" font-size="11" fill="#374151">1/4决赛</text>
+
+      <rect x="640" y="780" width="22" height="14" rx="3" fill="#81c784" stroke="#0b3d2e"/>
+      <text x="670" y="792" font-size="11" fill="#374151">半决赛</text>
+
+      <rect x="760" y="780" width="22" height="14" rx="3" fill="url(#g2)"/>
+      <text x="790" y="792" font-size="11" fill="#374151">决赛</text>
+    </svg>
+  </div>
+
+  <h3 style="margin-top:30px;margin-bottom:15px;color:var(--green-dark);font-size:1.3em;">📅 1/16决赛（32强赛）完整对阵表</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>场次</th><th>日期</th><th>时间(ET)</th><th>对阵</th><th>球场</th><th>城市</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>M73</td><td>6月28日</td><td>15:00</td><td><strong>A组第二</strong> vs <strong>B组第二</strong></td><td>SoFi Stadium</td><td>洛杉矶</td></tr>
+      <tr><td>M74</td><td>6月29日</td><td>16:30</td><td><strong>E组第一</strong> vs 最佳第三(A/B/C/D/F)</td><td>Gillette Stadium</td><td>波士顿</td></tr>
+      <tr><td>M75</td><td>6月29日</td><td>21:00</td><td><strong>F组第一</strong> vs <strong>C组第二</strong></td><td>Estadio BBVA</td><td>蒙特雷</td></tr>
+      <tr><td>M76</td><td>6月29日</td><td>13:00</td><td><strong>C组第一</strong> vs <strong>F组第二</strong></td><td>NRG Stadium</td><td>休斯顿</td></tr>
+      <tr><td>M77</td><td>6月30日</td><td>17:00</td><td><strong>E组第二</strong> vs <strong>I组第二</strong></td><td>AT&T Stadium</td><td>达拉斯</td></tr>
+      <tr><td>M78</td><td>6月30日</td><td>13:00</td><td><strong>I组第一</strong> vs 最佳第三(C/D/F/G/H)</td><td>MetLife Stadium</td><td>纽约/新泽西</td></tr>
+      <tr><td>M79</td><td>6月30日</td><td>21:00</td><td><strong>A组第一</strong> vs 最佳第三(C/E/F/H/I)</td><td>Estadio Azteca</td><td>墨西哥城</td></tr>
+      <tr><td>M80</td><td>7月1日</td><td>12:00</td><td><strong>L组第一</strong> vs 最佳第三(E/H/I/J/K)</td><td>Mercedes-Benz Stadium</td><td>亚特兰大</td></tr>
+      <tr><td>M81</td><td>7月1日</td><td>20:00</td><td><strong>D组第一</strong> vs 最佳第三(B/E/F/I/J)</td><td>Levi's Stadium</td><td>旧金山湾区</td></tr>
+      <tr><td>M82</td><td>7月1日</td><td>16:00</td><td><strong>G组第一</strong> vs 最佳第三(A/E/H/I/J)</td><td>Lumen Field</td><td>西雅图</td></tr>
+      <tr><td>M83</td><td>7月2日</td><td>19:00</td><td><strong>K组第二</strong> vs <strong>L组第二</strong></td><td>BMO Field</td><td>多伦多</td></tr>
+      <tr><td>M84</td><td>7月2日</td><td>15:00</td><td><strong>H组第一</strong> vs <strong>J组第二</strong></td><td>SoFi Stadium</td><td>洛杉矶</td></tr>
+      <tr><td>M85</td><td>7月2日</td><td>23:00</td><td><strong>B组第一</strong> vs 最佳第三(E/F/G/I/J)</td><td>BC Place</td><td>温哥华</td></tr>
+      <tr><td>M86</td><td>7月3日</td><td>18:00</td><td><strong>J组第一</strong> vs <strong>H组第二</strong></td><td>Hard Rock Stadium</td><td>迈阿密</td></tr>
+      <tr><td>M87</td><td>7月3日</td><td>21:30</td><td><strong>K组第一</strong> vs 最佳第三(D/E/I/J/L)</td><td>Arrowhead Stadium</td><td>堪萨斯城</td></tr>
+      <tr><td>M88</td><td>7月3日</td><td>14:00</td><td><strong>D组第二</strong> vs <strong>G组第二</strong></td><td>AT&T Stadium</td><td>达拉斯</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ SECTION 2: TEAMS FULL SQUAD ============ -->
+<section id="teams" class="section">
+  <h3 class="subsection-title">🌍 48支参赛队伍 · 完整26人名单</h3>
+  <p class="section-desc">点击任意球队卡片展开查看完整的26人大名单，按门将/后卫/中场/前锋分组展示。名单来源及公布日期已标注于每队卡片中。</p>
+
+  <!-- UEFA -->
+  <div class="confederation">
+    <div class="conf-header">
+      <h3>🏰 UEFA（欧洲）</h3>
+      <span class="conf-count">16队 · 416名球员</span>
+    </div>
+    <div class="teams-grid" id="uefa-teams"></div>
+  </div>
+
+  <!-- CAF -->
+  <div class="confederation">
+    <div class="conf-header">
+      <h3>🦁 CAF（非洲）</h3>
+      <span class="conf-count">10队 · 260名球员</span>
+    </div>
+    <div class="teams-grid" id="caf-teams"></div>
+  </div>
+
+  <!-- AFC -->
+  <div class="confederation">
+    <div class="conf-header">
+      <h3>🐉 AFC（亚洲）</h3>
+      <span class="conf-count">9队 · 234名球员</span>
+    </div>
+    <div class="teams-grid" id="afc-teams"></div>
+  </div>
+
+  <!-- CONMEBOL -->
+  <div class="confederation">
+    <div class="conf-header">
+      <h3>⚽ CONMEBOL（南美）</h3>
+      <span class="conf-count">6队 · 156名球员</span>
+    </div>
+    <div class="teams-grid" id="conmebol-teams"></div>
+  </div>
+
+  <!-- CONCACAF -->
+  <div class="confederation">
+    <div class="conf-header">
+      <h3>🌎 CONCACAF（中北美）</h3>
+      <span class="conf-count">6队 · 156名球员</span>
+    </div>
+    <div class="teams-grid" id="concacaf-teams"></div>
+  </div>
+
+  <!-- OFC -->
+  <div class="confederation">
+    <div class="conf-header">
+      <h3>🌊 OFC（大洋洲）</h3>
+      <span class="conf-count">1队 · 26名球员</span>
+    </div>
+    <div class="teams-grid" id="ofc-teams"></div>
+  </div>
+</section>
+
+<!-- ============ SECTION 3: FORMAT ============ -->
+<section id="format" class="section">
+  <h2 class="section-title"><span class="icon">📋</span>赛制与体彩</h2>
+  <p class="section-desc">2026年美加墨世界杯赛制说明及中国体育彩票竞彩足球玩法指南。</p>
+
+  <h3 class="subsection-title">📋 2026世界杯赛制说明</h3>
+  <p class="section-desc">2026年美加墨世界杯是世界杯历史上首届48支球队参赛的赛事，赛制发生了重大变革。</p>
+
+  <div class="format-grid">
+    <div class="format-card highlight">
+      <h4>🏆 核心数据</h4>
+      <div class="stat-row"><span class="stat-label">参赛球队</span><span class="stat-value">48支</span></div>
+      <div class="stat-row"><span class="stat-label">小组数量</span><span class="stat-value">12个（A-L组）</span></div>
+      <div class="stat-row"><span class="stat-label">每组球队</span><span class="stat-value">4支</span></div>
+      <div class="stat-row"><span class="stat-label">每队大名单</span><span class="stat-value">26人（23正选+3替补）</span></div>
+      <div class="stat-row"><span class="stat-label">总场次</span><span class="stat-value">104场</span></div>
+      <div class="stat-row"><span class="stat-label">赛事天数</span><span class="stat-value">39天</span></div>
+      <div class="stat-row"><span class="stat-label">冠军比赛</span><span class="stat-value">8场</span></div>
+    </div>
+    <div class="format-card">
+      <h4>📊 小组赛阶段</h4>
+      <div class="stat-row"><span class="stat-label">赛制</span><span class="stat-value">单循环</span></div>
+      <div class="stat-row"><span class="stat-label">每队场次</span><span class="stat-value">3场</span></div>
+      <div class="stat-row"><span class="stat-label">总场次</span><span class="stat-value">72场</span></div>
+      <div class="stat-row"><span class="stat-label">积分规则</span><span class="stat-value">胜3/平1/负0</span></div>
+      <div class="stat-row"><span class="stat-label">晋级</span><span class="stat-value">前二+8个最佳第三</span></div>
+    </div>
+    <div class="format-card">
+      <h4>⚔️ 淘汰赛阶段</h4>
+      <div class="stat-row"><span class="stat-label">1/16决赛</span><span class="stat-value">32→16（16场）</span></div>
+      <div class="stat-row"><span class="stat-label">1/8决赛</span><span class="stat-value">16→8（8场）</span></div>
+      <div class="stat-row"><span class="stat-label">1/4决赛</span><span class="stat-value">8→4（4场）</span></div>
+      <div class="stat-row"><span class="stat-label">半决赛</span><span class="stat-value">4→2（2场）</span></div>
+      <div class="stat-row"><span class="stat-label">决赛+三四名</span><span class="stat-value">2场</span></div>
+    </div>
+    <div class="format-card">
+      <h4>📍 主办信息</h4>
+      <div class="stat-row"><span class="stat-label">主办国</span><span class="stat-value">美国/加拿大/墨西哥</span></div>
+      <div class="stat-row"><span class="stat-label">主办城市</span><span class="stat-value">16个</span></div>
+      <div class="stat-row"><span class="stat-label">开幕</span><span class="stat-value">6.11 墨西哥城</span></div>
+      <div class="stat-row"><span class="stat-label">决赛</span><span class="stat-value">7.19 纽约/新泽西</span></div>
+      <div class="stat-row"><span class="stat-label">三四名</span><span class="stat-value">7.18 迈阿密</span></div>
+    </div>
+  </div>
+
+  <h3 style="margin:30px 0 15px;color:var(--green-dark);font-size:1.3em;">📈 赛制变革对比（32队→48队）</h3>
+  <table class="data-table">
+    <thead><tr><th>项目</th><th>2022卡塔尔（32队）</th><th>2026美加墨（48队）</th></tr></thead>
+    <tbody>
+      <tr><td>参赛球队</td><td>32支</td><td><strong>48支</strong></td></tr>
+      <tr><td>小组数量</td><td>8个</td><td><strong>12个</strong></td></tr>
+      <tr><td>小组赛场次</td><td>48场</td><td><strong>72场</strong></td></tr>
+      <tr><td>首轮淘汰赛</td><td>16强赛（1/8决赛）</td><td><strong>32强赛（1/16决赛）新增</strong></td></tr>
+      <tr><td>淘汰赛轮次</td><td>4轮</td><td><strong>5轮</strong></td></tr>
+      <tr><td>淘汰赛总场次</td><td>16场</td><td><strong>32场</strong></td></tr>
+      <tr><td><strong>总场次</strong></td><td><strong>64场</strong></td><td><strong>104场</strong></td></tr>
+      <tr><td>赛事天数</td><td>29天</td><td><strong>39天</strong></td></tr>
+      <tr><td>晋级淘汰赛的球队</td><td>16支（小组前二）</td><td><strong>32支（前二+8最佳第三）</strong></td></tr>
+      <tr><td>冠军需踢场次</td><td>7场</td><td><strong>8场</strong></td></tr>
+      <tr><td>每队报名人数</td><td>26人</td><td>26人</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin:30px 0 15px;color:var(--green-dark);font-size:1.3em;">⚖️ 小组内排名规则（同分处理）</h3>
+  <table class="data-table">
+    <thead><tr><th>优先级</th><th>判定标准</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>相互间对战积分</td></tr>
+      <tr><td>2</td><td>相互间净胜球</td></tr>
+      <tr><td>3</td><td>相互间进球数</td></tr>
+      <tr><td>4</td><td>所有小组赛净胜球</td></tr>
+      <tr><td>5</td><td>所有小组赛进球数</td></tr>
+      <tr><td>6</td><td>公平竞赛积分（红黄牌少者列前）</td></tr>
+      <tr><td>7</td><td>FIFA世界排名</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin:30px 0 15px;color:var(--green-dark);font-size:1.3em;">🏟️ 16个主办城市与球场</h3>
+  <h4 style="color:var(--blue);margin-bottom:10px;">🇺🇸 美国（11个城市）</h4>
+  <table class="data-table">
+    <thead><tr><th>城市</th><th>球场</th><th>容量(约)</th><th>承办阶段</th></tr></thead>
+    <tbody>
+      <tr><td>纽约/新泽西</td><td>MetLife Stadium</td><td>82,500</td><td>小组赛、32强、<strong>决赛</strong></td></tr>
+      <tr><td>达拉斯</td><td>AT&T Stadium</td><td>80,000</td><td>小组赛、32强、<strong>半决赛</strong></td></tr>
+      <tr><td>亚特兰大</td><td>Mercedes-Benz Stadium</td><td>71,000</td><td>小组赛、32强、<strong>半决赛</strong></td></tr>
+      <tr><td>洛杉矶</td><td>SoFi Stadium</td><td>70,240</td><td>小组赛、32强</td></tr>
+      <tr><td>迈阿密</td><td>Hard Rock Stadium</td><td>65,000</td><td>小组赛、32强、<strong>三四名决赛</strong></td></tr>
+      <tr><td>休斯顿</td><td>NRG Stadium</td><td>72,220</td><td>小组赛、32强</td></tr>
+      <tr><td>波士顿</td><td>Gillette Stadium</td><td>65,878</td><td>小组赛、32强</td></tr>
+      <tr><td>费城</td><td>Lincoln Financial Field</td><td>69,796</td><td>小组赛</td></tr>
+      <tr><td>西雅图</td><td>Lumen Field</td><td>69,000</td><td>小组赛、32强</td></tr>
+      <tr><td>旧金山湾区</td><td>Levi's Stadium</td><td>68,500</td><td>小组赛、32强</td></tr>
+      <tr><td>堪萨斯城</td><td>Arrowhead Stadium</td><td>76,640</td><td>小组赛、32强</td></tr>
+    </tbody>
+  </table>
+
+  <h4 style="color:var(--green);margin-bottom:10px;">🇲🇽 墨西哥（3个城市）</h4>
+  <table class="data-table">
+    <thead><tr><th>城市</th><th>球场</th><th>容量(约)</th><th>承办阶段</th></tr></thead>
+    <tbody>
+      <tr><td>墨西哥城</td><td>Estadio Azteca</td><td>87,523</td><td>小组赛、32强、<strong>开幕式</strong></td></tr>
+      <tr><td>瓜达拉哈拉</td><td>Estadio Akron</td><td>48,071</td><td>小组赛</td></tr>
+      <tr><td>蒙特雷</td><td>Estadio BBVA</td><td>53,500</td><td>小组赛、32强</td></tr>
+    </tbody>
+  </table>
+
+  <h4 style="color:#dc2626;margin-bottom:10px;">🇨🇦 加拿大（2个城市）</h4>
+  <table class="data-table">
+    <thead><tr><th>城市</th><th>球场</th><th>容量(约)</th><th>承办阶段</th></tr></thead>
+    <tbody>
+      <tr><td>多伦多</td><td>BMO Field</td><td>45,000</td><td>小组赛、32强</td></tr>
+      <tr><td>温哥华</td><td>BC Place</td><td>54,000</td><td>小组赛、32强</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ SECTION 4: LOTTERY ============ -->
+<section id="lottery" class="section">
+  <h3 class="subsection-title">🎫 中国体育彩票·世界杯押注方式</h3>
+  <p class="section-desc">以下内容整理自中国体育彩票官方渠道（lottery.gov.cn），仅供信息参考。彩票有风险，投注需谨慎。</p>
+
+  <div class="info-box">
+    <strong>📢 重要提示：</strong>中国体育彩票实体店是<strong>唯一正规合法</strong>的购彩渠道。所有网络售彩、私彩赌球均属<strong>非法</strong>，不受法律保护。未满18周岁不得购买彩票及兑奖。
+  </div>
+
+  <div class="lottery-tabs">
+    <button class="lottery-tab active" onclick="showLotteryTab('overview',this)">玩法概览</button>
+    <button class="lottery-tab" onclick="showLotteryTab('rules',this)">详细规则</button>
+    <button class="lottery-tab" onclick="showLotteryTab('odds',this)">赔率与奖金</button>
+    <button class="lottery-tab" onclick="showLotteryTab('special',this)">世界杯特色</button>
+    <button class="lottery-tab" onclick="showLotteryTab('guide',this)">购彩指南</button>
+  </div>
+
+  <!-- Tab 1: Overview -->
+  <div id="lottery-overview" class="lottery-content active">
+    <div class="method-card">
+      <h4>🎯 竞彩足球六大核心玩法</h4>
+      <div class="method-grid">
+        <div class="method-item">
+          <h5>胜平负</h5>
+          <p>竞猜主队胜(3)、平(1)、负(0)。最经典玩法，过关2×1至8×1。</p>
+        </div>
+        <div class="method-item">
+          <h5>让球胜平负</h5>
+          <p>实力悬殊时让球，含让球后猜胜平负。过关2×1至8×1。</p>
+        </div>
+        <div class="method-item">
+          <h5>比分</h5>
+          <p>猜具体比分，共31个选项。过关仅限2×1和3×1。</p>
+        </div>
+        <div class="method-item">
+          <h5>总进球数</h5>
+          <p>猜双方进球总数(0-7+)，共8个选项。过关2×1至8×1。</p>
+        </div>
+        <div class="method-item">
+          <h5>半全场胜平负</h5>
+          <p>猜半场+全场结果组合，共9种。过关仅限2×1和3×1。</p>
+        </div>
+        <div class="method-item">
+          <h5>混合过关</h5>
+          <p>不同玩法自由组合串联，灵活度高。过关2×1至8×1。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="format-card">
+      <h4>📊 各玩法投注选项数与过关方式</h4>
+      <table class="data-table" style="margin-bottom:0;">
+        <thead><tr><th>玩法</th><th>投注选项数</th><th>过关方式</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>胜平负</td><td>3个</td><td>2×1 ~ 8×1</td><td>竞猜主队胜、平、负</td></tr>
+          <tr><td>让球胜平负</td><td>3个</td><td>2×1 ~ 8×1</td><td>含让球后的结果</td></tr>
+          <tr><td>比分</td><td>31个</td><td>2×1、3×1</td><td>猜具体比分</td></tr>
+          <tr><td>总进球数</td><td>8个</td><td>2×1 ~ 8×1</td><td>双方进球总数</td></tr>
+          <tr><td>半全场胜平负</td><td>9个</td><td>2×1、3×1</td><td>半场+全场组合</td></tr>
+          <tr><td>混合过关</td><td>自由</td><td>2×1 ~ 8×1</td><td>不同玩法组合</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tab 2: Rules -->
+  <div id="lottery-rules" class="lottery-content">
+    <div class="method-card">
+      <h4>⚽ 1. 胜平负</h4>
+      <p>选定1场比赛，对主队在全场90分钟（含伤停补时）的"胜"、"平"、"负"结果进行投注。</p>
+      <table class="data-table" style="margin:15px 0 0;">
+        <thead><tr><th>实际比分</th><th>开奖结果</th><th>中奖选项</th></tr></thead>
+        <tbody>
+          <tr><td>主队胜客队（如3:0）</td><td>胜（3）</td><td>选"3"中奖</td></tr>
+          <tr><td>双方打平（如1:1）</td><td>平（1）</td><td>选"1"中奖</td></tr>
+          <tr><td>主队负客队（如0:2）</td><td>负（0）</td><td>选"0"中奖</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-card">
+      <h4>🎯 2. 让球胜平负</h4>
+      <p>当两队实力悬殊时，采取让球方式平衡竞猜难度。让球数确定后维持不变。</p>
+      <table class="data-table" style="margin:15px 0 0;">
+        <thead><tr><th>让球</th><th>实际结果</th><th>开奖</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="3">主队(-1)</td><td>主队净胜≥2球</td><td>3（主胜）</td></tr>
+          <tr><td>主队净胜=1球</td><td>1（平局）</td></tr>
+          <tr><td>主队平或负</td><td>0（主负）</td></tr>
+          <tr><td rowspan="3">主队(+1)</td><td>主队领先或平局</td><td>3（主胜）</td></tr>
+          <tr><td>客队净胜=1球</td><td>1（平局）</td></tr>
+          <tr><td>客队净胜≥2球</td><td>0（主负）</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-card">
+      <h4>📋 3. 比分玩法（31个选项）</h4>
+      <div class="method-grid" style="margin-top:15px;">
+        <div class="method-item" style="border-left-color:var(--green);">
+          <h5>主胜比分（13个）</h5>
+          <p style="font-size:0.8em;">1:0, 2:0, 3:0, 4:0, 2:1, 3:1, 3:2, 4:1, 4:2, 5:0, 5:1, 5:2, 胜其他</p>
+        </div>
+        <div class="method-item" style="border-left-color:var(--gold);">
+          <h5>平局比分（5个）</h5>
+          <p style="font-size:0.8em;">0:0, 1:1, 2:2, 3:3, 平其他</p>
+        </div>
+        <div class="method-item" style="border-left-color:var(--red);">
+          <h5>主负比分（13个）</h5>
+          <p style="font-size:0.8em;">0:1, 0:2, 1:2, 0:3, 1:3, 2:3, 0:4, 1:4, 2:4, 0:5, 1:5, 2:5, 负其他</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="method-card">
+      <h4>🔢 4. 总进球数（8个选项）</h4>
+      <table class="data-table" style="margin-top:15px;">
+        <thead><tr><th>选项</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7+</th></tr></thead>
+        <tbody>
+          <tr><td><strong>含义</strong></td><td>无进球</td><td>进1球</td><td>进2球</td><td>进3球</td><td>进4球</td><td>进5球</td><td>进6球</td><td>≥7球</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-card">
+      <h4>⏱️ 5. 半全场胜平负（9种组合）</h4>
+      <table class="data-table" style="margin-top:15px;">
+        <thead><tr><th>选项</th><th>含义</th><th>选项</th><th>含义</th></tr></thead>
+        <tbody>
+          <tr><td>3-3</td><td>半胜/全胜</td><td>1-3</td><td>半平/全胜</td></tr>
+          <tr><td>3-1</td><td>半胜/全平</td><td>1-1</td><td>半平/全平</td></tr>
+          <tr><td>3-0</td><td>半胜/全负</td><td>1-0</td><td>半平/全负</td></tr>
+          <tr><td>0-3</td><td>半负/全胜</td><td>0-1</td><td>半负/全平</td></tr>
+          <tr><td colspan="2"></td><td>0-0</td><td>半负/全负</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tab 3: Odds -->
+  <div id="lottery-odds" class="lottery-content">
+    <div class="method-card">
+      <h4>💰 奖金计算公式</h4>
+      <div class="odds-formula">
+        <p class="formula">中奖金额 = 所选场次赔率连乘 × 2元 × 倍数</p>
+        <p style="font-size:0.85em;color:var(--gray);margin-top:8px;">赔率连乘后先精确到分（保留两位小数），再乘以倍数</p>
+      </div>
+      <p><strong>计算示例：</strong>比赛A选主胜(1.77) + 比赛B选主负(1.85)，2×1，1倍</p>
+      <p style="color:var(--green);font-weight:700;margin-top:8px;">→ 1.77 × 1.85 = 3.2745 → 精确到3.27 → 3.27 × 2 × 1 = <strong>6.54元</strong></p>
+      <p style="color:var(--green);font-weight:700;">→ 若倍投100倍：3.27 × 2 × 100 = <strong>654元</strong></p>
+    </div>
+
+    <div class="format-card">
+      <h4>📋 投注限额规定</h4>
+      <table class="data-table" style="margin-bottom:0;">
+        <thead><tr><th>项目</th><th>限额</th></tr></thead>
+        <tbody>
+          <tr><td>单注金额</td><td>2元/注</td></tr>
+          <tr><td>倍投范围</td><td>2 ~ 99倍</td></tr>
+          <tr><td>2-3场过关</td><td>单注最高奖金 <strong>20万元</strong></td></tr>
+          <tr><td>4-5场过关</td><td>单注最高奖金 <strong>50万元</strong></td></tr>
+          <tr><td>6场及以上过关</td><td>单注最高奖金 <strong>100万元</strong></td></tr>
+          <tr><td>单张彩票</td><td>不得超过 <strong>10,000注</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="format-card highlight">
+      <h4>🏅 核心数据</h4>
+      <div class="stat-row"><span class="stat-label">返奖率</span><span class="stat-value">69%（全国最高之一）</span></div>
+      <div class="stat-row"><span class="stat-label">奖金返还</span><span class="stat-value">68%</span></div>
+      <div class="stat-row"><span class="stat-label">调节基金</span><span class="stat-value">1%</span></div>
+      <div class="stat-row"><span class="stat-label">制度</span><span class="stat-value">固定奖金制</span></div>
+      <div class="stat-row"><span class="stat-label">单注保底</span><span class="stat-value">不足2元补足至2元</span></div>
+    </div>
+  </div>
+
+  <!-- Tab 4: Special -->
+  <div id="lottery-special" class="lottery-content">
+    <div class="method-card">
+      <h4>🏆 冠军竞猜</h4>
+      <p>竞猜2026世界杯最终捧起大力神杯的冠军球队。初始阶段设置<strong>48个选项</strong>（每支球队一个），随赛事推进逐渐减少。</p>
+      <ul style="margin-top:12px;padding-left:20px;color:var(--gray);font-size:0.9em;">
+        <li>所有选项均设有<strong>固定奖金</strong>，以出票时票面显示为准</li>
+        <li><strong>不能进行过关投注</strong></li>
+        <li>另设"其他"选项覆盖未列出球队</li>
+      </ul>
+    </div>
+
+    <div class="method-card">
+      <h4>🥈 冠亚军竞猜</h4>
+      <p>竞猜哪两支队伍进入决赛，<strong>不需要猜出谁是冠军/亚军</strong>，只要决赛两队与所选组合一致即中奖。</p>
+      <ul style="margin-top:12px;padding-left:20px;color:var(--gray);font-size:0.9em;">
+        <li>初始阶段共<strong>50个选项</strong>（49个固定组合 + "其他"）</li>
+        <li><strong>不能进行过关投注</strong></li>
+      </ul>
+    </div>
+
+    <div class="format-card">
+      <h4>📅 2026世界杯销售时间线</h4>
+      <table class="data-table" style="margin-bottom:0;">
+        <thead><tr><th>时间</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>2026年6月2日</td><td><strong>冠军竞猜、冠亚军竞猜开售</strong></td></tr>
+          <tr><td>2026年6月8日</td><td><strong>小组赛竞猜开售</strong></td></tr>
+          <tr><td>2026年6月12日</td><td>世界杯开幕（北京时间）</td></tr>
+          <tr><td>2026年7月20日</td><td>世界杯决赛（北京时间）</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="format-card">
+      <h4>🕐 销售时间</h4>
+      <div class="stat-row"><span class="stat-label">周一至周五</span><span class="stat-value">11:00 - 22:00</span></div>
+      <div class="stat-row"><span class="stat-label">周六、周日</span><span class="stat-value">11:00 - 23:00</span></div>
+      <div class="stat-row"><span class="stat-label">停售</span><span class="stat-value">开赛前5-30分钟</span></div>
+    </div>
+  </div>
+
+  <!-- Tab 5: Guide -->
+  <div id="lottery-guide" class="lottery-content">
+    <div class="method-card">
+      <h4>🏪 购买渠道</h4>
+      <div class="warning-box">
+        <strong>⚠️ 唯一合法渠道：线下体彩实体店</strong><br>
+        我国法律禁止擅自利用互联网销售体育彩票，所有网络售彩、私彩赌球均属<strong>非法</strong>，不受法律保护。
+      </div>
+      <h5 style="margin:15px 0 10px;color:var(--green-dark);">查找实体店方式：</h5>
+      <div class="method-grid">
+        <div class="method-item"><h5>📱 中国体育彩票APP</h5><p>下载官方APP，使用"找实体店"功能</p></div>
+        <div class="method-item"><h5>💬 微信小程序</h5><p>搜索"中国体育彩票官方小程序"查找附近门店</p></div>
+        <div class="method-item"><h5>🔍 支付宝小程序</h5><p>搜索"中国体育彩票官方小程序"</p></div>
+        <div class="method-item"><h5>📞 客服热线</h5><p>拨打中国体育彩票客服：95086</p></div>
+      </div>
+    </div>
+
+    <div class="method-card">
+      <h4>📝 购买流程</h4>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:15px;">
+        <div style="flex:1;min-width:120px;background:#f0fdf4;padding:15px;border-radius:10px;text-align:center;">
+          <div style="font-size:1.5em;margin-bottom:5px;">1️⃣</div>
+          <div style="font-size:0.85em;font-weight:600;">查找门店</div>
+          <div style="font-size:0.75em;color:var(--gray);">找到附近竞彩标准店</div>
+        </div>
+        <div style="flex:1;min-width:120px;background:#f0fdf4;padding:15px;border-radius:10px;text-align:center;">
+          <div style="font-size:1.5em;margin-bottom:5px;">2️⃣</div>
+          <div style="font-size:0.85em;font-weight:600;">选择比赛</div>
+          <div style="font-size:0.75em;color:var(--gray);">查看赛程选比赛</div>
+        </div>
+        <div style="flex:1;min-width:120px;background:#f0fdf4;padding:15px;border-radius:10px;text-align:center;">
+          <div style="font-size:1.5em;margin-bottom:5px;">3️⃣</div>
+          <div style="font-size:0.85em;font-weight:600;">确定玩法</div>
+          <div style="font-size:0.75em;color:var(--gray);">胜平负/比分/总进球等</div>
+        </div>
+        <div style="flex:1;min-width:120px;background:#f0fdf4;padding:15px;border-radius:10px;text-align:center;">
+          <div style="font-size:1.5em;margin-bottom:5px;">4️⃣</div>
+          <div style="font-size:0.85em;font-weight:600;">支付出票</div>
+          <div style="font-size:0.75em;color:var(--gray);">获得纸质彩票凭证</div>
+        </div>
+        <div style="flex:1;min-width:120px;background:#f0fdf4;padding:15px;border-radius:10px;text-align:center;">
+          <div style="font-size:1.5em;margin-bottom:5px;">5️⃣</div>
+          <div style="font-size:0.85em;font-weight:600;">妥善保管</div>
+          <div style="font-size:0.75em;color:var(--gray);">纸质彩票是唯一兑奖凭证</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="format-card">
+      <h4>💵 兑奖规则</h4>
+      <table class="data-table" style="margin-bottom:0;">
+        <thead><tr><th>项目</th><th>规则</th></tr></thead>
+        <tbody>
+          <tr><td>兑奖期限</td><td>开奖之日起 <strong>60个自然日</strong></td></tr>
+          <tr><td>跨省通兑</td><td>单注≤1万元已实现全国跨省通兑</td></tr>
+          <tr><td>小额兑奖</td><td>≤6000元，省内任意竞彩标准店</td></tr>
+          <tr><td>中额兑奖</td><td>6000元~10万元，当地市体彩中心</td></tr>
+          <tr><td>大额兑奖</td><td>≥10万元，参照当地体彩中心规定</td></tr>
+          <tr><td>兑奖凭证</td><td><strong>纸质彩票是唯一凭证</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="warning-box">
+      <strong>🔞 年龄限制：</strong>未满18周岁的未成年人不得购买彩票及兑奖。体彩实体店有义务核验购彩者年龄。<br><br>
+      <strong>💡 理性购彩提示：</strong>保持平和心态，设定合理预算，不跟风合买，不超额投注，不借贷购彩，不沉迷竞猜。把赛事竞猜作为观赛的"调味剂"。
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION: AI LEADERBOARD ============ -->
+<section id="leaderboard" class="section active">
+  <h2 class="section-title"><span class="icon">🤖</span>AI模型收益排行榜</h2>
+  <p class="section-desc">基于每轮比赛结果实时更新，按总资产（剩余资金 + 累计奖金）排名。每位模型初始资金100元。</p>
+  <div id="ai-leaderboard"></div>
+
+  <h3 class="subsection-title">📅 赛事轮次进度</h3>
+  <div id="ai-progress"></div>
+</section>
+
+<!-- ============ SECTION: AI ROUNDS ============ -->
+<section id="rounds" class="section">
+  <h2 class="section-title"><span class="icon">🔄</span>逐轮预测与操作</h2>
+  <p class="section-desc">每个比赛轮次中，各模型分析对局后给出预测并制定投注方案，赛后结算盈亏。</p>
+  <div id="ai-round-nav"></div>
+  <div id="ai-round-content"></div>
+</section>
+
+<!-- ============ SECTION: AI CONTESTANTS ============ -->
+<section id="contestants" class="section">
+  <h2 class="section-title"><span class="icon">⚔️</span>参赛选手与规则</h2>
+  <p class="section-desc">参与本次预测擂台赛的6个大语言模型及比赛规则说明。</p>
+
+  <h3 class="subsection-title">🤖 参赛模型</h3>
+  <div id="ai-model-gallery"></div>
+
+  <h3 class="subsection-title" style="margin-top:35px;">📋 比赛规则</h3>
+  <div class="format-grid">
+    <div class="format-card highlight">
+      <h4>🏆 比赛概述</h4>
+      <div class="stat-row"><span class="stat-label">参赛模型</span><span class="stat-value">6个</span></div>
+      <div class="stat-row"><span class="stat-label">初始资金</span><span class="stat-value">每模型100元</span></div>
+      <div class="stat-row"><span class="stat-label">竞猜对象</span><span class="stat-value">2026世界杯竞彩足球</span></div>
+      <div class="stat-row"><span class="stat-label">评判标准</span><span class="stat-value">最终总资产排名</span></div>
+      <div class="stat-row"><span class="stat-label">总资产</span><span class="stat-value">剩余资金 + 累计奖金</span></div>
+    </div>
+    <div class="format-card">
+      <h4>⚙️ 运作机制</h4>
+      <div class="stat-row"><span class="stat-label">轮次划分</span><span class="stat-value">按比赛日/阶段</span></div>
+      <div class="stat-row"><span class="stat-label">模型输入</span><span class="stat-value">赛程、赔率、球队信息</span></div>
+      <div class="stat-row"><span class="stat-label">模型输出</span><span class="stat-value">分析 + 预测 + 投注方案</span></div>
+      <div class="stat-row"><span class="stat-label">购彩执行</span><span class="stat-value">按模型方案人工购买</span></div>
+      <div class="stat-row"><span class="stat-label">结算方式</span><span class="stat-value">赛后按体彩开奖结算</span></div>
+    </div>
+    <div class="format-card">
+      <h4>📐 约束条件</h4>
+      <div class="stat-row"><span class="stat-label">资金上限</span><span class="stat-value">仅使用分配的100元</span></div>
+      <div class="stat-row"><span class="stat-label">可选比赛</span><span class="stat-value">模型可只选部分比赛</span></div>
+      <div class="stat-row"><span class="stat-label">投注玩法</span><span class="stat-value">竞彩足球官方玩法</span></div>
+      <div class="stat-row"><span class="stat-label">过关方式</span><span class="stat-value">模型自由决定</span></div>
+      <div class="stat-row"><span class="stat-label">资金归零</span><span class="stat-value">可继续预测但无法下注</span></div>
+    </div>
+    <div class="format-card">
+      <h4>💰 奖金计算</h4>
+      <div class="stat-row"><span class="stat-label">公式</span><span class="stat-value">赔率连乘 × 2元 × 倍数</span></div>
+      <div class="stat-row"><span class="stat-label">单注金额</span><span class="stat-value">2元/注</span></div>
+      <div class="stat-row"><span class="stat-label">倍投范围</span><span class="stat-value">2 ~ 99倍</span></div>
+      <div class="stat-row"><span class="stat-label">返奖率</span><span class="stat-value">69%</span></div>
+      <div class="stat-row"><span class="stat-label">合法渠道</span><span class="stat-value">线下体彩实体店</span></div>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-top:20px;">
+    <strong>💡 示例：</strong>2×1过关，赔率1.77和1.85，1倍 → 1.77×1.85=3.27 → 3.27×2×1 = <strong>6.54元</strong>。倍投100倍 → <strong>654元</strong>。
+  </div>
+</section>
+
+<!-- ============ SECTION: PURCHASE GUIDE ============ -->
+<section id="purchase" class="section">
+  <h2 class="section-title"><span class="icon">🎫</span>购彩清单</h2>
+  <p class="section-desc">自动汇总所有模型的投注方案，生成到店购彩指令。过关票同组合多腿合并为一张票，单关票同选项跨模型合并。</p>
+  <div id="purchase-content"></div>
+</section>
+
+<!-- ============ SECTION 5: DATA SOURCES ============ -->
+<section id="sources" class="section">
+  <h2 class="section-title"><span class="icon">📚</span>数据来源与信息声明</h2>
+  <p class="section-desc">本页面所有数据均来自以下权威渠道，已逐一核实准确性与时效性。数据截止：2026年6月10日。</p>
+
+  <div class="sources-section">
+    <h3>🏆 球队名单数据来源（48队×26人全名单）</h3>
+    <div class="sources-grid">
+      <div class="source-item"><span class="s-name">FourFourTwo</span><span class="s-url">fourfourtwo.com</span><span class="s-date">2026-05~06</span></div>
+      <div class="source-item"><span class="s-name">ESPN</span><span class="s-url">espn.com/soccer</span><span class="s-date">2026-05~06</span></div>
+      <div class="source-item"><span class="s-name">DAZN</span><span class="s-url">dazn.com</span><span class="s-date">2026-05-25</span></div>
+      <div class="source-item"><span class="s-name">EnglandFootball.com</span><span class="s-url">englandfootball.com</span><span class="s-date">2026-05-22</span></div>
+      <div class="source-item"><span class="s-name">USSoccer.com</span><span class="s-url">ussoccer.com</span><span class="s-date">2026-05-26</span></div>
+      <div class="source-item"><span class="s-name">CanadaSoccer.com</span><span class="s-url">canadasoccer.com</span><span class="s-date">2026-06-01</span></div>
+      <div class="source-item"><span class="s-name">NZFootball.co.nz</span><span class="s-url">nzfootball.co.nz</span><span class="s-date">2026-05-14</span></div>
+      <div class="source-item"><span class="s-name">FIFAWorldCupNews</span><span class="s-url">fifaworldcupnews.com</span><span class="s-date">2026-05-31</span></div>
+      <div class="source-item"><span class="s-name">CupofNations2025</span><span class="s-url">cupofnations2025.com</span><span class="s-date">2026-05-19</span></div>
+      <div class="source-item"><span class="s-name">A-Leagues</span><span class="s-url">aleagues.com.au</span><span class="s-date">2026-06-01</span></div>
+      <div class="source-item"><span class="s-name">Foot-Africa</span><span class="s-url">foot-africa.com</span><span class="s-date">2026-05-18</span></div>
+      <div class="source-item"><span class="s-name">SportsWorldGhana</span><span class="s-url">sportsworldghana.com</span><span class="s-date">2026-05-11</span></div>
+      <div class="source-item"><span class="s-name">NewsroomPanama</span><span class="s-url">newsroompanama.com</span><span class="s-date">2026-05-26</span></div>
+      <div class="source-item"><span class="s-name">Yahoo Sports</span><span class="s-url">sports.yahoo.com</span><span class="s-date">2026-06-01</span></div>
+      <div class="source-item"><span class="s-name">CCTV体育</span><span class="s-url">sports.cctv.com</span><span class="s-date">2026-05-18</span></div>
+      <div class="source-item"><span class="s-name">搜狐体育</span><span class="s-url">sports.sohu.com</span><span class="s-date">2026-06-02</span></div>
+      <div class="source-item"><span class="s-name">新浪财经</span><span class="s-url">sina.cn</span><span class="s-date">2026-06-03</span></div>
+      <div class="source-item"><span class="s-name">Thai Rath</span><span class="s-url">en.thairath.co.th</span><span class="s-date">2026-05-15</span></div>
+    </div>
+  </div>
+
+  <div class="sources-section">
+    <h3>📋 赛制与赛程数据来源</h3>
+    <div class="sources-grid">
+      <div class="source-item"><span class="s-name">FIFA官方竞赛规程</span><span class="s-url">fifa.com</span><span class="s-date">官方文件</span></div>
+      <div class="source-item"><span class="s-name">ESPN 2026赛程</span><span class="s-url">espn.com</span><span class="s-date">2026-06</span></div>
+      <div class="source-item"><span class="s-name">Yahoo Sports专题</span><span class="s-url">sports.yahoo.com</span><span class="s-date">2026-06</span></div>
+      <div class="source-item"><span class="s-name">体坛周报</span><span class="s-url">ttplus.cn</span><span class="s-date">2026-06</span></div>
+      <div class="source-item"><span class="s-name">球天下体育</span><span class="s-url">qtx.com</span><span class="s-date">2026-06</span></div>
+    </div>
+  </div>
+
+  <div class="sources-section">
+    <h3>🎫 体彩押注方式数据来源</h3>
+    <div class="sources-grid">
+      <div class="source-item"><span class="s-name">中国体育彩票官网</span><span class="s-url">lottery.gov.cn</span><span class="s-date">官方渠道</span></div>
+      <div class="source-item"><span class="s-name">国家体育总局体彩中心</span><span class="s-url">官方公告</span><span class="s-date">官方渠道</span></div>
+      <div class="source-item"><span class="s-name">中国竞彩网</span><span class="s-url">竞彩官方</span><span class="s-date">官方渠道</span></div>
+      <div class="source-item"><span class="s-name">江苏体彩</span><span class="s-url">js-lottery.com</span><span class="s-date">官方授权</span></div>
+      <div class="source-item"><span class="s-name">上海观察</span><span class="s-url">shobserver.com</span><span class="s-date">权威媒体</span></div>
+      <div class="source-item"><span class="s-name">扬子晚报/紫牛新闻</span><span class="s-url">权威媒体</span><span class="s-date">2026-06</span></div>
+    </div>
+  </div>
+
+  <div class="warning-box" style="margin-top:30px;">
+    <strong>⚠️ 免责声明：</strong><br>
+    1. 本页面所有球员名单数据来自各国家队官方公告或权威体育媒体报道，仅供信息参考。<br>
+    2. 球员号码为各来源整理，部分号码可能因官方最终确认而有变动。<br>
+    3. 俱乐部信息以名单公布时为准，转会窗口期间可能发生变化。<br>
+    4. 体彩相关内容整理自中国体育彩票官方渠道，不构成任何投注建议。<br>
+    5. 彩票有风险，投注需谨慎。请通过合法渠道理性购彩。<br>
+    6. 数据整理于2026年6月10日，最终信息请以FIFA官方及各国足协最新公布为准。
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <h4>🤖 AI Model Arena · 2026世界杯预测擂台赛</h4>
+    <p>6大AI模型 · 各100元本金 · 竞彩足球实盘 · 最终收益排名</p>
+    <p>参赛模型：GPT-5.5 / GLM-5.1 / Qwen-3.7-Max / Deepseek-V4-Pro / Mimo-V2.5-Pro / Kimi-K2.6</p>
+    <p>世界杯数据：48支参赛球队 × 26人大名单 = <strong>1,248名球员</strong> | 104场比赛 | 16个主办城市</p>
+    <p>数据截止：<strong>2026年6月10日</strong> | 信息来源：FIFA官方、FourFourTwo、ESPN、各国足协官方公告、中国体育彩票官网等</p>
+    <div class="disclaimer">
+      <p>⚠️ 免责声明：本页面所有数据来自公开权威渠道，仅供信息参考。球员号码可能因赛前调整而变化，俱乐部信息可能因转会窗口变动而更新。</p>
+      <p>体彩相关内容不构成任何投注建议。彩票有风险，投注需谨慎。未满18周岁不得购买彩票及兑奖。</p>
+      <p>最终信息请以FIFA官方（fifa.com）及各国足协最新公布为准。</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== Navigation =====
+// Grouped sections: bracket shows teams too, format shows lottery too
+const SECTION_GROUPS = {
+  bracket: ['bracket', 'teams'],
+  format: ['format', 'lottery'],
+};
+
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const group = SECTION_GROUPS[id];
+  if (group) {
+    group.forEach(gid => {
+      const el = document.getElementById(gid);
+      if (el) el.classList.add('active');
+    });
+  } else {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('active');
+  }
+  if(btn) btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== Lottery Tabs =====
+function showLotteryTab(id, btn) {
+  document.querySelectorAll('.lottery-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.lottery-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('lottery-' + id).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+
+// ===== Team Data =====
+
+const teamsData = {
+  uefa: [
+    {
+      name: '法国', flag: '🇫🇷', rank: 1, coach: '迪迪埃·德尚', source: 'FourFourTwo / fourfourtwo.com', date: '2026-05-17',
+      players: [
+        {n:'迈克·迈尼昂',p:'GK',c:'AC米兰（意大利）'},{n:'布里斯·桑巴',p:'GK',c:'雷恩（法国）'},{n:'罗宾·里瑟',p:'GK',c:'朗斯（法国）'},
+        {n:'马洛·古斯托',p:'DF',c:'切尔西（英格兰）'},{n:'卢卡斯·迪涅',p:'DF',c:'阿斯顿维拉（英格兰）'},{n:'达约·于帕梅卡诺',p:'DF',c:'拜仁慕尼黑（德国）'},{n:'威廉·萨利巴',p:'DF',c:'阿森纳（英格兰）'},{n:'易卜拉欣·科纳泰',p:'DF',c:'利物浦（英格兰）'},{n:'朱尔·孔德',p:'DF',c:'巴塞罗那（西班牙）'},{n:'特奥·埃尔南德斯',p:'DF',c:'利雅得新月（沙特）'},{n:'卢卡斯·埃尔南德斯',p:'DF',c:'巴黎圣日耳曼（法国）'},{n:'马克桑斯·拉克罗瓦',p:'DF',c:'水晶宫（英格兰）'},
+        {n:'恩戈洛·坎特',p:'MF',c:'费内巴切（土耳其）'},{n:'奥雷利安·楚阿梅尼',p:'MF',c:'皇家马德里（西班牙）'},{n:'阿德里安·拉比奥',p:'MF',c:'AC米兰（意大利）'},{n:'马努·科内',p:'MF',c:'罗马（意大利）'},{n:'拉扬·切尔基',p:'MF',c:'曼城（英格兰）'},{n:'沃伦·扎伊尔-埃梅里',p:'MF',c:'巴黎圣日耳曼（法国）'},
+        {n:'奥斯曼·登贝莱',p:'FW',c:'巴黎圣日耳曼（法国）'},{n:'马库斯·图拉姆',p:'FW',c:'国际米兰（意大利）'},{n:'基利安·姆巴佩©',p:'FW',c:'皇家马德里（西班牙）',cap:true},{n:'布拉德利·巴尔科拉',p:'FW',c:'巴黎圣日耳曼（法国）'},{n:'迈克尔·奥利塞',p:'FW',c:'拜仁慕尼黑（德国）'},{n:'马格内·阿克利乌什',p:'FW',c:'摩纳哥（法国）'},{n:'德西雷·杜埃',p:'FW',c:'巴黎圣日耳曼（法国）'},{n:'让-菲利普·马泰塔',p:'FW',c:'水晶宫（英格兰）'}
+      ]
+    },
+    {
+      name: '西班牙', flag: '🇪🇸', rank: 2, coach: '路易斯·德拉富恩特', source: 'DAZN / dazn.com', date: '2026-05-25',
+      players: [
+        {n:'大卫·拉亚',p:'GK',c:'阿森纳（英格兰）'},{n:'霍安·加西亚',p:'GK',c:'巴塞罗那（西班牙）'},{n:'乌奈·西蒙',p:'GK',c:'毕尔巴鄂竞技（西班牙）'},
+        {n:'马克·普比尔',p:'DF',c:'马德里竞技（西班牙）'},{n:'亚历杭德罗·格里马尔多',p:'DF',c:'勒沃库森（德国）'},{n:'埃里克·加西亚',p:'DF',c:'巴塞罗那（西班牙）'},{n:'马科斯·略伦特',p:'DF',c:'马德里竞技（西班牙）'},{n:'佩德罗·波罗',p:'DF',c:'热刺（英格兰）'},{n:'艾默里克·拉波尔特',p:'DF',c:'毕尔巴鄂竞技（西班牙）'},{n:'保·库巴西',p:'DF',c:'巴塞罗那（西班牙）'},{n:'马克·库库雷利亚',p:'DF',c:'切尔西（英格兰）'},
+        {n:'米克尔·梅里诺',p:'MF',c:'阿森纳（英格兰）'},{n:'法维安·鲁伊斯',p:'MF',c:'巴黎圣日耳曼（法国）'},{n:'加维',p:'MF',c:'巴塞罗那（西班牙）'},{n:'达尼·奥尔莫',p:'MF',c:'巴塞罗那（西班牙）'},{n:'罗德里©',p:'MF',c:'曼城（英格兰）',cap:true},{n:'马丁·苏维门迪',p:'MF',c:'阿森纳（英格兰）'},{n:'佩德里',p:'MF',c:'巴塞罗那（西班牙）'},{n:'亚历克斯·巴埃纳',p:'MF',c:'马德里竞技（西班牙）'},
+        {n:'费兰·托雷斯',p:'FW',c:'巴塞罗那（西班牙）'},{n:'耶雷米·皮诺',p:'FW',c:'水晶宫（英格兰）'},{n:'尼科·威廉斯',p:'FW',c:'毕尔巴鄂竞技（西班牙）'},{n:'拉明·亚马尔',p:'FW',c:'巴塞罗那（西班牙）'},{n:'米克尔·奥亚萨瓦尔',p:'FW',c:'皇家社会（西班牙）'},{n:'维克托·穆尼奥斯',p:'FW',c:'奥萨苏纳（西班牙）'},{n:'博尔哈·伊格莱西亚斯',p:'FW',c:'塞尔塔（西班牙）'}
+      ]
+    },
+    {
+      name: '英格兰', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', rank: 4, coach: '托马斯·图赫尔', source: 'EnglandFootball.com', date: '2026-05-22',
+      players: [
+        {n:'乔丹·皮克福德',p:'GK',c:'埃弗顿（英格兰）'},{n:'迪恩·亨德森',p:'GK',c:'水晶宫（英格兰）'},{n:'詹姆斯·特拉福德',p:'GK',c:'曼城（英格兰）'},
+        {n:'埃兹里·孔萨',p:'DF',c:'阿斯顿维拉（英格兰）'},{n:'尼科·奥赖利',p:'DF',c:'曼城（英格兰）'},{n:'约翰·斯通斯',p:'DF',c:'曼城（英格兰）'},{n:'马克·格伊',p:'DF',c:'曼城（英格兰）'},{n:'蒂诺·利夫拉门托',p:'DF',c:'纽卡斯尔联（英格兰）'},{n:'丹·伯恩',p:'DF',c:'纽卡斯尔联（英格兰）'},{n:'里斯·詹姆斯©',p:'DF',c:'切尔西（英格兰）',cap:true},{n:'杰德·斯彭斯',p:'DF',c:'热刺（英格兰）'},{n:'贾雷尔·夸安萨',p:'DF',c:'勒沃库森（德国）'},
+        {n:'德克兰·赖斯',p:'MF',c:'阿森纳（英格兰）'},{n:'埃利奥特·安德森',p:'MF',c:'诺丁汉森林（英格兰）'},{n:'乔丹·亨德森',p:'MF',c:'布伦特福德（英格兰）'},{n:'科比·梅努',p:'MF',c:'曼联（英格兰）'},{n:'安东尼·戈登',p:'MF',c:'巴塞罗那（西班牙）'},{n:'埃贝雷基·埃泽',p:'MF',c:'阿森纳（英格兰）'},{n:'摩根·罗杰斯',p:'MF',c:'阿斯顿维拉（英格兰）'},{n:'祖德·贝林厄姆',p:'MF',c:'皇家马德里（西班牙）'},
+        {n:'布卡约·萨卡',p:'FW',c:'阿森纳（英格兰）'},{n:'哈里·凯恩',p:'FW',c:'拜仁慕尼黑（德国）'},{n:'马库斯·拉什福德',p:'FW',c:'巴塞罗那（西班牙）'},{n:'奥利·沃特金斯',p:'FW',c:'阿斯顿维拉（英格兰）'},{n:'诺尼·马杜埃凯',p:'FW',c:'阿森纳（英格兰）'},{n:'伊万·托尼',p:'FW',c:'吉达国民（沙特）'}
+      ]
+    },
+    {
+      name: '德国', flag: '🇩🇪', rank: 10, coach: '尤利安·纳格尔斯曼', source: 'FourFourTwo / fourfourtwo.com', date: '2026-06-08',
+      players: [
+        {n:'曼努埃尔·诺伊尔',p:'GK',c:'拜仁慕尼黑（德国）'},{n:'奥利弗·鲍曼',p:'GK',c:'霍芬海姆（德国）'},{n:'亚历山大·努贝尔',p:'GK',c:'斯图加特（德国）'},
+        {n:'安东尼奥·吕迪格',p:'DF',c:'皇家马德里（西班牙）'},{n:'尼科·施洛特贝克',p:'DF',c:'多特蒙德（德国）'},{n:'乔纳坦·塔赫',p:'DF',c:'拜仁慕尼黑（德国）'},{n:'达维德·劳姆',p:'DF',c:'RB莱比锡（德国）'},{n:'瓦尔德马·安东',p:'DF',c:'多特蒙德（德国）'},{n:'纳撒尼尔·布朗',p:'DF',c:'法兰克福（德国）'},{n:'马利克·佳夫',p:'DF',c:'纽卡斯尔联（英格兰）'},{n:'费利克斯·内梅查',p:'DF',c:'多特蒙德（德国）'},
+        {n:'约书亚·基米希©',p:'MF',c:'拜仁慕尼黑（德国）',cap:true},{n:'勒鲁瓦·萨内',p:'MF',c:'加拉塔萨雷（土耳其）'},{n:'莱昂·戈雷茨卡',p:'MF',c:'拜仁慕尼黑（德国）'},{n:'帕斯卡尔·格罗斯',p:'MF',c:'布莱顿（英格兰）'},{n:'纳迪姆·阿米里',p:'MF',c:'美因茨（德国）'},{n:'贾迈勒·穆西亚拉',p:'MF',c:'拜仁慕尼黑（德国）'},{n:'弗洛里安·维尔茨',p:'MF',c:'利物浦（英格兰）'},{n:'亚历山大·帕夫洛维奇',p:'MF',c:'拜仁慕尼黑（德国）'},{n:'安杰洛·施蒂勒',p:'MF',c:'斯图加特（德国）'},{n:'阿桑·韦德拉奥果',p:'MF',c:'RB莱比锡（德国）'},
+        {n:'凯·哈弗茨',p:'FW',c:'阿森纳（英格兰）'},{n:'尼克·沃尔特马德',p:'FW',c:'纽卡斯尔联（英格兰）'},{n:'德尼兹·翁达夫',p:'FW',c:'斯图加特（德国）'},{n:'马克西米利安·拜尔',p:'FW',c:'多特蒙德（德国）'}
+      ]
+    },
+    {
+      name: '葡萄牙', flag: '🇵🇹', rank: 5, coach: '罗伯托·马丁内斯', source: 'CupofNations2025', date: '2026-05-19',
+      players: [
+        {n:'迪奥戈·科斯塔',p:'GK',c:'波尔图（葡萄牙）'},{n:'若泽·萨',p:'GK',c:'狼队（英格兰）'},{n:'鲁伊·席尔瓦',p:'GK',c:'葡萄牙体育（葡萄牙）'},
+        {n:'迪奥戈·达洛特',p:'DF',c:'曼联（英格兰）'},{n:'努诺·门德斯',p:'DF',c:'巴黎圣日耳曼（法国）'},{n:'贡萨洛·伊纳西奥',p:'DF',c:'葡萄牙体育（葡萄牙）'},{n:'雷纳托·维加',p:'DF',c:'尤文图斯（意大利）'},{n:'鲁本·迪亚斯',p:'DF',c:'曼城（英格兰）'},{n:'托马斯·阿劳霍',p:'DF',c:'本菲卡（葡萄牙）'},{n:'纳尔逊·塞梅多',p:'DF',c:'狼队（英格兰）'},{n:'若昂·坎塞洛',p:'DF',c:'利雅得新月（沙特）'},
+        {n:'鲁本·内维斯',p:'MF',c:'利雅得新月（沙特）'},{n:'若昂·内维斯',p:'MF',c:'巴黎圣日耳曼（法国）'},{n:'维蒂尼亚',p:'MF',c:'巴黎圣日耳曼（法国）'},{n:'布鲁诺·费尔南德斯©',p:'MF',c:'曼联（英格兰）',cap:true},{n:'贝尔纳多·席尔瓦',p:'MF',c:'曼城（英格兰）'},{n:'若昂·费利克斯',p:'MF',c:'AC米兰（意大利）'},{n:'弗朗西斯科·特林康',p:'MF',c:'葡萄牙体育（葡萄牙）'},{n:'弗朗西斯科·孔塞桑',p:'MF',c:'尤文图斯（意大利）'},{n:'马特乌斯·努内斯',p:'MF',c:'曼城（英格兰）'},
+        {n:'佩德罗·内托',p:'FW',c:'切尔西（英格兰）'},{n:'贡萨洛·拉莫斯',p:'FW',c:'巴黎圣日耳曼（法国）'},{n:'C罗©',p:'FW',c:'利雅得胜利（沙特）',cap:true},{n:'拉斐尔·莱奥',p:'FW',c:'AC米兰（意大利）'},{n:'贡萨洛·格德斯',p:'FW',c:'本菲卡（葡萄牙）'}
+      ]
+    },
+    {
+      name: '荷兰', flag: '🇳🇱', rank: 7, coach: '罗纳德·科曼', source: '搜狐/网易', date: '2026-05-27',
+      players: [
+        {n:'马克·弗莱肯',p:'GK',c:'勒沃库森（德国）'},{n:'罗夫斯',p:'GK',c:'桑德兰（英格兰）'},{n:'费布吕亨',p:'GK',c:'布莱顿（英格兰）'},
+        {n:'纳坦·阿克',p:'DF',c:'曼城（英格兰）'},{n:'马茨·韦弗',p:'DF',c:'布莱顿（英格兰）'},{n:'维吉尔·范戴克©',p:'DF',c:'利物浦（英格兰）',cap:true},{n:'丹泽尔·邓弗里斯',p:'DF',c:'国际米兰（意大利）'},{n:'尤里恩·廷伯',p:'DF',c:'阿森纳（英格兰）'},{n:'米基·范德芬',p:'DF',c:'热刺（英格兰）'},{n:'雅伊尔·哈托',p:'DF',c:'切尔西（英格兰）'},{n:'扬·范赫克',p:'DF',c:'布莱顿（英格兰）'},
+        {n:'弗伦基·德容',p:'MF',c:'巴塞罗那（西班牙）'},{n:'特恩·科普迈纳斯',p:'MF',c:'尤文图斯（意大利）'},{n:'昆滕·廷伯',p:'MF',c:'马赛（法国）'},{n:'赫拉芬贝赫',p:'MF',c:'利物浦（英格兰）'},{n:'马丁·德容恩',p:'MF',c:'亚特兰大（意大利）'},{n:'古斯·蒂尔',p:'MF',c:'埃因霍温（荷兰）'},{n:'蒂贾尼·赖因德斯',p:'MF',c:'曼城（英格兰）'},
+        {n:'孟菲斯·德佩',p:'FW',c:'科林蒂安（巴西）'},{n:'科迪·加克波',p:'FW',c:'利物浦（英格兰）'},{n:'贾斯汀·克鲁伊维特',p:'FW',c:'伯恩茅斯（英格兰）'},{n:'诺阿·朗',p:'FW',c:'加拉塔萨雷（土耳其）'},{n:'唐耶尔·马伦',p:'FW',c:'罗马（意大利）'},{n:'克里森西奥·萨默维尔',p:'FW',c:'西汉姆联（英格兰）'},{n:'韦格霍斯特',p:'FW',c:'阿贾克斯（荷兰）'},{n:'布莱恩·布罗比',p:'FW',c:'桑德兰（英格兰）'}
+      ]
+    },
+    {
+      name: '比利时', flag: '🇧🇪', rank: 9, coach: '鲁迪·加西亚', source: 'FourFourTwo / fourfourtwo.com', date: '2026-05-15',
+      players: [
+        {n:'蒂博·库尔图瓦',p:'GK',c:'皇家马德里（西班牙）'},{n:'塞纳·拉门斯',p:'GK',c:'曼联（英格兰）'},{n:'迈克·彭德斯',p:'GK',c:'斯特拉斯堡（法国）'},
+        {n:'托马斯·默尼耶',p:'DF',c:'里尔（法国）'},{n:'蒂莫西·卡斯塔涅',p:'DF',c:'富勒姆（英格兰）'},{n:'阿蒂尔·泰亚特',p:'DF',c:'法兰克福（德国）'},{n:'泽诺·德巴斯特',p:'DF',c:'葡萄牙体育（葡萄牙）'},{n:'马克西姆·德屈佩',p:'DF',c:'布莱顿（英格兰）'},{n:'布兰登·梅切勒',p:'DF',c:'布鲁日（比利时）'},{n:'科尼·德温特',p:'DF',c:'AC米兰（意大利）'},{n:'华金·塞斯',p:'DF',c:'布鲁日（比利时）'},{n:'内森·恩戈伊',p:'DF',c:'里尔（法国）'},
+        {n:'阿克塞尔·维特塞尔',p:'MF',c:'赫罗纳（西班牙）'},{n:'凯文·德布劳内',p:'MF',c:'那不勒斯（意大利）'},{n:'尤里·蒂勒曼斯©',p:'MF',c:'阿斯顿维拉（英格兰）',cap:true},{n:'汉斯·瓦纳肯',p:'MF',c:'布鲁日（比利时）'},{n:'查尔斯·德凯特拉雷',p:'MF',c:'亚特兰大（意大利）'},{n:'阿马杜·奥纳纳',p:'MF',c:'阿斯顿维拉（英格兰）'},{n:'尼古拉·拉斯金',p:'MF',c:'格拉斯哥流浪者（苏格兰）'},{n:'迭戈·莫雷拉',p:'MF',c:'斯特拉斯堡（法国）'},
+        {n:'罗梅卢·卢卡库',p:'FW',c:'那不勒斯（意大利）'},{n:'莱昂德罗·特罗萨德',p:'FW',c:'阿森纳（英格兰）'},{n:'杰雷米·多库',p:'FW',c:'曼城（英格兰）'},{n:'多迪·卢克巴吉奥',p:'FW',c:'本菲卡（葡萄牙）'},{n:'亚历克西斯·萨勒马克尔斯',p:'FW',c:'AC米兰（意大利）'},{n:'马蒂亚斯·费尔南德斯-帕尔多',p:'FW',c:'里尔（法国）'}
+      ]
+    },
+    {
+      name: '克罗地亚', flag: '🇭🇷', rank: 11, coach: '兹拉特科·达利奇', source: 'FourFourTwo / fourfourtwo.com', date: '2026-05-18',
+      players: [
+        {n:'多米尼克·利瓦科维奇',p:'GK',c:'萨格勒布迪纳摩（克罗地亚）'},{n:'多米尼克·科塔尔斯基',p:'GK',c:'哥本哈根（丹麦）'},{n:'伊沃尔·潘杜尔',p:'GK',c:'赫尔城（英格兰）'},
+        {n:'约瑟普·斯塔尼希奇',p:'DF',c:'拜仁慕尼黑（德国）'},{n:'约斯科·格瓦迪奥尔',p:'DF',c:'曼城（英格兰）'},{n:'杜耶·查莱塔-察尔',p:'DF',c:'皇家社会（西班牙）'},{n:'约瑟普·舒塔洛',p:'DF',c:'阿贾克斯（荷兰）'},{n:'马林·蓬格拉契奇',p:'DF',c:'佛罗伦萨（意大利）'},{n:'马丁·埃尔利奇',p:'DF',c:'中日德兰（丹麦）'},{n:'卢卡·武什科维奇',p:'DF',c:'汉堡（德国）'},
+        {n:'马特奥·科瓦契奇',p:'MF',c:'曼城（英格兰）'},{n:'卢卡·莫德里奇©',p:'MF',c:'AC米兰（意大利）',cap:true},{n:'马里奥·帕萨利奇',p:'MF',c:'亚特兰大（意大利）'},{n:'尼古拉·弗拉希奇',p:'MF',c:'都灵（意大利）'},{n:'卢卡·苏契奇',p:'MF',c:'皇家社会（西班牙）'},{n:'马丁·巴图里纳',p:'MF',c:'科莫（意大利）'},{n:'克里斯蒂扬·亚基奇',p:'MF',c:'奥格斯堡（德国）'},{n:'佩塔尔·苏契奇',p:'MF',c:'国际米兰（意大利）'},{n:'尼古拉·莫罗',p:'MF',c:'博洛尼亚（意大利）'},{n:'托尼·弗鲁克',p:'MF',c:'里耶卡（克罗地亚）'},
+        {n:'伊万·佩里西奇',p:'FW',c:'PSV埃因霍温（荷兰）'},{n:'安德烈·克拉马里奇',p:'FW',c:'霍芬海姆（德国）'},{n:'安特·布迪米尔',p:'FW',c:'奥萨苏纳（西班牙）'},{n:'马尔科·帕萨利奇',p:'FW',c:'奥兰多城（美国）'},{n:'佩塔尔·穆萨',p:'FW',c:'达拉斯FC（美国）'},{n:'伊戈尔·马塔诺维奇',p:'FW',c:'弗赖堡（德国）'}
+      ]
+    },
+    {
+      name: '挪威', flag: '🇳🇴', rank: 18, coach: '斯托莱·索尔巴肯', source: 'FourFourTwo / fourfourtwo.com', date: '2026-05-22',
+      players: [
+        {n:'厄尔扬·尼兰',p:'GK',c:'塞维利亚（西班牙）'},{n:'埃吉尔·塞尔维克',p:'GK',c:'沃特福德（英格兰）'},{n:'桑德·唐维克',p:'GK',c:'汉堡（德国）'},
+        {n:'克里斯托弗·阿耶尔',p:'DF',c:'布伦特福德（英格兰）'},{n:'尤利安·吕尔松',p:'DF',c:'多特蒙德（德国）'},{n:'利奥·厄斯蒂加德',p:'DF',c:'热那亚（意大利）'},{n:'马库斯·佩德森',p:'DF',c:'都灵（意大利）'},{n:'大卫·沃尔夫',p:'DF',c:'伍尔弗汉普顿流浪者（英格兰）'},{n:'弗雷德里克·比约尔坎',p:'DF',c:'博德闪耀（挪威）'},{n:'托比约恩·赫格姆',p:'DF',c:'博洛尼亚（意大利）'},{n:'松德雷·兰加斯',p:'DF',c:'德比郡（英格兰）'},{n:'亨里克·法尔克纳',p:'DF',c:'维京（挪威）'},
+        {n:'桑德·贝格',p:'MF',c:'富勒姆（英格兰）'},{n:'马丁·厄德高©',p:'MF',c:'阿森纳（英格兰）',cap:true},{n:'帕特里克·贝格',p:'MF',c:'博德闪耀（挪威）'},{n:'克里斯蒂安·托斯特韦特',p:'MF',c:'萨索洛（意大利）'},{n:'莫滕·索斯比',p:'MF',c:'克雷莫内塞（意大利）'},{n:'安东尼奥·努萨',p:'MF',c:'RB莱比锡（德国）'},{n:'弗雷德里克·奥尔斯内斯',p:'MF',c:'本菲卡（葡萄牙）'},{n:'奥斯卡·博布',p:'MF',c:'富勒姆（英格兰）'},{n:'延斯·彼得·豪格',p:'MF',c:'博德闪耀（挪威）'},{n:'安德烈亚斯·谢尔德鲁普',p:'MF',c:'本菲卡（葡萄牙）'},{n:'泰洛·奥斯高',p:'MF',c:'格拉斯哥流浪者（苏格兰）'},
+        {n:'亚历山大·瑟洛特',p:'FW',c:'马德里竞技（西班牙）'},{n:'埃尔林·哈兰德',p:'FW',c:'曼城（英格兰）'},{n:'约尔根·拉森',p:'FW',c:'水晶宫（英格兰）'}
+      ]
+    },
+    {
+      name: '瑞士', flag: '🇨🇭', rank: 17, coach: '穆拉特·雅金', source: 'FourFourTwo / fourfourtwo.com', date: '2026-06-05',
+      players: [
+        {n:'格雷戈尔·科贝尔',p:'GK',c:'多特蒙德（德国）'},{n:'伊冯·姆沃戈',p:'GK',c:'洛里昂（法国）'},{n:'马文·凯勒',p:'GK',c:'伯尔尼年轻人（瑞士）'},
+        {n:'米罗·穆海姆',p:'DF',c:'汉堡（德国）'},{n:'西尔万·威德默',p:'DF',c:'美因茨（德国）'},{n:'尼科·埃尔韦迪',p:'DF',c:'门兴格拉德巴赫（德国）'},{n:'曼努埃尔·阿坎吉©',p:'DF',c:'国际米兰（意大利）',cap:true},{n:'里卡多·罗德里格斯',p:'DF',c:'皇家贝蒂斯（西班牙）'},{n:'埃雷·科梅特',p:'DF',c:'瓦伦西亚（西班牙）'},{n:'奥雷勒·阿曼达',p:'DF',c:'法兰克福（德国）'},{n:'卢卡·雅凯',p:'DF',c:'斯图加特（德国）'},
+        {n:'丹尼斯·扎卡里亚',p:'MF',c:'摩纳哥（法国）'},{n:'雷莫·弗罗伊勒',p:'MF',c:'博洛尼亚（意大利）'},{n:'约翰·曼赞比',p:'MF',c:'弗赖堡（德国）'},{n:'格拉尼特·扎卡',p:'MF',c:'桑德兰（英格兰）'},{n:'阿尔东·亚沙里',p:'MF',c:'AC米兰（意大利）'},{n:'吉布里尔·索乌',p:'MF',c:'塞维利亚（西班牙）'},{n:'米歇尔·埃比舍尔',p:'MF',c:'比萨（意大利）'},{n:'法比安·里德',p:'MF',c:'奥格斯堡（德国）'},
+        {n:'布雷尔·恩博洛',p:'FW',c:'雷恩（法国）'},{n:'丹·恩多耶',p:'FW',c:'诺丁汉森林（英格兰）'},{n:'克里斯蒂安·法斯纳赫特',p:'FW',c:'伯尔尼年轻人（瑞士）'},{n:'鲁文·巴尔加斯',p:'FW',c:'塞维利亚（西班牙）'},{n:'诺亚·奥卡福尔',p:'FW',c:'利兹联（英格兰）'},{n:'泽基·阿姆杜尼',p:'FW',c:'伯恩利（英格兰）'},{n:'塞德里克·伊滕',p:'FW',c:'杜塞尔多夫（德国）'}
+      ]
+    },
+    {
+      name: '苏格兰', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', rank: 38, coach: '史蒂夫·克拉克', source: 'FourFourTwo / fourfourtwo.com', date: '2026-05-20',
+      players: [
+        {n:'克雷格·戈登',p:'GK',c:'哈茨（苏格兰）'},{n:'安格斯·冈恩',p:'GK',c:'诺丁汉森林（英格兰）'},{n:'利亚姆·凯利',p:'GK',c:'格拉斯哥流浪者（苏格兰）'},
+        {n:'格兰特·汉利',p:'DF',c:'希伯尼安（苏格兰）'},{n:'杰克·亨德里',p:'DF',c:'达曼协作（沙特）'},{n:'阿龙·希基',p:'DF',c:'布伦特福德（英格兰）'},{n:'多姆·海厄姆',p:'DF',c:'雷克瑟姆（威尔士）'},{n:'斯科特·麦克纳',p:'DF',c:'萨格勒布迪纳摩（克罗地亚）'},{n:'内森·帕特森',p:'DF',c:'埃弗顿（英格兰）'},{n:'安东尼·拉尔斯顿',p:'DF',c:'凯尔特人（苏格兰）'},{n:'约翰·索塔尔',p:'DF',c:'格拉斯哥流浪者（苏格兰）'},{n:'基兰·蒂尔尼',p:'DF',c:'凯尔特人（苏格兰）'},{n:'安迪·罗伯逊©',p:'DF',c:'利物浦（英格兰）',cap:true},
+        {n:'瑞安·克里斯蒂',p:'MF',c:'伯恩茅斯（英格兰）'},{n:'芬德利·柯蒂斯',p:'MF',c:'基尔马诺克（苏格兰）'},{n:'刘易斯·弗格森',p:'MF',c:'博洛尼亚（意大利）'},{n:'本·甘农-多克',p:'MF',c:'伯恩茅斯（英格兰）'},{n:'泰勒·弗莱彻',p:'MF',c:'曼联（英格兰）'},{n:'约翰·麦金',p:'MF',c:'阿斯顿维拉（英格兰）'},{n:'肯尼·麦克莱恩',p:'MF',c:'诺维奇城（英格兰）'},{n:'斯科特·麦克托米奈',p:'MF',c:'那不勒斯（意大利）'},
+        {n:'切·亚当斯',p:'FW',c:'都灵（意大利）'},{n:'林顿·戴克斯',p:'FW',c:'查尔顿竞技（英格兰）'},{n:'乔治·赫斯特',p:'FW',c:'伊普斯维奇镇（英格兰）'},{n:'劳伦斯·尚克兰',p:'FW',c:'哈茨（苏格兰）'},{n:'罗斯·斯图尔特',p:'FW',c:'南安普顿（英格兰）'}
+      ]
+    },
+    {
+      name: '奥地利', flag: '🇦🇹', rank: 24, coach: '拉尔夫·朗尼克', source: 'FourFourTwo / fourfourtwo.com', date: '2026-05-19',
+      players: [
+        {n:'亚历山大·施拉格',p:'GK',c:'萨尔茨堡红牛（奥地利）'},{n:'弗洛里安·维格勒',p:'GK',c:'比尔森胜利（捷克）'},{n:'帕特里克·彭茨',p:'GK',c:'布隆德比（丹麦）'},
+        {n:'达维德·阿芬格鲁贝尔',p:'DF',c:'埃尔切（西班牙）'},{n:'凯文·丹索',p:'DF',c:'热刺（英格兰）'},{n:'斯特凡·波施',p:'DF',c:'美因茨（德国）'},{n:'达维德·阿拉巴©',p:'DF',c:'皇家马德里（西班牙）',cap:true},{n:'菲利普·林哈特',p:'DF',c:'弗赖堡（德国）'},{n:'菲利普·姆韦内',p:'DF',c:'美因茨（德国）'},{n:'亚历山大·普拉斯',p:'DF',c:'霍芬海姆（德国）'},{n:'马尔科·弗里德尔',p:'DF',c:'云达不莱梅（德国）'},{n:'米夏埃尔·斯沃博达',p:'DF',c:'威尼斯（意大利）'},
+        {n:'克萨韦尔·施拉格',p:'MF',c:'RB莱比锡（德国）'},{n:'尼古拉斯·塞瓦尔德',p:'MF',c:'RB莱比锡（德国）'},{n:'马塞尔·萨比策',p:'MF',c:'多特蒙德（德国）'},{n:'弗洛里安·格里利奇',p:'MF',c:'布拉加（葡萄牙）'},{n:'卡尼·丘库埃梅卡',p:'MF',c:'多特蒙德（德国）'},{n:'罗马诺·施密德',p:'MF',c:'云达不莱梅（德国）'},{n:'克里斯托夫·鲍姆加特纳',p:'MF',c:'RB莱比锡（德国）'},{n:'康拉德·莱默',p:'MF',c:'拜仁慕尼黑（德国）'},{n:'帕特里克·维默尔',p:'MF',c:'沃尔夫斯堡（德国）'},{n:'保罗·万纳',p:'MF',c:'PSV埃因霍温（荷兰）'},{n:'亚历山德罗·舍普夫',p:'MF',c:'沃尔夫斯贝格（奥地利）'},
+        {n:'马尔科·阿瑙托维奇',p:'FW',c:'贝尔格莱德红星（塞尔维亚）'},{n:'米夏埃尔·格雷戈里奇',p:'FW',c:'奥格斯堡（德国）'},{n:'萨沙·卡拉伊季奇',p:'FW',c:'LASK林茨（奥地利）'}
+      ]
+    },
+    {
+      name: '捷克', flag: '🇨🇿', rank: 34, coach: '米罗斯拉夫·库贝克', source: 'FIFAWorldCupNews', date: '2026-05-31',
+      players: [
+        {n:'卢卡斯·霍尔尼切克',p:'GK',c:'布拉加（葡萄牙）'},{n:'马捷伊·科瓦日',p:'GK',c:'勒沃库森（德国）'},{n:'因德里赫·斯塔涅克',p:'GK',c:'布拉格斯拉维亚（捷克）'},
+        {n:'弗拉迪米尔·曹法尔',p:'DF',c:'霍芬海姆（德国）'},{n:'达维德·杜德拉',p:'DF',c:'布拉格斯拉维亚（捷克）'},{n:'托马什·霍莱什',p:'DF',c:'布拉格斯拉维亚（捷克）'},{n:'罗宾·赫拉纳奇',p:'DF',c:'霍芬海姆（德国）'},{n:'什捷潘·哈卢佩克',p:'DF',c:'布拉格斯拉维亚（捷克）'},{n:'达维德·尤拉塞克',p:'DF',c:'布拉格斯拉维亚（捷克）'},{n:'拉吉斯拉夫·克雷伊奇©',p:'DF',c:'伍尔弗汉普顿流浪者（英格兰）',cap:true},{n:'雅罗斯拉夫·泽莱尼',p:'DF',c:'布拉格斯巴达（捷克）'},{n:'达维德·齐马',p:'DF',c:'布拉格斯拉维亚（捷克）'},
+        {n:'帕维尔·布哈',p:'MF',c:'辛辛那提FC（美国）'},{n:'卢卡斯·切尔夫',p:'MF',c:'比尔森胜利（捷克）'},{n:'弗拉迪米尔·达里达',p:'MF',c:'赫拉德茨-克拉洛韦（捷克）'},{n:'托马什·拉德拉',p:'MF',c:'比尔森胜利（捷克）'},{n:'卢卡斯·普罗沃德',p:'MF',c:'布拉格斯拉维亚（捷克）'},{n:'米哈尔·萨迪莱克',p:'MF',c:'布拉格斯拉维亚（捷克）'},{n:'胡戈·索胡雷克',p:'MF',c:'布拉格斯巴达（捷克）'},{n:'亚历山德·索伊卡',p:'MF',c:'比尔森胜利（捷克）'},{n:'托马什·绍切克',p:'MF',c:'西汉姆联（英格兰）'},{n:'帕维尔·舒尔茨',p:'MF',c:'里昂（法国）'},{n:'丹尼斯·维辛斯基',p:'MF',c:'比尔森胜利（捷克）'},
+        {n:'亚当·赫洛热克',p:'FW',c:'霍芬海姆（德国）'},{n:'托马什·乔里',p:'FW',c:'布拉格斯拉维亚（捷克）'},{n:'莫伊米尔·基蒂尔',p:'FW',c:'布拉格斯拉维亚（捷克）'}
+      ]
+    },
+    {
+      name: '波黑', flag: '🇧🇦', rank: 32, coach: '谢尔盖·巴巴雷茨', source: 'SportsWorldGhana', date: '2026-05-11', tag: '首次',
+      players: [
+        {n:'尼古拉·瓦西利',p:'GK',c:'圣保利（德国）'},{n:'马丁·兹洛米斯利奇',p:'GK',c:'里耶卡（克罗地亚）'},{n:'奥斯曼·哈季基奇',p:'GK',c:'斯拉文贝鲁波（克罗地亚）'},
+        {n:'阿马尔·戴迪克',p:'DF',c:'本菲卡（葡萄牙）'},{n:'塞亚德·科拉希纳茨©',p:'DF',c:'亚特兰大（意大利）',cap:true},{n:'尼哈德·穆亚基奇',p:'DF',c:'加济安泰普（土耳其）'},{n:'尼古拉·卡蒂奇',p:'DF',c:'沙尔克04（德国）'},{n:'塔里克·穆哈雷莫维奇',p:'DF',c:'萨索洛（意大利）'},{n:'斯蒂耶潘·拉德利伊奇',p:'DF',c:'里耶卡（克罗地亚）'},{n:'丹尼斯·哈季卡杜尼奇',p:'DF',c:'桑普多利亚（意大利）'},{n:'尼达尔·切利克',p:'DF',c:'朗斯（法国）'},
+        {n:'阿米尔·哈季亚赫梅托维奇',p:'MF',c:'赫尔城（英格兰）'},{n:'伊万·孙伊奇',p:'MF',c:'帕福斯（塞浦路斯）'},{n:'伊万·巴希奇',p:'MF',c:'阿斯塔纳（哈萨克斯坦）'},{n:'杰尼斯·布尔尼奇',p:'MF',c:'卡尔斯鲁厄（德国）'},{n:'埃尔明·马赫米奇',p:'MF',c:'利贝雷茨（捷克）'},{n:'本亚明·塔希罗维奇',p:'MF',c:'布隆德比（丹麦）'},{n:'阿马尔·梅米奇',p:'MF',c:'比尔森胜利（捷克）'},{n:'阿尔明·吉戈维奇',p:'MF',c:'伯尔尼年轻人（瑞士）'},{n:'凯里姆·阿拉伊贝戈维奇',p:'MF',c:'萨尔茨堡红牛（奥地利）'},{n:'埃斯米尔·巴伊拉克塔雷维奇',p:'MF',c:'PSV埃因霍温（荷兰）'},
+        {n:'埃尔梅丁·德米罗维奇',p:'FW',c:'斯图加特（德国）'},{n:'约沃·卢基奇',p:'FW',c:'克卢日大学（罗马尼亚）'},{n:'萨梅德·巴日达尔',p:'FW',c:'比亚韦斯托克（波兰）'},{n:'哈里斯·塔巴科维奇',p:'FW',c:'门兴格拉德巴赫（德国）'},{n:'埃丁·哲科©',p:'FW',c:'沙尔克04（德国）',cap:true}
+      ]
+    },
+    {
+      name: '瑞典', flag: '🇸🇪', rank: 35, coach: '格雷厄姆·波特', source: 'FourFourTwo / fourfourtwo.com', date: '2026-05-12',
+      players: [
+        {n:'克里斯托弗·努德费尔特',p:'GK',c:'AIK索尔纳（瑞典）'},{n:'维克托·约翰松',p:'GK',c:'斯托克城（英格兰）'},{n:'雅各布·泽特斯特伦',p:'GK',c:'德比郡（英格兰）'},
+        {n:'维克托·林德洛夫',p:'DF',c:'阿斯顿维拉（英格兰）'},{n:'伊萨克·海恩',p:'DF',c:'亚特兰大（意大利）'},{n:'加布里埃尔·古德蒙松',p:'DF',c:'利兹联（英格兰）'},{n:'卡尔·斯塔费尔特',p:'DF',c:'塞尔塔（西班牙）'},{n:'赫尔曼·约翰松',p:'DF',c:'达拉斯FC（美国）'},{n:'亚尔马·埃克达尔',p:'DF',c:'伯恩利（英格兰）'},{n:'丹尼尔·斯文松',p:'DF',c:'多特蒙德（德国）'},{n:'古斯塔夫·拉格比尔克',p:'DF',c:'布拉加（葡萄牙）'},{n:'埃里克·史密斯',p:'DF',c:'圣保利（德国）'},{n:'埃利奥特·斯特劳德',p:'DF',c:'米亚尔比（瑞典）'},
+        {n:'马蒂亚斯·斯万贝里',p:'MF',c:'沃尔夫斯堡（德国）'},{n:'耶斯佩尔·卡尔斯特伦',p:'MF',c:'乌迪内斯（意大利）'},{n:'亚辛·阿亚里',p:'MF',c:'布莱顿（英格兰）'},{n:'卢卡斯·贝尔瓦尔',p:'MF',c:'热刺（英格兰）'},{n:'贝斯福特·泽内利',p:'MF',c:'圣吉罗斯联合（比利时）'},
+        {n:'亚历山大·伊萨克',p:'FW',c:'利物浦（英格兰）'},{n:'维克托·哲凯赖什',p:'FW',c:'阿森纳（英格兰）'},{n:'肯·塞马',p:'FW',c:'帕福斯（塞浦路斯）'},{n:'安东尼·埃兰加',p:'FW',c:'纽卡斯尔联（英格兰）'},{n:'本雅明·尼格伦',p:'FW',c:'凯尔特人（苏格兰）'},{n:'亚历山大·贝恩哈德松',p:'FW',c:'荷尔斯泰因基尔（德国）'},{n:'古斯塔夫·尼尔松',p:'FW',c:'布鲁日（比利时）'},{n:'塔哈·阿里',p:'FW',c:'马尔默（瑞典）'}
+      ]
+    },
+    {
+      name: '土耳其', flag: '🇹🇷', rank: 22, coach: '文琴佐·蒙特拉', source: '搜狐/新浪', date: '2026-06-02',
+      players: [
+        {n:'乌古尔詹·恰基尔',p:'GK',c:'加拉塔萨雷（土耳其）'},{n:'阿勒泰·巴因迪尔',p:'GK',c:'曼联（英格兰）'},{n:'梅尔特·居诺克',p:'GK',c:'费内巴切（土耳其）'},
+        {n:'泽基·切利克',p:'DF',c:'罗马（意大利）'},{n:'阿卜杜勒克里姆·巴尔达克彻',p:'DF',c:'加拉塔萨雷（土耳其）'},{n:'埃伦·埃尔马利',p:'DF',c:'加拉塔萨雷（土耳其）'},{n:'费尔迪·卡迪奥卢',p:'DF',c:'布莱顿（英格兰）'},{n:'梅里赫·德米拉尔',p:'DF',c:'吉达国民（沙特）'},{n:'梅尔特·穆尔杜尔',p:'DF',c:'费内巴切（土耳其）'},{n:'奥赞·卡巴克',p:'DF',c:'霍芬海姆（德国）'},{n:'萨梅特·阿卡丁',p:'DF',c:'里泽体育（土耳其）'},{n:'恰拉尔·瑟云聚',p:'DF',c:'费内巴切（土耳其）'},
+        {n:'哈坎·恰尔汗奥卢©',p:'MF',c:'国际米兰（意大利）',cap:true},{n:'奥尔昆·科克丘',p:'MF',c:'贝西克塔斯（土耳其）'},{n:'伊斯梅尔·于克塞克',p:'MF',c:'费内巴切（土耳其）'},{n:'卡安·艾汗',p:'MF',c:'加拉塔萨雷（土耳其）'},{n:'萨利赫·厄兹詹',p:'MF',c:'多特蒙德（德国）'},
+        {n:'阿尔达·居莱尔',p:'FW',c:'皇家马德里（西班牙）'},{n:'巴勒什·阿尔佩尔·伊尔马兹',p:'FW',c:'加拉塔萨雷（土耳其）'},{n:'凯南·伊尔迪兹',p:'FW',c:'尤文图斯（意大利）'},{n:'詹·乌尊',p:'FW',c:'法兰克福（德国）'},{n:'德尼兹·居尔',p:'FW',c:'波尔图（葡萄牙）'},{n:'伊尔凡·詹·卡赫韦奇',p:'FW',c:'卡斯帕萨（土耳其）'},{n:'凯雷姆·阿克蒂尔科奥卢',p:'FW',c:'费内巴切（土耳其）'},{n:'尤努斯·阿克金',p:'FW',c:'加拉塔萨雷（土耳其）'},{n:'奥古兹·艾丁',p:'FW',c:'费内巴切（土耳其）'}
+      ]
+    }
+  ],
+
+  caf: [
+    {
+      name: '摩洛哥', flag: '🇲🇦', rank: 15, coach: '穆罕默德·瓦赫比', source: 'FourFourTwo / fourfourtwo.com', date: '2026-05-26',
+      players: [
+        {n:'亚辛·布努',p:'GK',c:'利雅得新月（沙特）'},{n:'穆尼尔·穆罕默迪',p:'GK',c:'拜尔坎RS（摩洛哥）'},{n:'雷达·塔格诺提',p:'GK',c:'卡萨布兰卡拉贾（摩洛哥）'},
+        {n:'阿什拉夫·哈基米©',p:'DF',c:'巴黎圣日耳曼（法国）',cap:true},{n:'努赛尔·马兹拉维',p:'DF',c:'曼联（英格兰）'},{n:'纳伊夫·阿格尔德',p:'DF',c:'马赛（法国）'},{n:'阿纳斯·萨拉赫丁',p:'DF',c:'特温特（荷兰）'},{n:'优素福·贝拉马里',p:'DF',c:'开罗国民（埃及）'},{n:'查迪·里亚德',p:'DF',c:'水晶宫（英格兰）'},{n:'扎卡里亚·瓦赫迪',p:'DF',c:'亨克（比利时）'},{n:'伊萨·迪奥普',p:'DF',c:'富勒姆（英格兰）'},{n:'雷杜安·哈尔哈尔',p:'DF',c:'梅赫伦（比利时）'},
+        {n:'索菲安·阿姆拉巴特',p:'MF',c:'皇家贝蒂斯（西班牙）'},{n:'阿泽丁·奥纳希',p:'MF',c:'赫罗纳（西班牙）'},{n:'比拉尔·埃尔·汉努斯',p:'MF',c:'斯图加特（德国）'},{n:'伊斯梅尔·赛巴里',p:'MF',c:'PSV埃因霍温（荷兰）'},{n:'萨米尔·穆拉贝特',p:'MF',c:'斯特拉斯堡（法国）'},{n:'尼埃尔·艾瑙伊',p:'MF',c:'罗马（意大利）'},{n:'阿尤布·布阿迪',p:'MF',c:'里尔（法国）'},
+        {n:'阿卜杜·埃扎洛祖利',p:'FW',c:'皇家贝蒂斯（西班牙）'},{n:'卜拉欣·迪亚斯',p:'FW',c:'皇家马德里（西班牙）'},{n:'苏菲亚内·拉希米',p:'FW',c:'阿尔艾因（阿联酋）'},{n:'阿尤布·埃尔·卡比',p:'FW',c:'奥林匹亚科斯（希腊）'},{n:'谢姆斯丁·塔尔比',p:'FW',c:'桑德兰（英格兰）'},{n:'耶西内·贾西米',p:'FW',c:'斯特拉斯堡（法国）'},{n:'阿尤布·阿米尼',p:'FW',c:'法兰克福（德国）'}
+      ]
+    },
+    {
+      name: '突尼斯', flag: '🇹🇳', rank: 30, coach: '萨布里·拉穆希', source: 'FourFourTwo / fourfourtwo.com', date: '2026-06-08',
+      players: [
+        {n:'艾曼·达门',p:'GK',c:'斯法克斯（突尼斯）'},{n:'萨布里·本·赫桑',p:'GK',c:'萨赫勒之星（突尼斯）'},{n:'穆希布·沙马克',p:'GK',c:'非洲俱乐部（突尼斯）'},
+        {n:'蒙塔萨尔·塔尔比',p:'DF',c:'洛里昂（法国）'},{n:'迪伦·布隆',p:'DF',c:'塞尔维特（瑞士）'},{n:'阿里·阿布迪',p:'DF',c:'尼斯（法国）'},{n:'扬·瓦莱里',p:'DF',c:'年轻人（瑞士）'},{n:'穆罕默德·本·哈米达',p:'DF',c:'突尼斯希望（突尼斯）'},{n:'穆塔兹·内法蒂',p:'DF',c:'北雪平（瑞典）'},{n:'奥马尔·雷基克',p:'DF',c:'马里博尔（斯洛文尼亚）'},{n:'阿德姆·阿鲁斯',p:'DF',c:'卡斯帕萨（土耳其）'},{n:'拉德·希卡维',p:'DF',c:'莫纳斯提尔US（突尼斯）'},
+        {n:'埃利耶斯·斯基里',p:'MF',c:'法兰克福（德国）'},{n:'汉尼拔·梅布里',p:'MF',c:'伯恩利（英格兰）'},{n:'阿尼斯·本·斯拉马',p:'MF',c:'诺维奇城（英格兰）'},{n:'莫尔塔达·本·瓦内斯',p:'MF',c:'卡斯帕萨（土耳其）'},{n:'伊斯梅尔·加尔比',p:'MF',c:'奥格斯堡（德国）'},{n:'哈吉·马哈茂德',p:'MF',c:'卢加诺（瑞士）'},{n:'拉尼·赫迪拉',p:'MF',c:'柏林联（德国）'},
+        {n:'埃利亚斯·阿舒里',p:'FW',c:'哥本哈根（丹麦）'},{n:'菲拉斯·沙瓦特',p:'FW',c:'非洲俱乐部（突尼斯）'},{n:'哈泽姆·马斯图里',p:'FW',c:'马哈奇卡拉迪纳摩（俄罗斯）'},{n:'埃利亚斯·萨阿德',p:'FW',c:'汉诺威96（德国）'},{n:'塞巴斯蒂安·图内克蒂',p:'FW',c:'凯尔特人（苏格兰）'},{n:'哈利勒·阿亚里',p:'FW',c:'巴黎圣日耳曼（法国）'},{n:'拉扬·埃卢米',p:'FW',c:'温哥华白帽（加拿大）'}
+      ]
+    },
+    {
+      name: '埃及', flag: '🇪🇬', rank: 36, coach: '霍萨姆·哈桑', source: 'FIFAWorldCupNews', date: '2026-05-29',
+      players: [
+        {n:'穆罕默德·埃尔·谢纳维',p:'GK',c:'开罗国民（埃及）'},{n:'穆斯塔法·肖比尔',p:'GK',c:'开罗国民（埃及）'},{n:'马赫迪·苏莱曼',p:'GK',c:'亚历山大伊蒂哈德（埃及）'},{n:'穆罕默德·阿拉',p:'GK',c:'古纳（埃及）'},
+        {n:'穆罕默德·哈尼',p:'DF',c:'开罗国民（埃及）'},{n:'塔里克·阿拉',p:'DF',c:'ZED（埃及）'},{n:'哈姆迪·法蒂',p:'DF',c:'沃克拉（卡塔尔）'},{n:'拉米·拉比亚',p:'DF',c:'开罗国民（埃及）'},{n:'亚西尔·易卜拉欣',p:'DF',c:'开罗国民（埃及）'},{n:'侯萨姆·阿卜杜勒马吉德',p:'DF',c:'扎马雷克（埃及）'},{n:'穆罕默德·阿卜杜勒莫内姆',p:'DF',c:'尼斯（法国）'},{n:'艾哈迈德·法图赫',p:'DF',c:'扎马雷克（埃及）'},{n:'卡里姆·哈菲兹',p:'DF',c:'金字塔（埃及）'},
+        {n:'马尔万·阿提亚',p:'MF',c:'开罗国民（埃及）'},{n:'莫汉纳德·拉希恩',p:'MF',c:'金字塔（埃及）'},{n:'纳比勒·埃马德·邓加',p:'MF',c:'纳吉马（巴林）'},{n:'马哈茂德·萨贝尔',p:'MF',c:'ZED（埃及）'},{n:'艾哈迈德·赛义德·齐佐',p:'MF',c:'扎马雷克（埃及）'},{n:'马哈茂德·特雷泽盖',p:'MF',c:'开罗国民（埃及）'},{n:'伊玛姆·阿舒尔',p:'MF',c:'开罗国民（埃及）'},{n:'穆斯塔法·齐科',p:'MF',c:'金字塔（埃及）'},{n:'易卜拉欣·阿德尔',p:'MF',c:'北西兰（丹麦）'},{n:'海塞姆·哈桑',p:'MF',c:'皇家奥维多（西班牙）'},
+        {n:'穆罕默德·萨拉赫©',p:'FW',c:'利物浦（英格兰）',cap:true},{n:'奥马尔·马尔穆什',p:'FW',c:'曼城（英格兰）'},{n:'哈姆扎·阿卜杜勒卡里姆',p:'FW',c:'巴塞罗那竞技（西班牙）'}
+      ]
+    },
+    {
+      name: '阿尔及利亚', flag: '🇩🇿', rank: 25, coach: '弗拉基米尔·佩特科维奇', source: 'FourFourTwo / fourfourtwo.com', date: '2026-06-04',
+      players: [
+        {n:'梅尔文·马斯蒂尔',p:'GK',c:'尼永体育场（瑞士）'},{n:'乌萨马·本波特',p:'GK',c:'阿尔及尔USM（阿尔及利亚）'},{n:'卢卡·齐达内',p:'GK',c:'格拉纳达（西班牙）'},
+        {n:'艾萨·曼迪',p:'DF',c:'里尔（法国）'},{n:'阿什雷夫·阿巴达',p:'DF',c:'阿尔及尔USM（阿尔及利亚）'},{n:'穆罕默德·阿明·图盖',p:'DF',c:'突尼斯希望（突尼斯）'},{n:'齐内丁·贝莱伊德',p:'DF',c:'卡比利JS（阿尔及利亚）'},{n:'贾文·哈贾姆',p:'DF',c:'年轻人（瑞士）'},{n:'拉扬·艾特-努里',p:'DF',c:'曼城（英格兰）'},{n:'拉菲克·贝尔加利',p:'DF',c:'维罗纳（意大利）'},{n:'拉米·本塞拜尼',p:'DF',c:'多特蒙德（德国）'},{n:'萨米尔·切尔吉',p:'DF',c:'巴黎FC（法国）'},
+        {n:'拉米兹·泽鲁基',p:'MF',c:'特温特（荷兰）'},{n:'侯塞姆·奥瓦尔',p:'MF',c:'吉达联合（沙特）'},{n:'法雷斯·沙伊比',p:'MF',c:'法兰克福（德国）'},{n:'伊希姆·布达维',p:'MF',c:'尼斯（法国）'},{n:'纳比勒·本塔莱布',p:'MF',c:'里尔（法国）'},{n:'易卜拉欣·马扎',p:'MF',c:'勒沃库森（德国）'},{n:'亚辛·蒂特拉维',p:'MF',c:'沙勒罗瓦（比利时）'},
+        {n:'里亚德·马赫雷斯',p:'FW',c:'吉达国民（沙特）'},{n:'阿明·古伊里',p:'FW',c:'马赛（法国）'},{n:'阿尼斯·哈吉·穆萨',p:'FW',c:'费耶诺德（荷兰）'},{n:'纳德希尔·本博阿里',p:'FW',c:'久尔（匈牙利）'},{n:'穆罕默德·阿莫拉',p:'FW',c:'沃尔夫斯堡（德国）'},{n:'阿迪尔·布尔比纳',p:'FW',c:'杜海勒（卡塔尔）'},{n:'法雷斯·盖德jemis',p:'FW',c:'弗罗西诺内（意大利）'}
+      ]
+    },
+    {
+      name: '加纳', flag: '🇬🇭', rank: 42, coach: '卡洛斯·奎罗斯', source: 'FourFourTwo / fourfourtwo.com', date: '2026-06-01',
+      players: [
+        {n:'劳伦斯·阿蒂-齐吉',p:'GK',c:'圣加仑（瑞士）'},{n:'约瑟夫·阿南',p:'GK',c:'圣帕特里克竞技（爱尔兰）'},{n:'本杰明·阿萨雷',p:'GK',c:'橡树之心（加纳）'},
+        {n:'阿里杜·塞杜',p:'DF',c:'雷恩（法国）'},{n:'乔纳斯·阿杰泰',p:'DF',c:'沃尔夫斯堡（德国）'},{n:'阿卜杜勒·穆明',p:'DF',c:'巴列卡诺（西班牙）'},{n:'吉迪恩·门萨',p:'DF',c:'欧塞尔（法国）'},{n:'巴巴·拉赫曼',p:'DF',c:'PAOK（希腊）'},{n:'杰罗姆·奥波库',p:'DF',c:'伊斯坦布尔巴萨克赛希尔（土耳其）'},{n:'科乔·佩普拉·奥蓬',p:'DF',c:'尼斯（法国）'},{n:'德里克·卢卡森',p:'DF',c:'帕福斯（塞浦路斯）'},{n:'马文·塞尼亚',p:'DF',c:'欧塞尔（法国）'},
+        {n:'托马斯·帕尔特伊',p:'MF',c:'比利亚雷亚尔（西班牙）'},{n:'阿卜杜勒·法塔武',p:'MF',c:'莱斯特城（英格兰）'},{n:'夸西·西博',p:'MF',c:'奥维多（西班牙）'},{n:'以利沙·奥乌苏',p:'MF',c:'欧塞尔（法国）'},{n:'凯莱布·耶伦基',p:'MF',c:'北西兰（丹麦）'},{n:'奥古斯丁·博阿凯',p:'MF',c:'圣埃蒂安（法国）'},{n:'卡马尔丁·苏勒马纳',p:'MF',c:'亚特兰大（意大利）'},
+        {n:'安托万·塞梅诺',p:'FW',c:'曼城（英格兰）'},{n:'伊尼亚基·威廉斯',p:'FW',c:'毕尔巴鄂竞技（西班牙）'},{n:'克里斯托弗·邦苏·巴',p:'FW',c:'卡迪西亚（沙特）'},{n:'欧内斯特·努阿马',p:'FW',c:'里昂（法国）'},{n:'布兰登·托马斯-阿桑特',p:'FW',c:'考文垂城（英格兰）'},{n:'普林斯·夸贝纳·阿杜',p:'FW',c:'比尔森胜利（捷克）'},{n:'乔丹·阿尤©',p:'FW',c:'莱斯特城（英格兰）',cap:true}
+      ]
+    },
+    {
+      name: '塞内加尔', flag: '🇸🇳', rank: 16, coach: '帕佩·蒂亚乌', source: 'ESPN / espn.com', date: '2026-06-02',
+      players: [
+        {n:'爱德华·门迪',p:'GK',c:'吉达国民（沙特）'},{n:'莫里·迪奥',p:'GK',c:'勒阿弗尔（法国）'},{n:'耶旺恩·迪乌夫',p:'GK',c:'尼斯（法国）'},
+        {n:'卡利杜·库利巴利©',p:'DF',c:'利雅得新月（沙特）',cap:true},{n:'穆萨·尼亚卡泰',p:'DF',c:'里昂（法国）'},{n:'马马杜·萨尔',p:'DF',c:'切尔西（英格兰）'},{n:'阿卜杜拉耶·塞克',p:'DF',c:'海法马卡比（以色列）'},{n:'克雷平·迪亚塔',p:'DF',c:'摩纳哥（法国）'},{n:'安托万·门迪',p:'DF',c:'尼斯（法国）'},{n:'埃尔·哈吉·马利克·迪乌夫',p:'DF',c:'西汉姆联（英格兰）'},{n:'伊斯梅尔·雅各布斯',p:'DF',c:'加拉塔萨雷（土耳其）'},
+        {n:'伊德里萨·加纳·盖耶',p:'MF',c:'埃弗顿（英格兰）'},{n:'帕佩·盖耶',p:'MF',c:'比利亚雷亚尔（西班牙）'},{n:'拉明·卡马拉',p:'MF',c:'摩纳哥（法国）'},{n:'哈比卜·迪亚拉',p:'MF',c:'桑德兰（英格兰）'},{n:'帕特·西斯',p:'MF',c:'巴列卡诺（西班牙）'},{n:'帕佩·萨尔',p:'MF',c:'热刺（英格兰）'},{n:'巴拉·萨波科·恩迪亚耶',p:'MF',c:'拜仁慕尼黑（德国）'},
+        {n:'萨迪奥·马内©',p:'FW',c:'利雅得胜利（沙特）',cap:true},{n:'伊斯梅拉·萨尔',p:'FW',c:'水晶宫（英格兰）'},{n:'伊利曼·恩迪亚耶',p:'FW',c:'埃弗顿（英格兰）'},{n:'阿萨内·迪奥',p:'FW',c:'科莫（意大利）'},{n:'尼古拉斯·杰克逊',p:'FW',c:'拜仁慕尼黑（德国）'},{n:'班巴·迪昂',p:'FW',c:'洛里昂（法国）'},{n:'谢里夫·恩迪亚耶',p:'FW',c:'萨姆松体育（土耳其）'},{n:'易卜拉欣·姆巴耶',p:'FW',c:'巴黎圣日耳曼（法国）'}
+      ]
+    },
+    {
+      name: '科特迪瓦', flag: '🇨🇮', rank: 19, coach: '埃默塞·法埃', source: 'FourFourTwo / fourfourtwo.com', date: '2026-06-08',
+      players: [
+        {n:'亚希亚·福法纳',p:'GK',c:'里泽体育（土耳其）'},{n:'阿尔班·拉冯',p:'GK',c:'帕纳辛奈科斯（希腊）'},{n:'穆罕默德·科内',p:'GK',c:'沙勒罗瓦（比利时）'},
+        {n:'吉斯拉兰·科南',p:'DF',c:'吉尔维森特（葡萄牙）'},{n:'奥迪隆·科苏努',p:'DF',c:'亚特兰大（意大利）'},{n:'威尔弗里德·辛格',p:'DF',c:'加拉塔萨雷（土耳其）'},{n:'埃文·恩迪卡',p:'DF',c:'罗马（意大利）'},{n:'伊曼纽尔·阿格巴杜',p:'DF',c:'贝西克塔斯（土耳其）'},{n:'盖拉·杜埃',p:'DF',c:'斯特拉斯堡（法国）'},{n:'奥斯曼·迪奥曼德',p:'DF',c:'葡萄牙体育（葡萄牙）'},{n:'克里斯托弗·奥佩里',p:'DF',c:'伊斯坦布尔巴萨克赛希尔（土耳其）'},
+        {n:'弗兰克·凯西埃©',p:'MF',c:'吉达国民（沙特）',cap:true},{n:'让·迈克尔·塞里',p:'MF',c:'马里博尔（斯洛文尼亚）'},{n:'易卜拉欣·桑加雷',p:'MF',c:'诺丁汉森林（英格兰）'},{n:'塞科·福法纳',p:'MF',c:'波尔图（葡萄牙）'},{n:'克里斯·奥乌莱',p:'MF',c:'特拉布宗体育（土耳其）'},{n:'帕菲·吉亚冈',p:'MF',c:'沙勒罗瓦（比利时）'},
+        {n:'尼古拉·佩佩',p:'FW',c:'比利亚雷亚尔（西班牙）'},{n:'乌马尔·迪亚基特',p:'FW',c:'布鲁日塞克莱（比利时）'},{n:'西蒙·阿丁格拉',p:'FW',c:'摩纳哥（法国）'},{n:'埃万·盖桑',p:'FW',c:'水晶宫（英格兰）'},{n:'阿马德·迪亚洛',p:'FW',c:'曼联（英格兰）'},{n:'扬·迪奥曼德',p:'FW',c:'RB莱比锡（德国）'},{n:'巴祖马纳·图雷',p:'FW',c:'霍芬海姆（德国）'},{n:'埃利·瓦希',p:'FW',c:'尼斯（法国）'},{n:'安格-约昂·博尼',p:'FW',c:'国际米兰（意大利）'}
+      ]
+    },
+    {
+      name: '南非', flag: '🇿🇦', rank: 43, coach: '雨果·布鲁斯', source: 'fifa-26.com', date: '2026-05-27',
+      players: [
+        {n:'罗恩文·威廉姆斯©',p:'GK',c:'马梅洛迪日落（南非）',cap:true},{n:'里卡多·戈斯',p:'GK',c:'西韦莱莱（南非）'},{n:'西普霍·切恩',p:'GK',c:'奥兰多海盗（南非）'},
+        {n:'库利索·穆道',p:'DF',c:'马梅洛迪日落（南非）'},{n:'奥布里·莫迪巴',p:'DF',c:'马梅洛迪日落（南非）'},{n:'库鲁马尼·恩达马内',p:'DF',c:'马梅洛迪日落（南非）'},{n:'奥尔韦图·马坎亚',p:'DF',c:'费城联合（美国）'},{n:'布拉德利·克罗斯',p:'DF',c:'凯撒酋长（南非）'},{n:'塔邦·马图鲁迪',p:'DF',c:'波罗克瓦尼城（南非）'},{n:'恩科西纳蒂·西比西',p:'DF',c:'奥兰多海盗（南非）'},{n:'卡莫赫洛·塞贝贝莱',p:'DF',c:'奥兰多海盗（南非）'},{n:'伊梅·奥孔',p:'DF',c:'汉诺威96（德国）'},{n:'萨穆凯莱·卡比尼',p:'DF',c:'莫尔德（挪威）'},{n:'姆贝凯泽利·姆博卡齐',p:'DF',c:'芝加哥火焰（美国）'},
+        {n:'特博霍·莫科埃纳',p:'MF',c:'马梅洛迪日落（南非）'},{n:'杰登·亚当斯',p:'MF',c:'马梅洛迪日落（南非）'},{n:'塔伦特·姆巴塔',p:'MF',c:'奥兰多海盗（南非）'},{n:'斯菲费洛·西托莱',p:'MF',c:'通德拉（葡萄牙）'},
+        {n:'奥斯温·阿波利斯',p:'FW',c:'奥兰多海盗（南非）'},{n:'奇潘·莫雷米',p:'FW',c:'奥兰多海盗（南非）'},{n:'埃维登斯·马克戈帕',p:'FW',c:'奥兰多海盗（南非）'},{n:'雷莱博希尔·莫福肯',p:'FW',c:'奥兰多海盗（南非）'},{n:'特拉·茨瓦内',p:'FW',c:'马梅洛迪日落（南非）'},{n:'莱尔·福斯特',p:'FW',c:'伯恩利（英格兰）'},{n:'伊克拉姆·雷纳斯',p:'FW',c:'马梅洛迪日落（南非）'},{n:'塔佩洛·马塞科',p:'FW',c:'AEL利马索尔（塞浦路斯）'}
+      ]
+    },
+    {
+      name: '佛得角', flag: '🇨🇻', rank: 46, coach: '布比斯塔', source: 'FourFourTwo / fourfourtwo.com', date: '2026-05-18', tag: '新军',
+      players: [
+        {n:'沃津哈',p:'GK',c:'沙维斯（葡萄牙）'},{n:'马西奥·罗萨',p:'GK',c:'蒙塔纳（保加利亚）'},{n:'CJ·多斯桑托斯',p:'GK',c:'圣地亚哥（美国）'},
+        {n:'斯托皮拉©',p:'DF',c:'托雷嫩塞（葡萄牙）',cap:true},{n:'皮科',p:'DF',c:'沙姆洛克流浪（爱尔兰）'},{n:'若昂·保罗',p:'DF',c:'FCSB（罗马尼亚）'},{n:'迪内',p:'DF',c:'阿尔巴塔（阿联酋）'},{n:'洛根·科斯塔',p:'DF',c:'比利亚雷亚尔（西班牙）'},{n:'史蒂文·莫雷拉',p:'DF',c:'哥伦布机员（美国）'},{n:'瓦格纳·皮纳',p:'DF',c:'特拉布宗体育（土耳其）'},{n:'西德尼·洛佩斯·卡布拉尔',p:'DF',c:'本菲卡（葡萄牙）'},{n:'凯尔文·皮雷斯',p:'DF',c:'SJK（芬兰）'},
+        {n:'贾米罗·蒙特罗',p:'MF',c:'PEC兹沃勒（荷兰）'},{n:'凯文·皮纳',p:'MF',c:'克拉斯诺达尔（俄罗斯）'},{n:'德罗伊·杜阿尔特',p:'MF',c:'卢多戈雷茨（保加利亚）'},{n:'特尔莫·阿坎若',p:'MF',c:'吉马良斯维多利亚（葡萄牙）'},{n:'拉罗斯·杜阿尔特',p:'MF',c:'普斯卡什学院（匈牙利）'},{n:'扬尼克·塞梅多',p:'MF',c:'法伦斯（葡萄牙）'},
+        {n:'瑞安·门德斯',p:'FW',c:'伊格迪尔（土耳其）'},{n:'加里·罗德里格斯',p:'FW',c:'阿波隆利马索尔（塞浦路斯）'},{n:'威利·塞梅多',p:'FW',c:'奥莫尼亚（塞浦路斯）'},{n:'若瓦内·卡布拉尔',p:'FW',c:'埃斯特雷拉阿马多拉（葡萄牙）'},{n:'本奇莫尔',p:'FW',c:'阿克隆托利亚蒂（俄罗斯）'},{n:'戴隆·利夫拉门托',p:'FW',c:'卡萨皮亚（葡萄牙）'},{n:'赫利奥·瓦雷拉',p:'FW',c:'特拉维夫马卡比（以色列）'},{n:'努诺·达科斯塔',p:'FW',c:'伊斯坦布尔巴萨克赛希尔（土耳其）'}
+      ]
+    },
+    {
+      name: '民主刚果', flag: '🇨🇩', rank: 40, coach: '塞巴斯蒂安·德萨布雷', source: 'Foot-Africa / foot-africa.com', date: '2026-05-18',
+      players: [
+        {n:'蒂莫西·法尤卢',p:'GK',c:'诺亚（亚美尼亚）'},{n:'利昂内尔·姆帕西',p:'GK',c:'勒阿弗尔（法国）'},{n:'马修·埃波罗',p:'GK',c:'标准列日（比利时）'},
+        {n:'亚伦·万-比萨卡',p:'DF',c:'西汉姆联（英格兰）'},{n:'热德翁·卡卢卢',p:'DF',c:'阿里斯利马索尔（塞浦路斯）'},{n:'乔里斯·卡延贝',p:'DF',c:'亨克（比利时）'},{n:'阿蒂尔·马苏阿库',p:'DF',c:'朗斯（法国）'},{n:'史蒂夫·卡普阿迪',p:'DF',c:'维德祖洛兹（波兰）'},{n:'罗基·布希里',p:'DF',c:''},{n:'阿克塞尔·图安泽贝',p:'DF',c:'伯恩利（英格兰）'},{n:'尚塞尔·姆本巴©',p:'DF',c:'里尔（法国）',cap:true},{n:'迪伦·巴图宾西卡',p:'DF',c:'拉里萨（希腊）'},{n:'塞缪尔·穆图萨米',p:'MF',c:'阿特罗米托斯（希腊）'},{n:'埃多·卡延贝',p:'MF',c:'沃特福德（英格兰）'},{n:'纳坦·姆巴佩',p:'MF',c:'蒙彼利埃（法国）'},{n:'查尔斯·皮克尔',p:'MF',c:'西班牙人（西班牙）'},{n:'诺亚·萨迪基',p:'MF',c:'桑德兰（英格兰）'},{n:'布莱恩·西彭加',p:'MF',c:'卡斯特利翁（西班牙）'},{n:'恩加莱耶尔·穆考',p:'MF',c:'里尔（法国）'},{n:'特奥·邦贡达',p:'MF',c:'莫斯科斯巴达（俄罗斯）'},{n:'梅沙克·埃利亚',p:'MF',c:'阿兰亚斯堡（土耳其）'},{n:'盖尔·卡库塔',p:'MF',c:'拉里萨（希腊）'},
+        {n:'菲斯顿·马耶莱',p:'FW',c:'金字塔（埃及）'},{n:'塞德里克·巴坎布',p:'FW',c:'皇家贝蒂斯（西班牙）'},{n:'西蒙·班扎',p:'FW',c:'阿尔贾吉拉（阿联酋）'},{n:'约安·维萨',p:'FW',c:'纽卡斯尔联（英格兰）'}
+      ]
+    }
+  ],
+
+  afc: [
+    {
+      name: '日本', flag: '🇯🇵', rank: 15, coach: '森保一', source: 'Thai Rath / thairath.co.th', date: '2026-05-15',
+      players: [
+        {n:'铃木彩艳',p:'GK',c:'帕尔马（意大利）'},{n:'大迫敬介',p:'GK',c:'广岛三箭（日本）'},{n:'早川友基',p:'GK',c:'鹿岛鹿角（日本）'},
+        {n:'长友佑都',p:'DF',c:'FC东京（日本）'},{n:'谷口彰悟',p:'DF',c:'圣图尔登（比利时）'},{n:'板仓滉',p:'DF',c:'阿贾克斯（荷兰）'},{n:'渡边刚',p:'DF',c:'费耶诺德（荷兰）'},{n:'富安健洋',p:'DF',c:'阿贾克斯（荷兰）'},{n:'伊藤洋辉',p:'DF',c:'拜仁慕尼黑（德国）'},{n:'濑古步梦',p:'DF',c:'勒阿弗尔（法国）'},{n:'菅原由势',p:'DF',c:'云达不莱梅（德国）'},
+        {n:'远藤航©',p:'MF',c:'利物浦（英格兰）',cap:true},{n:'伊藤纯也',p:'MF',c:'亨克（比利时）'},{n:'镰田大地',p:'MF',c:'水晶宫（英格兰）'},{n:'堂安律',p:'MF',c:'法兰克福（德国）'},{n:'田中碧',p:'MF',c:'利兹联（英格兰）'},{n:'中村敬斗',p:'MF',c:'兰斯（法国）'},{n:'佐野海舟',p:'MF',c:'美因茨05（德国）'},{n:'久保建英',p:'MF',c:'皇家社会（西班牙）'},{n:'铃木淳之介',p:'MF',c:'哥本哈根（丹麦）'},
+        {n:'前田大然',p:'FW',c:'凯尔特人（苏格兰）'},{n:'上田绮世',p:'FW',c:'费耶诺德（荷兰）'},{n:'小川航基',p:'FW',c:'NEC奈梅亨（荷兰）'},{n:'铃木唯人',p:'FW',c:'弗赖堡（德国）'},{n:'后藤启介',p:'FW',c:'圣图尔登（比利时）'},{n:'盐谷航斗',p:'FW',c:'沃尔夫斯堡（德国）'}
+      ]
+    },
+    {
+      name: '韩国', flag: '🇰🇷', rank: 23, coach: '洪明甫', source: 'CupofNations2025', date: '2026-05-18',
+      players: [
+        {n:'赵贤祐',p:'GK',c:'蔚山HD（韩国）'},{n:'金承奎',p:'GK',c:'FC东京（日本）'},{n:'宋范根',p:'GK',c:'全北现代（韩国）'},
+        {n:'金珉载',p:'DF',c:'拜仁慕尼黑（德国）'},{n:'曹侑珉',p:'DF',c:'沙迦（阿联酋）'},{n:'李韩汎',p:'DF',c:'中日德兰（丹麦）'},{n:'金泰贤',p:'DF',c:'鹿岛鹿角（日本）'},{n:'朴镇燮',p:'DF',c:'浙江FC（中国）'},{n:'李基赫',p:'DF',c:'江原FC（韩国）'},{n:'李泰锡',p:'DF',c:'奥地利维也纳（奥地利）'},{n:'薛永佑',p:'DF',c:'贝尔格莱德红星（塞尔维亚）'},{n:'延斯·卡斯特罗普',p:'DF',c:'门兴格拉德巴赫（德国）'},{n:'金纹焕',p:'DF',c:'大田韩亚市民（韩国）'},
+        {n:'杨贤俊',p:'MF',c:'凯尔特人（苏格兰）'},{n:'白昇浩',p:'MF',c:'伯明翰城（英格兰）'},{n:'黄仁范',p:'MF',c:'费耶诺德（荷兰）'},{n:'金珍圭',p:'MF',c:'全北现代（韩国）'},{n:'裴峻浩',p:'MF',c:'斯托克城（英格兰）'},{n:'严智星',p:'MF',c:'斯旺西城（威尔士）'},{n:'李东炅',p:'MF',c:'蔚山HD（韩国）'},{n:'李在城',p:'MF',c:'美因茨05（德国）'},
+        {n:'孙兴慜©',p:'FW',c:'洛杉矶FC（美国）',cap:true},{n:'曹圭成',p:'FW',c:'中日德兰（丹麦）'},{n:'黄喜灿',p:'FW',c:'狼队（英格兰）'},{n:'吴贤揆',p:'FW',c:'贝西克塔斯（土耳其）'}
+      ]
+    },
+    {
+      name: '伊朗', flag: '🇮🇷', rank: 29, coach: '阿米尔·加莱诺伊', source: 'FourFourTwo / fourfourtwo.com', date: '2026-06-08',
+      players: [
+        {n:'阿里雷扎·贝兰万德',p:'GK',c:'大不里士拖拉机（伊朗）'},{n:'帕亚姆·尼亚兹曼德',p:'GK',c:'波斯波利斯（伊朗）'},{n:'侯赛因·侯赛尼',p:'GK',c:'塞帕罕（伊朗）'},
+        {n:'萨利赫·哈尔达尼',p:'DF',c:'德黑兰独立（伊朗）'},{n:'埃赫桑·哈伊萨菲©',p:'DF',c:'塞帕罕（伊朗）',cap:true},{n:'舒贾·哈利勒扎德',p:'DF',c:'大不里士拖拉机（伊朗）'},{n:'米拉德·穆罕默迪',p:'DF',c:'波斯波利斯（伊朗）'},{n:'侯赛因·卡纳尼扎德甘',p:'DF',c:'波斯波利斯（伊朗）'},{n:'阿里·内马蒂',p:'DF',c:'胡齐斯坦钢铁（伊朗）'},{n:'拉明·礼萨伊安',p:'DF',c:'胡齐斯坦钢铁（伊朗）'},{n:'丹尼尔·埃里',p:'DF',c:'马拉万（伊朗）'},
+        {n:'赛义德·埃扎托拉希',p:'MF',c:'迪拜青年国民（阿联酋）'},{n:'阿里雷扎·贾汉巴赫什',p:'MF',c:'登德尔（比利时）'},{n:'穆罕默德·莫赫比',p:'MF',c:'罗斯托夫（俄罗斯）'},{n:'萨曼·戈多斯',p:'MF',c:'卡尔巴（阿联酋）'},{n:'鲁兹贝赫·切什米',p:'MF',c:'德黑兰独立（伊朗）'},{n:'迈赫迪·托拉比',p:'MF',c:'大不里士拖拉机（伊朗）'},{n:'穆罕默德·戈尔巴尼',p:'MF',c:'瓦赫达（阿联酋）'},{n:'阿米尔穆罕默德·拉扎吉尼亚',p:'MF',c:'德黑兰独立（伊朗）'},
+        {n:'迈赫迪·塔雷米',p:'FW',c:'奥林匹亚科斯（希腊）'},{n:'迈赫迪·加耶迪',p:'FW',c:'迪拜胜利（阿联酋）'},{n:'阿里·阿里普尔',p:'FW',c:'波斯波利斯（伊朗）'},{n:'阿米尔侯赛因·侯赛因扎德',p:'FW',c:'大不里士拖拉机（伊朗）'},{n:'沙赫里亚尔·莫格汉卢',p:'FW',c:'卡尔巴（阿联酋）'},{n:'丹尼斯·埃克特',p:'FW',c:'标准列日（比利时）'}
+      ]
+    },
+    {
+      name: '澳大利亚', flag: '🇦🇺', rank: 27, coach: '托尼·波波维奇', source: 'A-Leagues / aleagues.com.au', date: '2026-06-01',
+      players: [
+        {n:'马修·瑞安©',p:'GK',c:'莱万特（西班牙）',cap:true},{n:'帕特里克·比奇',p:'GK',c:'墨尔本城（澳大利亚）'},{n:'保罗·伊佐',p:'GK',c:'兰德斯（丹麦）'},
+        {n:'阿齐兹·贝希奇',p:'DF',c:'墨尔本城（澳大利亚）'},{n:'乔丹·博斯',p:'DF',c:'费耶诺德（荷兰）'},{n:'卡梅隆·伯吉斯',p:'DF',c:'斯旺西城（威尔士）'},{n:'亚历山德罗·西尔卡蒂',p:'DF',c:'帕尔马（意大利）'},{n:'米洛斯·德格内克',p:'DF',c:'希腊人竞技（塞浦路斯）'},{n:'贾森·杰里亚',p:'DF',c:'新潟天鹅（日本）'},{n:'卢卡斯·赫林顿',p:'DF',c:'科罗拉多急流（美国）'},{n:'雅各布·伊塔利安诺',p:'DF',c:'格拉茨AK（奥地利）'},{n:'哈里·苏塔尔',p:'DF',c:'莱斯特城（英格兰）'},
+        {n:'卡梅隆·德夫林',p:'MF',c:'哈茨（苏格兰）'},{n:'杰克逊·欧文',p:'MF',c:'圣保利（德国）'},{n:'康纳·梅特卡夫',p:'MF',c:'圣保利（德国）'},{n:'艾登·奥尼尔',p:'MF',c:'纽约城（美国）'},{n:'保罗·奥孔-恩格斯特勒',p:'MF',c:'悉尼FC（澳大利亚）'},{n:'马修·莱基',p:'MF',c:'墨尔本城（澳大利亚）'},
+        {n:'阿维·马比尔',p:'FW',c:'卡斯特利翁（西班牙）'},{n:'尼山·维卢皮莱',p:'FW',c:'墨尔本胜利（澳大利亚）'},{n:'克里斯蒂安·沃尔帕托',p:'FW',c:'萨索洛（意大利）'},{n:'泰特·延吉',p:'FW',c:'町田泽尔维亚（日本）'},{n:'阿伊丁·赫鲁斯蒂奇',p:'FW',c:'赫拉克勒斯（荷兰）'},{n:'内斯托里·伊兰昆达',p:'FW',c:'沃特福德（英格兰）'},{n:'穆罕默德·图雷',p:'FW',c:'诺维奇城（英格兰）'}
+      ]
+    },
+    {
+      name: '沙特阿拉伯', flag: '🇸🇦', rank: 38, coach: '乔治斯·多尼斯', source: 'FourFourTwo / fourfourtwo.com', date: '2026-06-08',
+      players: [
+        {n:'穆罕默德·奥韦斯',p:'GK',c:'欧拉（沙特）'},{n:'纳瓦夫·阿齐迪',p:'GK',c:'利雅得胜利（沙特）'},{n:'艾哈迈德·卡萨尔',p:'GK',c:'卡迪西亚（沙特）'},
+        {n:'阿卜杜勒阿·阿姆里',p:'DF',c:'利雅得胜利（沙特）'},{n:'哈桑·坦巴蒂',p:'DF',c:'利雅得新月（沙特）'},{n:'吉哈德·蒂克里',p:'DF',c:'卡迪西亚（沙特）'},{n:'阿里·拉贾米',p:'DF',c:'利雅得新月（沙特）'},{n:'哈桑·卡代什',p:'DF',c:'吉达联合（沙特）'},{n:'萨乌德·阿卜杜勒哈米德',p:'DF',c:'朗斯（法国）'},{n:'穆罕默德·阿布·沙马特',p:'DF',c:'卡迪西亚（沙特）'},{n:'阿里·马杰拉希',p:'DF',c:'吉达国民（沙特）'},{n:'穆特卜·哈尔比',p:'DF',c:'利雅得新月（沙特）'},{n:'纳瓦夫·布沙尔',p:'DF',c:'利雅得胜利（沙特）'},{n:'苏丹·加纳姆',p:'DF',c:'利雅得胜利（沙特）'},
+        {n:'穆罕默德·卡诺',p:'MF',c:'利雅得新月（沙特）'},{n:'阿卜杜拉·海巴里',p:'MF',c:'利雅得胜利（沙特）'},{n:'齐亚德·乔哈尼',p:'MF',c:'吉达国民（沙特）'},{n:'纳赛尔·道萨里',p:'MF',c:'利雅得新月（沙特）'},{n:'穆萨卜·朱维尔',p:'MF',c:'卡迪西亚（沙特）'},{n:'阿拉·哈吉',p:'MF',c:'尼奥姆（沙特）'},{n:'萨利姆·道萨里©',p:'MF',c:'利雅得新月（沙特）',cap:true},{n:'哈立德·加纳姆',p:'MF',c:'达曼协作（沙特）'},{n:'艾曼·叶海亚',p:'MF',c:'利雅得胜利（沙特）'},
+        {n:'菲拉斯·布莱坎',p:'FW',c:'吉达国民（沙特）'},{n:'萨利赫·谢赫里',p:'FW',c:'吉达联合（沙特）'},{n:'阿卜杜拉·哈姆丹',p:'FW',c:'利雅得胜利（沙特）'}
+      ]
+    },
+    {
+      name: '卡塔尔', flag: '🇶🇦', rank: 41, coach: '胡伦·洛佩特吉', source: 'Yahoo Sports', date: '2026-06-01',
+      players: [
+        {n:'谢哈布·埃莱西',p:'GK',c:'沙哈尼亚（卡塔尔）'},{n:'萨拉赫·扎卡里亚',p:'GK',c:'杜海勒（卡塔尔）'},{n:'米沙勒·巴尔沙姆',p:'GK',c:'萨德（卡塔尔）'},{n:'马哈茂德·阿布纳达',p:'GK',c:'赖扬（卡塔尔）'},
+        {n:'布阿莱姆·胡赫',p:'DF',c:'萨德（卡塔尔）'},{n:'佩德罗·米格尔',p:'DF',c:'萨德（卡塔尔）'},{n:'苏丹·布雷克',p:'DF',c:'杜海勒（卡塔尔）'},{n:'塔里克·萨勒曼',p:'DF',c:'萨德（卡塔尔）'},{n:'哈希米·侯赛因',p:'DF',c:'阿拉比（卡塔尔）'},{n:'阿尤布·阿维',p:'DF',c:'加拉法（卡塔尔）'},{n:'巴萨姆·拉维',p:'DF',c:'杜海勒（卡塔尔）'},{n:'拉扬·阿里',p:'DF',c:'加拉法（卡塔尔）'},{n:'伊萨·拉耶',p:'DF',c:'阿拉比（卡塔尔）'},{n:'卢卡斯·门德斯',p:'DF',c:'沃克拉（卡塔尔）'},{n:'霍曼·阿明',p:'DF',c:'莱昂内萨文化（西班牙）'},
+        {n:'艾哈迈德·法蒂',p:'MF',c:'阿拉比（卡塔尔）'},{n:'阿西姆·马迪博',p:'MF',c:'沃克拉（卡塔尔）'},{n:'哈桑·海多斯©',p:'MF',c:'萨德（卡塔尔）',cap:true},{n:'卡里姆·布迪亚夫',p:'MF',c:'杜海勒（卡塔尔）'},{n:'贾西姆·贾贝尔',p:'MF',c:'赖扬（卡塔尔）'},{n:'阿卜杜勒阿齐兹·哈特姆',p:'MF',c:'赖扬（卡塔尔）'},{n:'穆罕默德·曼奈',p:'MF',c:'沙马尔（卡塔尔）'},
+        {n:'阿尔莫埃斯·阿里',p:'FW',c:'杜海勒（卡塔尔）'},{n:'阿克拉姆·阿菲夫',p:'FW',c:'萨德（卡塔尔）'},{n:'塔辛·穆罕默德',p:'FW',c:'杜海勒（卡塔尔）'},{n:'埃德米尔森·儒尼奥尔',p:'FW',c:'杜海勒（卡塔尔）'},{n:'艾哈迈德·加内希',p:'FW',c:'加拉法（卡塔尔）'}
+      ]
+    },
+    {
+      name: '约旦', flag: '🇯🇴', rank: 39, coach: '贾迈勒·塞拉米', source: 'ESPN / espn.com', date: '2026-06-02', tag: '新军',
+      players: [
+        {n:'亚齐德·阿布·莱拉',p:'GK',c:'侯赛因（约旦）'},{n:'阿卜杜拉·法胡里',p:'GK',c:'维达特（约旦）'},{n:'努尔·巴尼·阿提亚',p:'GK',c:'费萨里（约旦）'},
+        {n:'伊赫桑·哈达德',p:'DF',c:'侯赛因（约旦）'},{n:'赛义德·罗桑',p:'DF',c:'侯赛因（约旦）'},{n:'穆罕默德·阿布阿尔纳迪',p:'DF',c:'雪兰莪（马来西亚）'},{n:'胡萨姆·阿布·达哈卜',p:'DF',c:'费萨里（约旦）'},{n:'穆罕默德·阿布·哈希什',p:'DF',c:'卡尔马（约旦）'},{n:'亚赞·阿拉伯',p:'DF',c:'FC首尔（韩国）'},{n:'阿纳斯·巴达维',p:'DF',c:'费萨里（约旦）'},{n:'阿卜杜拉·纳西布',p:'DF',c:'扎瓦拉（伊拉克）'},{n:'萨利姆·奥贝德',p:'DF',c:'侯赛因（约旦）'},
+        {n:'穆罕默德·达乌德',p:'MF',c:'维达特（约旦）'},{n:'尼扎尔·拉什丹',p:'MF',c:'卡塔尔SC（卡塔尔）'},{n:'努尔·拉瓦比德',p:'MF',c:'雪兰莪（马来西亚）'},{n:'拉贾伊·阿耶德',p:'MF',c:'侯赛因（约旦）'},{n:'阿米尔·贾穆斯',p:'MF',c:'扎瓦拉（伊拉克）'},{n:'易卜拉欣·萨迪',p:'MF',c:'卡尔马（约旦）'},{n:'穆罕默德·阿布·塔哈',p:'MF',c:'空军（伊拉克）'},
+        {n:'穆萨·塔马里',p:'FW',c:'雷恩（法国）'},{n:'奥德·法胡里',p:'FW',c:'金字塔（埃及）'},{n:'穆罕默德·阿布·兹雷克',p:'FW',c:'卡萨布兰卡拉贾（摩洛哥）'},{n:'阿里·阿扎伊泽',p:'FW',c:'沙巴布（沙特）'},{n:'阿里·奥尔万',p:'FW',c:'塞利亚（卡塔尔）'},{n:'易卜拉欣·萨布拉',p:'FW',c:'萨格勒布火车头（克罗地亚）'},{n:'马哈茂德·马尔迪',p:'FW',c:'侯赛因（约旦）'}
+      ]
+    },
+    {
+      name: '乌兹别克斯坦', flag: '🇺🇿', rank: 37, coach: '法比奥·卡纳瓦罗', source: '新浪 / sina.cn', date: '2026-06-02', tag: '新军',
+      players: [
+        {n:'尤茨基尔·尤索波夫',p:'GK',c:'纳曼干新春（乌兹别克）'},{n:'阿卜杜沃赫德·内马托夫',p:'GK',c:'纳萨夫（乌兹别克）'},{n:'博蒂拉里·叶尔加舍夫',p:'GK',c:'费尔干纳油工（乌兹别克）'},
+        {n:'阿卜杜科迪尔·胡桑诺夫',p:'DF',c:'曼城（英格兰）'},{n:'阿里扎诺夫',p:'DF',c:'塔什干棉农（乌兹别克）'},{n:'法鲁克·萨菲耶夫',p:'DF',c:'费尔干纳油工（乌兹别克）'},{n:'拉斯塔马乔·阿舒马托夫',p:'DF',c:'德黑兰独立（伊朗）'},{n:'谢尔佐德·纳斯鲁拉耶夫',p:'DF',c:'塔什干棉农（乌兹别克）'},{n:'乌姆尔别克·埃什穆罗多夫',p:'DF',c:'纳萨夫（乌兹别克）'},{n:'阿卜杜拉·阿卜杜拉耶夫',p:'DF',c:'迪巴（阿联酋）'},{n:'贝赫鲁兹·卡里莫夫',p:'DF',c:'特尔梅兹（乌兹别克）'},{n:'阿瓦兹别克·乌尔马萨利耶夫',p:'DF',c:'AGMK（乌兹别克）'},{n:'贾洪吉尔·乌罗佐夫',p:'DF',c:'埃尤普体育（土耳其）'},
+        {n:'阿克玛·莫兹戈沃伊',p:'MF',c:'纳萨夫（乌兹别克）'},{n:'奥塔贝克·舒库罗夫',p:'MF',c:'班尼亚斯（阿联酋）'},{n:'贾姆什德·伊斯坎德罗夫',p:'MF',c:'费尔干纳油工（乌兹别克）'},{n:'奥迪忠·坎罗布科夫',p:'MF',c:'大不里士拖拉机（伊朗）'},{n:'贾洛利丁·马沙里波夫',p:'MF',c:'德黑兰独立（伊朗）'},{n:'多斯通贝克·哈姆达莫夫',p:'MF',c:'塔什干棉农（乌兹别克）'},{n:'阿齐齐翁·加尼耶夫',p:'MF',c:'巴塔（阿联酋）'},{n:'阿博斯别克·费祖拉耶夫',p:'MF',c:'伊斯坦布尔（土耳其）'},{n:'谢尔佐德·埃萨诺夫',p:'MF',c:'布哈拉（乌兹别克）'},
+        {n:'奥斯顿·乌鲁诺夫',p:'FW',c:'波斯波利斯（伊朗）'},{n:'埃尔多尔·肖穆罗多夫',p:'FW',c:'伊斯坦布尔（土耳其）'},{n:'阿齐兹别克·阿莫诺夫',p:'FW',c:'萨马尔罕迪那摩（乌兹别克）'},{n:'伊戈尔·谢尔盖耶夫',p:'FW',c:'波斯波利斯（伊朗）'}
+      ]
+    },
+    {
+      name: '伊拉克', flag: '🇮🇶', rank: 45, coach: '格雷厄姆·阿诺德', source: 'FourFourTwo / fourfourtwo.com', date: '2026-06-04',
+      players: [
+        {n:'法赫德·塔利布',p:'GK',c:'塔拉巴（伊拉克）'},{n:'贾拉尔·哈桑',p:'GK',c:'扎瓦拉（伊拉克）'},{n:'艾哈迈德·巴西尔',p:'GK',c:'肖塔（伊拉克）'},
+        {n:'雷宾·苏拉卡',p:'DF',c:'波尔图（葡萄牙）'},{n:'侯赛因·阿里',p:'DF',c:'什切青波贡（波兰）'},{n:'扎伊德·塔赫辛',p:'DF',c:'塔什干棉农（乌兹别克）'},{n:'阿卡姆·哈希姆',p:'DF',c:'扎瓦拉（伊拉克）'},{n:'马纳夫·尤尼斯',p:'DF',c:'肖塔（伊拉克）'},{n:'艾哈迈德·叶海亚',p:'DF',c:'肖塔（伊拉克）'},{n:'梅查斯·多斯基',p:'DF',c:'比尔森胜利（捷克）'},{n:'穆斯塔法·萨敦',p:'DF',c:'肖塔（伊拉克）'},{n:'弗兰斯·普特罗斯',p:'DF',c:'佩西比（印尼）'},
+        {n:'优素福·阿明',p:'MF',c:'AEK拉纳卡（塞浦路斯）'},{n:'易卜拉欣·巴耶什',p:'MF',c:'达夫拉（阿联酋）'},{n:'齐丹·伊克巴尔',p:'MF',c:'乌得勒支（荷兰）'},{n:'阿米尔·阿马尔',p:'MF',c:'克拉科维亚（波兰）'},{n:'艾哈迈德·卡西姆',p:'MF',c:'纳什维尔SC（美国）'},{n:'阿里·贾西姆',p:'MF',c:'纳吉马（巴林）'},{n:'凯文·雅各布',p:'MF',c:'AGF（丹麦）'},{n:'艾马尔·谢尔',p:'MF',c:'萨尔普斯堡（挪威）'},{n:'马尔科·法尔吉',p:'MF',c:'威尼斯（意大利）'},{n:'扎伊德·伊斯梅尔',p:'MF',c:'塔拉巴（伊拉克）'},
+        {n:'阿里·哈马迪',p:'FW',c:'伊普斯维奇城（英格兰）'},{n:'穆罕默德·阿里',p:'FW',c:'迪巴（阿联酋）'},{n:'阿里·优素福',p:'FW',c:'塔拉巴（伊拉克）'},{n:'艾曼·侯赛因',p:'FW',c:'卡尔马（伊拉克）'}
+      ]
+    }
+  ],
+
+  conmebol: [
+    {
+      name: '阿根廷', flag: '🇦🇷', rank: 3, coach: '利昂内尔·斯卡洛尼', source: 'FourFourTwo / fourfourtwo.com', date: '2026-05-29', tag: '卫冕冠军',
+      players: [
+        {n:'埃米利亚诺·马丁内斯',p:'GK',c:'阿斯顿维拉（英格兰）'},{n:'胡安·穆索',p:'GK',c:'马德里竞技（西班牙）'},{n:'格罗尼莫·鲁利',p:'GK',c:'马赛（法国）'},
+        {n:'纳韦尔·莫利纳',p:'DF',c:'马德里竞技（西班牙）'},{n:'冈萨洛·蒙铁尔',p:'DF',c:'河床（阿根廷）'},{n:'克里斯蒂安·罗梅罗',p:'DF',c:'热刺（英格兰）'},{n:'尼古拉斯·奥塔门迪',p:'DF',c:'本菲卡（葡萄牙）'},{n:'利桑德罗·马丁内斯',p:'DF',c:'曼联（英格兰）'},{n:'莱昂纳多·巴列尔迪',p:'DF',c:'马赛（法国）'},{n:'法昆多·梅迪纳',p:'DF',c:'马赛（法国）'},{n:'尼古拉斯·塔利亚菲科',p:'DF',c:'里昂（法国）'},
+        {n:'恩佐·费尔南德斯',p:'MF',c:'切尔西（英格兰）'},{n:'亚历克西斯·麦卡利斯特',p:'MF',c:'利物浦（英格兰）'},{n:'埃塞克尔·帕拉西奥斯',p:'MF',c:'勒沃库森（德国）'},{n:'莱安德罗·帕雷德斯',p:'MF',c:'博卡青年（阿根廷）'},{n:'罗德里戈·德保罗',p:'MF',c:'迈阿密国际（美国）'},{n:'瓦伦丁·巴尔科',p:'MF',c:'斯特拉斯堡（法国）'},{n:'乔瓦尼·洛塞尔索',p:'MF',c:'皇家贝蒂斯（西班牙）'},
+        {n:'利昂内尔·梅西©',p:'FW',c:'迈阿密国际（美国）',cap:true},{n:'劳塔罗·马丁内斯',p:'FW',c:'国际米兰（意大利）'},{n:'胡利安·阿尔瓦雷斯',p:'FW',c:'马德里竞技（西班牙）'},{n:'尼古拉斯·冈萨雷斯',p:'FW',c:'马德里竞技（西班牙）'},{n:'蒂亚戈·阿尔马达',p:'FW',c:'马德里竞技（西班牙）'},{n:'尼科·帕斯',p:'FW',c:'科莫（意大利）'},{n:'朱利亚诺·西蒙尼',p:'FW',c:'马德里竞技（西班牙）'},{n:'何塞·曼努埃尔·洛佩斯',p:'FW',c:'帕尔梅拉斯（巴西）'}
+      ]
+    },
+    {
+      name: '巴西', flag: '🇧🇷', rank: 6, coach: '卡洛·安切洛蒂', source: 'CCTV / cctv.com', date: '2026-05-18',
+      players: [
+        {n:'阿利松',p:'GK',c:'利物浦（英格兰）'},{n:'埃德森',p:'GK',c:'费内巴切（土耳其）'},{n:'韦弗顿',p:'GK',c:'格雷米奥（巴西）'},
+        {n:'亚历克斯·桑德罗',p:'DF',c:'弗拉门戈（巴西）'},{n:'布雷默',p:'DF',c:'尤文图斯（意大利）'},{n:'达尼洛',p:'DF',c:'弗拉门戈（巴西）'},{n:'道格拉斯·桑托斯',p:'DF',c:'泽尼特（俄罗斯）'},{n:'加布里埃尔·马加良斯',p:'DF',c:'阿森纳（英格兰）'},{n:'莱奥·佩雷拉',p:'DF',c:'弗拉门戈（巴西）'},{n:'马尔基尼奥斯©',p:'DF',c:'巴黎圣日耳曼（法国）',cap:true},{n:'韦斯利',p:'DF',c:'罗马（意大利）'},{n:'罗杰·伊巴涅斯',p:'DF',c:'吉达国民（沙特）'},
+        {n:'布鲁诺·吉马良斯',p:'MF',c:'纽卡斯尔联（英格兰）'},{n:'卡塞米罗',p:'MF',c:'曼联（英格兰）'},{n:'达尼洛·桑托斯',p:'MF',c:'博塔弗戈（巴西）'},{n:'法比尼奥',p:'MF',c:'吉达联合（沙特）'},{n:'卢卡斯·帕奎塔',p:'MF',c:'弗拉门戈（巴西）'},
+        {n:'恩德里克',p:'FW',c:'里昂（法国）'},{n:'马丁内利',p:'FW',c:'阿森纳（英格兰）'},{n:'伊戈尔·蒂亚戈',p:'FW',c:'布伦特福德（英格兰）'},{n:'路易斯·恩里克',p:'FW',c:'泽尼特（俄罗斯）'},{n:'马特乌斯·库尼亚',p:'FW',c:'曼联（英格兰）'},{n:'内马尔',p:'FW',c:'桑托斯（巴西）'},{n:'拉菲尼亚',p:'FW',c:'巴塞罗那（西班牙）'},{n:'拉扬',p:'FW',c:'伯恩茅斯（英格兰）'},{n:'维尼修斯',p:'FW',c:'皇家马德里（西班牙）'}
+      ]
+    },
+    {
+      name: '乌拉圭', flag: '🇺🇾', rank: 22, coach: '马塞洛·贝尔萨', source: 'FourFourTwo / fourfourtwo.com', date: '2026-05-31',
+      players: [
+        {n:'塞尔吉奥·罗切特',p:'GK',c:'巴西国际（巴西）'},{n:'圣地亚哥·梅莱',p:'GK',c:'蒙特雷（墨西哥）'},{n:'费尔南多·穆斯莱拉',p:'GK',c:'拉普拉塔大学生（阿根廷）'},
+        {n:'罗纳德·阿劳霍',p:'DF',c:'巴塞罗那（西班牙）'},{n:'何塞·玛利亚·希门尼斯©',p:'DF',c:'马德里竞技（西班牙）',cap:true},{n:'圣地亚哥·布埃诺',p:'DF',c:'狼队（英格兰）'},{n:'塞巴斯蒂安·卡塞雷斯',p:'DF',c:'墨西哥美洲（墨西哥）'},{n:'马蒂亚斯·奥利韦拉',p:'DF',c:'那不勒斯（意大利）'},{n:'吉列尔莫·巴雷拉',p:'DF',c:'弗拉门戈（巴西）'},{n:'马蒂亚斯·比尼亚',p:'DF',c:'河床（阿根廷）'},{n:'华金·皮克雷斯',p:'DF',c:'帕尔梅拉斯（巴西）'},{n:'胡安·圣阿夫里亚',p:'DF',c:'皇家盐湖城（美国）'},
+        {n:'费德里科·巴尔韦德',p:'MF',c:'皇家马德里（西班牙）'},{n:'罗德里戈·本坦库尔',p:'MF',c:'热刺（英格兰）'},{n:'曼努埃尔·乌加特',p:'MF',c:'曼联（英格兰）'},{n:'埃米利亚诺·马丁内斯',p:'MF',c:'帕尔梅拉斯（巴西）'},{n:'罗德里戈·萨拉萨尔',p:'MF',c:'葡萄牙体育（葡萄牙）'},{n:'乔治安·德·阿拉斯卡埃塔',p:'MF',c:'弗拉门戈（巴西）'},{n:'尼古拉斯·德拉克鲁兹',p:'MF',c:'弗拉门戈（巴西）'},{n:'阿古斯丁·卡诺维奥',p:'MF',c:'弗鲁米嫩塞（巴西）'},{n:'马克西米利亚诺·阿劳霍',p:'MF',c:'葡萄牙体育（葡萄牙）'},{n:'布莱恩·罗德里格斯',p:'MF',c:'墨西哥美洲（墨西哥）'},{n:'法昆多·佩利斯特里',p:'MF',c:'帕纳辛纳科斯（希腊）'},
+        {n:'达尔文·努涅斯',p:'FW',c:'利雅得新月（沙特）'},{n:'费德里科·比尼亚斯',p:'FW',c:'皇家奥维多（西班牙）'},{n:'罗德里戈·阿吉雷',p:'FW',c:'老虎大学（墨西哥）'}
+      ]
+    },
+    {
+      name: '哥伦比亚', flag: '🇨🇴', rank: 9, coach: '内斯托尔·洛伦索', source: 'ESPN / espn.com', date: '2026-05-25',
+      players: [
+        {n:'戴维·奥斯皮纳',p:'GK',c:'国民竞技（哥伦比亚）'},{n:'卡米洛·巴尔加斯',p:'GK',c:'阿特拉斯（墨西哥）'},{n:'阿尔瓦罗·蒙特罗',p:'GK',c:'萨斯菲尔德（阿根廷）'},
+        {n:'丹尼尔·穆尼奥斯',p:'DF',c:'水晶宫（英格兰）'},{n:'约翰·卢库米',p:'DF',c:'博洛尼亚（意大利）'},{n:'圣地亚哥·阿里亚斯',p:'DF',c:'独立竞技（阿根廷）'},{n:'戴维森·桑切斯',p:'DF',c:'加拉塔萨雷（土耳其）'},{n:'约翰·莫希卡',p:'DF',c:'马略卡（西班牙）'},{n:'耶里·米纳',p:'DF',c:'卡利亚里（意大利）'},{n:'威勒·迪塔',p:'DF',c:'蓝十字（墨西哥）'},{n:'戴弗·马查多',p:'DF',c:'南特（法国）'},
+        {n:'凯文·卡斯塔尼奥',p:'MF',c:'河床（阿根廷）'},{n:'古斯塔沃·普埃尔塔',p:'MF',c:'桑坦德竞技（西班牙）'},{n:'约翰·阿里亚斯',p:'MF',c:'帕尔梅拉斯（巴西）'},{n:'哈梅斯·罗德里格斯©',p:'MF',c:'明尼苏达联（美国）',cap:true},{n:'哈米尔顿·坎帕斯',p:'MF',c:'罗萨里奥中央（阿根廷）'},{n:'豪尔赫·卡拉斯科',p:'MF',c:'弗拉门戈（巴西）'},{n:'胡安·金特罗',p:'MF',c:'河床（阿根廷）'},{n:'胡安·波蒂利亚',p:'MF',c:'巴拉那竞技（巴西）'},{n:'杰斐逊·勒尔马',p:'MF',c:'水晶宫（英格兰）'},{n:'理查德·里奥斯',p:'MF',c:'本菲卡（葡萄牙）'},
+        {n:'路易斯·迪亚斯',p:'FW',c:'拜仁慕尼黑（德国）'},{n:'约翰·科尔多瓦',p:'FW',c:'克拉斯诺达尔（俄罗斯）'},{n:'路易斯·苏亚雷斯',p:'FW',c:'葡萄牙体育（葡萄牙）'},{n:'卡洛斯·戈麦斯',p:'FW',c:'瓦斯科达伽马（巴西）'},{n:'库乔·埃尔南德斯',p:'FW',c:'皇家贝蒂斯（西班牙）'}
+      ]
+    },
+    {
+      name: '厄瓜多尔', flag: '🇪🇨', rank: 12, coach: '塞巴斯蒂安·贝卡切斯', source: 'FourFourTwo / fourfourtwo.com', date: '2026-06-01',
+      players: [
+        {n:'埃尔南·加林德斯',p:'GK',c:'飓风（阿根廷）'},{n:'莫伊塞斯·拉米雷斯',p:'GK',c:'基菲夏（希腊）'},{n:'冈萨洛·巴列',p:'GK',c:'基多体育大学（厄瓜多尔）'},
+        {n:'威利安·帕乔',p:'DF',c:'巴黎圣日耳曼（法国）'},{n:'皮耶罗·欣卡皮耶',p:'DF',c:'阿森纳（英格兰）'},{n:'乔尔·奥多涅斯',p:'DF',c:'布鲁日（比利时）'},{n:'费利克斯·托雷斯',p:'DF',c:'巴西国际（巴西）'},{n:'佩尔维斯·埃斯图皮尼安',p:'DF',c:'AC米兰（意大利）'},{n:'亚伊马尔·梅迪纳',p:'DF',c:'亨克（比利时）'},{n:'安赫洛·普雷西亚多',p:'DF',c:'米内罗竞技（巴西）'},{n:'杰克逊·波罗索',p:'DF',c:'蒂华纳（墨西哥）'},
+        {n:'阿兰·明达',p:'MF',c:'米内罗竞技（巴西）'},{n:'莫伊塞斯·凯塞多',p:'MF',c:'切尔西（英格兰）'},{n:'霍尔迪·阿尔西瓦尔',p:'MF',c:'山谷独立（厄瓜多尔）'},{n:'德尼尔·卡斯蒂略',p:'MF',c:'中日德兰（丹麦）'},{n:'约翰·耶博阿',p:'MF',c:'威尼斯（意大利）'},{n:'阿兰·弗兰科',p:'MF',c:'米内罗竞技（巴西）'},{n:'佩德罗·维特',p:'MF',c:'国立自治大学美洲狮（墨西哥）'},{n:'肯德里·帕埃斯',p:'MF',c:'河床（阿根廷）'},{n:'尼尔松·安古洛',p:'MF',c:'桑德兰（英格兰）'},{n:'冈萨洛·普拉塔',p:'MF',c:'弗拉门戈（巴西）'},
+        {n:'凯文·罗德里格斯',p:'FW',c:'圣吉勒联合（比利时）'},{n:'安东尼·瓦伦西亚',p:'FW',c:'安特卫普（比利时）'},{n:'恩纳·瓦伦西亚©',p:'FW',c:'帕丘卡（墨西哥）',cap:true},{n:'霍尔迪·凯塞多',p:'FW',c:'飓风（阿根廷）'},{n:'赫雷米·阿雷瓦洛',p:'FW',c:'斯图加特（德国）'}
+      ]
+    },
+    {
+      name: '巴拉圭', flag: '🇵🇾', rank: 27, coach: '古斯塔沃·阿尔法罗', source: 'FourFourTwo / fourfourtwo.com', date: '2026-06-01',
+      players: [
+        {n:'罗伯托·费尔南德斯',p:'GK',c:'塞罗波特诺（巴拉圭）'},{n:'奥兰多·希尔',p:'GK',c:'圣洛伦索（阿根廷）'},{n:'加斯东·奥尔韦拉',p:'GK',c:'奥林匹亚（巴拉圭）'},
+        {n:'古斯塔沃·贝拉斯克斯',p:'DF',c:'塞罗波特诺（巴拉圭）'},{n:'奥马尔·阿尔德雷特',p:'DF',c:'桑德兰（英格兰）'},{n:'胡安·何塞·卡塞雷斯',p:'DF',c:'莫斯科迪纳摩（俄罗斯）'},{n:'法维安·巴尔布埃纳',p:'DF',c:'格雷米奥（巴西）'},{n:'胡尼奥尔·阿隆索',p:'DF',c:'米内罗竞技（巴西）'},{n:'何塞·卡纳莱',p:'DF',c:'拉努斯（阿根廷）'},{n:'古斯塔沃·戈麦斯©',p:'DF',c:'帕尔梅拉斯（巴西）',cap:true},{n:'亚历山德罗·迈达纳',p:'DF',c:'塔勒雷斯（阿根廷）'},
+        {n:'拉蒙·索萨',p:'MF',c:'帕尔梅拉斯（巴西）'},{n:'迭戈·戈麦斯',p:'MF',c:'布莱顿（英格兰）'},{n:'米格尔·阿尔米隆',p:'MF',c:'亚特兰大联（美国）'},{n:'毛里西奥',p:'MF',c:'帕尔梅拉斯（巴西）'},{n:'安德烈斯·库瓦斯',p:'MF',c:'温哥华白浪（加拿大）'},{n:'达米安·博瓦迪利亚',p:'MF',c:'圣保罗（巴西）'},{n:'布拉扬·奥赫达',p:'MF',c:'奥兰多城（美国）'},{n:'马蒂亚斯·加拉萨',p:'MF',c:'亚特兰大联（美国）'},{n:'古斯塔沃·卡瓦列罗',p:'MF',c:'朴次茅斯（英格兰）'},
+        {n:'安东尼奥·萨纳夫里亚',p:'FW',c:'克雷莫内塞（意大利）'},{n:'卡库',p:'FW',c:'阿尔艾因（阿联酋）'},{n:'亚历克斯·阿尔塞',p:'FW',c:'独立竞技（阿根廷）'},{n:'胡里奥·恩西索',p:'FW',c:'斯特拉斯堡（法国）'},{n:'加布里埃尔·阿瓦洛斯',p:'FW',c:'独立竞技（阿根廷）'},{n:'伊西德罗·皮塔',p:'FW',c:'布拉甘蒂诺红牛（巴西）'}
+      ]
+    }
+  ],
+  concacaf: [
+    {
+      name: '美国', flag: '🇺🇸', rank: 16, coach: '毛里西奥·波切蒂诺', source: 'USSoccer.com', date: '2026-05-26', tag: '东道主',
+      players: [
+        {n:'马特·弗里斯',p:'GK',c:'纽约城（美国）'},{n:'马特·特纳',p:'GK',c:'新英格兰革命（美国）'},{n:'克里斯·布雷迪',p:'GK',c:'芝加哥火焰（美国）'},
+        {n:'马克·麦肯齐',p:'DF',c:'图卢兹（法国）'},{n:'克里斯·理查兹',p:'DF',c:'水晶宫（英格兰）'},{n:'蒂姆·里姆',p:'DF',c:'夏洛特FC（美国）'},{n:'迈尔斯·罗宾逊',p:'DF',c:'辛辛那提（美国）'},{n:'奥斯滕·特拉斯蒂',p:'DF',c:'凯尔特人（苏格兰）'},{n:'安托内·罗宾逊',p:'DF',c:'富勒姆（英格兰）'},{n:'塞尔吉尼奥·德斯特',p:'DF',c:'埃因霍温（荷兰）'},{n:'乔·斯卡利',p:'DF',c:'门兴格拉德巴赫（德国）'},{n:'亚历克斯·弗里曼',p:'DF',c:'纳什维尔（美国）'},{n:'马克斯·阿夫斯滕',p:'DF',c:'哥伦布机员（美国）'},
+        {n:'泰勒·亚当斯',p:'MF',c:'伯恩茅斯（英格兰）'},{n:'韦斯顿·麦肯尼',p:'MF',c:'尤文图斯（意大利）'},{n:'布雷登·阿伦森',p:'MF',c:'利兹联（英格兰）'},{n:'乔瓦尼·雷纳',p:'MF',c:'门兴格拉德巴赫（德国）'},{n:'塞巴斯蒂安·贝尔哈尔特',p:'MF',c:'温哥华白浪（加拿大）'},{n:'克里斯蒂安·罗尔丹',p:'MF',c:'西雅图海湾人（美国）'},{n:'马利克·蒂尔曼',p:'MF',c:'勒沃库森（德国）'},
+        {n:'福拉林·巴洛贡',p:'FW',c:'摩纳哥（法国）'},{n:'里卡多·佩皮',p:'FW',c:'埃因霍温（荷兰）'},{n:'蒂莫西·维阿',p:'FW',c:'马赛（法国）'},{n:'哈吉·赖特',p:'FW',c:'考文垂（英格兰）'},{n:'克里斯蒂安·普利希奇©',p:'FW',c:'AC米兰（意大利）',cap:true},{n:'亚历杭德罗·曾德哈斯',p:'FW',c:'墨西哥美洲（墨西哥）'}
+      ]
+    },
+    {
+      name: '墨西哥', flag: '🇲🇽', rank: 14, coach: '哈维尔·阿吉雷', source: 'ESPN / espn.com', date: '2026-05-31', tag: '东道主',
+      players: [
+        {n:'卡洛斯·阿塞韦多',p:'GK',c:'桑托斯拉古纳（墨西哥）'},{n:'吉列尔莫·奥乔亚',p:'GK',c:'AEL利马索尔（塞浦路斯）'},{n:'劳尔·兰赫尔',p:'GK',c:'瓜达拉哈拉（墨西哥）'},
+        {n:'赫苏斯·加利亚多',p:'DF',c:'托卢卡（墨西哥）'},{n:'塞萨尔·蒙特斯',p:'DF',c:'莫斯科火车头（俄罗斯）'},{n:'豪尔赫·桑切斯',p:'DF',c:'萨洛尼卡PAOK（希腊）'},{n:'约翰·巴斯克斯',p:'DF',c:'热那亚（意大利）'},{n:'伊斯雷尔·雷耶斯',p:'DF',c:'墨西哥美洲（墨西哥）'},{n:'马特奥·查韦斯',p:'DF',c:'阿尔克马尔（荷兰）'},{n:'赫苏斯·安古洛',p:'DF',c:'托卢卡（墨西哥）'},
+        {n:'埃德松·阿尔瓦雷斯©',p:'MF',c:'费内巴切（土耳其）',cap:true},{n:'奥贝林·皮内达',p:'MF',c:'AEK雅典（希腊）'},{n:'罗伯托·阿尔瓦拉多',p:'MF',c:'瓜达拉哈拉（墨西哥）'},{n:'路易斯·罗莫',p:'MF',c:'瓜达拉哈拉（墨西哥）'},{n:'路易斯·查韦斯',p:'MF',c:'莫斯科迪纳摩（俄罗斯）'},{n:'埃里克·利拉',p:'MF',c:'蓝十字（墨西哥）'},{n:'布莱恩·古铁雷斯',p:'MF',c:'瓜达拉哈拉（墨西哥）'},{n:'吉尔贝托·莫拉',p:'MF',c:'蒂华纳（墨西哥）'},{n:'奥贝德·巴尔加斯',p:'MF',c:'马德里竞技（西班牙）'},{n:'阿尔瓦罗·菲达尔戈',p:'MF',c:'皇家贝蒂斯（西班牙）'},{n:'塞萨尔·韦尔塔',p:'MF',c:'安德莱赫特（比利时）'},
+        {n:'劳尔·希门尼斯',p:'FW',c:'富勒姆（英格兰）'},{n:'亚历克西斯·维加',p:'FW',c:'托卢卡（墨西哥）'},{n:'圣地亚哥·希门尼斯',p:'FW',c:'AC米兰（意大利）'},{n:'胡利安·基尼奥内斯',p:'FW',c:'卡迪西亚（沙特）'},{n:'吉列尔莫·马丁内斯',p:'FW',c:'国立自治大学美洲狮（墨西哥）'}
+      ]
+    },
+    {
+      name: '加拿大', flag: '🇨🇦', rank: 26, coach: '杰西·马什', source: 'CanadaSoccer.com', date: '2026-06-01', tag: '东道主',
+      players: [
+        {n:'马克西姆·克雷波',p:'GK',c:'奥兰多城（美国）'},{n:'欧文·古德曼',p:'GK',c:'巴恩斯利（英格兰）'},{n:'戴恩·圣克莱尔',p:'GK',c:'国际迈阿密（美国）'},
+        {n:'莫伊斯·邦比托',p:'DF',c:'尼斯（法国）'},{n:'德里克·科尼利厄斯',p:'DF',c:'马赛（法国）'},{n:'阿方索·戴维斯©',p:'DF',c:'拜仁慕尼黑（德国）',cap:true},{n:'吕克·德富热罗勒',p:'DF',c:'富勒姆（英格兰）'},{n:'阿利斯泰尔·约翰斯顿',p:'DF',c:'凯尔特人（苏格兰）'},{n:'阿尔菲·琼斯',p:'DF',c:'米德尔斯堡（英格兰）'},{n:'里奇·拉里亚',p:'DF',c:'多伦多FC（加拿大）'},{n:'尼科·西古尔',p:'DF',c:'斯普利特海杜克（克罗地亚）'},{n:'乔尔·沃特曼',p:'DF',c:'芝加哥火焰（美国）'},
+        {n:'阿里·艾哈迈德',p:'MF',c:'温哥华白浪（加拿大）'},{n:'塔琼·布坎南',p:'MF',c:'比利亚雷亚尔（西班牙）'},{n:'马蒂厄·舒瓦尼耶',p:'MF',c:'洛杉矶FC（美国）'},{n:'斯蒂芬·欧斯塔基奥',p:'MF',c:'波尔图（葡萄牙）'},{n:'马塞洛·弗洛雷斯',p:'MF',c:'老虎大学（墨西哥）'},{n:'伊斯梅尔·科内',p:'MF',c:'萨索洛（意大利）'},{n:'利亚姆·米勒',p:'MF',c:'赫尔城（英格兰）'},{n:'乔纳森·奥索里奥',p:'MF',c:'多伦多FC（加拿大）'},{n:'内森·萨利巴',p:'MF',c:'安德莱赫特（比利时）'},{n:'雅各布·沙费尔伯格',p:'MF',c:'洛杉矶FC（美国）'},
+        {n:'乔纳森·戴维',p:'FW',c:'尤文图斯（意大利）'},{n:'普罗米斯·戴维',p:'FW',c:'圣吉勒联合（比利时）'},{n:'凯尔·拉林',p:'FW',c:'马略卡（西班牙）'},{n:'塔尼·奥卢瓦塞伊',p:'FW',c:'比利亚雷亚尔（西班牙）'}
+      ]
+    },
+    {
+      name: '巴拿马', flag: '🇵🇦', rank: 28, coach: '托马斯·克里斯蒂安森', source: 'NewsroomPanama.com', date: '2026-05-26',
+      players: [
+        {n:'奥兰多·莫斯克拉',p:'GK',c:'费哈（沙特）'},{n:'路易斯·梅希亚',p:'GK',c:'民族竞技（乌拉圭）'},{n:'塞萨尔·萨穆迪奥',p:'GK',c:'马拉松（洪都拉斯）'},
+        {n:'塞萨尔·布莱克曼',p:'DF',c:'布拉迪斯拉发斯拉夫人（斯洛伐克）'},{n:'豪尔赫·古铁雷斯',p:'DF',c:'拉瓜伊拉（委内瑞拉）'},{n:'迈克尔·阿米尔·穆里略',p:'DF',c:'贝西克塔斯（土耳其）'},{n:'菲德尔·埃斯科瓦尔',p:'DF',c:'萨普里萨（哥斯达黎加）'},{n:'安德烈斯·安德拉德',p:'DF',c:'LASK林茨（奥地利）'},{n:'埃德加多·法里尼亚',p:'DF',c:'下诺夫哥罗德（俄罗斯）'},{n:'何塞·科尔多瓦',p:'DF',c:'诺维奇城（英格兰）'},{n:'埃里克·戴维斯',p:'DF',c:'普拉扎阿马多尔（巴拿马）'},{n:'乔瓦尼·拉莫斯',p:'DF',c:'卡贝略港学术（委内瑞拉）'},{n:'罗德里克·米勒',p:'DF',c:'图兰托武兹（乌兹别克）'},
+        {n:'阿尼瓦尔·戈多伊©',p:'MF',c:'圣迭戈FC（美国）',cap:true},{n:'阿达尔韦托·卡拉斯基利亚',p:'MF',c:'国立自治大学美洲狮（墨西哥）'},{n:'卡洛斯·哈维',p:'MF',c:'明尼苏达联（美国）'},{n:'克里斯蒂安·马丁内斯',p:'MF',c:'伊罗尼基里亚特什莫纳（以色列）'},{n:'何塞·路易斯·罗德里格斯',p:'MF',c:'华雷斯（墨西哥）'},{n:'塞萨尔·亚尼斯',p:'MF',c:'科布雷萨尔（智利）'},{n:'约埃尔·巴尔塞纳斯',p:'MF',c:'马萨特兰（墨西哥）'},{n:'阿尔贝托·金特罗',p:'MF',c:'普拉扎阿马多尔（巴拿马）'},{n:'阿扎里亚斯·隆多尼奥',p:'MF',c:'智利天主大学（智利）'},
+        {n:'伊斯梅尔·迪亚斯',p:'FW',c:'莱昂（墨西哥）'},{n:'塞西利奥·沃特曼',p:'FW',c:'康塞普西翁大学（智利）'},{n:'何塞·法哈多',p:'FW',c:'智利天主大学（智利）'},{n:'托马斯·罗德里格斯',p:'FW',c:'萨普里萨（哥斯达黎加）'}
+      ]
+    },
+    {
+      name: '海地', flag: '🇭🇹', rank: 83, coach: '塞巴斯蒂安·米涅', source: 'FourFourTwo / fourfourtwo.com', date: '2026-06-08',
+      players: [
+        {n:'约翰尼·普拉西德©',p:'GK',c:'巴斯蒂亚（法国）',cap:true},{n:'亚历山大·皮埃尔',p:'GK',c:'索肖（法国）'},{n:'若叙埃·迪韦尔热',p:'GK',c:'科布伦茨宇宙（德国）'},
+        {n:'里卡多·阿德',p:'DF',c:'基多体育大学（厄瓜多尔）'},{n:'卡尔伦斯·阿尔库斯',p:'DF',c:'昂热（法国）'},{n:'马丁·埃克斯佩里恩斯',p:'DF',c:'南希（法国）'},{n:'让-凯文·迪韦尔纳',p:'DF',c:'根特（比利时）'},{n:'杜克·拉克鲁瓦',p:'DF',c:'科罗拉多斯普林斯开关（美国）'},{n:'维尔冈斯·波甘',p:'DF',c:'瓦勒海姆（比利时）'},{n:'汉内斯·德尔克鲁瓦',p:'DF',c:'卢加诺（瑞士）'},{n:'基托·瑟蒙西',p:'DF',c:'伯尔尼年轻人（瑞士）'},
+        {n:'勒弗顿·皮埃尔',p:'MF',c:'维泽拉（葡萄牙）'},{n:'丹利·让·雅克',p:'MF',c:'费城联合（美国）'},{n:'卡尔·圣特',p:'MF',c:'埃尔帕索火车头（美国）'},{n:'让-里克纳·贝勒加德',p:'MF',c:'伍尔弗汉普顿流浪者（英格兰）'},{n:'伍登斯基·皮埃尔',p:'MF',c:'维奥莱特（海地）'},{n:'多米尼克·西蒙',p:'MF',c:'塔特兰普雷绍夫（斯洛伐克）'},
+        {n:'杜肯斯·纳松',p:'FW',c:'德黑兰独立（伊朗）'},{n:'弗兰茨迪·皮埃罗',p:'FW',c:'里泽体育（土耳其）'},{n:'德里克·艾蒂安',p:'FW',c:'多伦多FC（加拿大）'},{n:'卢修斯·迪德松',p:'FW',c:'FC达拉斯（美国）'},{n:'吕本·普罗维登斯',p:'FW',c:'阿尔梅勒城（荷兰）'},{n:'若叙埃·卡西米尔',p:'FW',c:'欧塞尔（法国）'},{n:'亚辛·福图内',p:'FW',c:'维泽拉（葡萄牙）'},{n:'威尔逊·伊西多尔',p:'FW',c:'桑德兰（英格兰）'},{n:'莱尼·约瑟夫',p:'FW',c:'费伦茨瓦罗斯（匈牙利）'}
+      ]
+    },
+    {
+      name: '库拉索', flag: '🇨🇼', rank: 48, coach: '迪克·艾德沃卡特', source: 'FourFourTwo / fourfourtwo.com', date: '2026-06-08', tag: '新军',
+      players: [
+        {n:'埃洛伊·罗姆',p:'GK',c:'迈阿密FC（美国）'},{n:'蒂里克·博达克',p:'GK',c:'特尔斯达（荷兰）'},{n:'特雷弗·多恩布施',p:'GK',c:'VVV芬洛（荷兰）'},
+        {n:'舒兰迪·桑博',p:'DF',c:'鹿特丹斯巴达（荷兰）'},{n:'尤里恩·加里',p:'DF',c:'艾卜哈（沙特）'},{n:'罗松·范艾伊马',p:'DF',c:'瓦尔韦克（荷兰）'},{n:'谢雷尔·弗洛拉努斯',p:'DF',c:'兹沃勒（荷兰）'},{n:'德弗隆·丰维尔',p:'DF',c:'NEC奈梅亨（荷兰）'},{n:'阿曼多·奥比斯波',p:'DF',c:'埃因霍温（荷兰）'},{n:'约书亚·布雷内特',p:'DF',c:'开塞利体育（土耳其）'},{n:'里切德利·巴佐尔',p:'DF',c:'科尼亚体育（土耳其）'},
+        {n:'戈德弗里德·罗梅拉托',p:'MF',c:'瓦尔韦克（荷兰）'},{n:'胡尼尼奥·巴库纳',p:'MF',c:'加济安泰普（土耳其）'},{n:'利瓦诺·科梅宁西亚',p:'MF',c:'苏黎世（瑞士）'},{n:'莱昂德罗·巴库纳©',p:'MF',c:'厄德尔（土耳其）',cap:true},{n:'阿尔贾尼·马塔',p:'MF',c:'罗瑟汉姆（英格兰）'},{n:'泰雷斯·诺斯林',p:'MF',c:'特尔斯达（荷兰）'},{n:'凯文·费利达',p:'MF',c:'登博思（荷兰）'},{n:'塔希思·钟',p:'MF',c:'谢菲尔德联（英格兰）'},
+        {n:'尤尔根·洛卡迪亚',p:'FW',c:'迈阿密FC（美国）'},{n:'杰里米·安东尼斯',p:'FW',c:'基菲夏（希腊）'},{n:'松特耶·汉森',p:'FW',c:'米德尔斯堡（英格兰）'},{n:'肯吉·戈雷',p:'FW',c:'海法马卡比（以色列）'},{n:'杰尔·玛格丽塔',p:'FW',c:'贝弗伦（比利时）'},{n:'布兰德利·库瓦斯',p:'FW',c:'福伦丹（荷兰）'},{n:'赫尔瓦内·卡斯泰内尔',p:'FW',c:'登嘉楼（马来西亚）'}
+      ]
+    }
+  ],
+  ofc: [
+    {
+      name: '新西兰', flag: '🇳🇿', rank: 85, coach: '达伦·巴泽利', source: 'NZFootball.co.nz', date: '2026-05-14',
+      players: [
+        {n:'马克斯·克罗科姆',p:'GK',c:'米尔沃尔（英格兰）'},{n:'亚历克斯·保尔森',p:'GK',c:'格但斯克莱希亚（波兰）'},{n:'迈克尔·沃德',p:'GK',c:'奥克兰FC（新西兰）'},
+        {n:'蒂姆·佩恩',p:'DF',c:'惠灵顿凤凰（新西兰）'},{n:'弗朗西斯·德弗里斯',p:'DF',c:'奥克兰FC（新西兰）'},{n:'泰勒·宾登',p:'DF',c:'谢菲尔德联（英格兰）'},{n:'米切尔·伯克萨尔',p:'DF',c:'明尼苏达联（美国）'},{n:'利贝拉托·卡卡塞',p:'DF',c:'雷克瑟姆（威尔士）'},{n:'南多·派纳克',p:'DF',c:'奥克兰FC（新西兰）'},{n:'芬恩·苏尔曼',p:'DF',c:'波特兰伐木工（美国）'},{n:'卡兰·埃利奥特',p:'DF',c:'奥克兰FC（新西兰）'},{n:'汤米·史密斯',p:'DF',c:'布伦特里（英格兰）'},
+        {n:'乔·贝尔',p:'MF',c:'维京（挪威）'},{n:'马修·加伯特',p:'MF',c:'彼得堡联（英格兰）'},{n:'马科·斯特梅克',p:'MF',c:'斯旺西城（威尔士）'},{n:'萨普里特·辛格',p:'MF',c:'惠灵顿凤凰（新西兰）'},{n:'亚历克斯·鲁费',p:'MF',c:'惠灵顿凤凰（新西兰）'},{n:'本·奥尔德',p:'MF',c:'圣埃蒂安（法国）'},{n:'卡勒姆·麦考瓦特',p:'MF',c:'施克堡（丹麦）'},{n:'瑞安·托马斯',p:'MF',c:'兹沃勒（荷兰）'},{n:'拉克兰·贝利斯',p:'MF',c:'纽卡斯尔喷气机（澳大利亚）'},
+        {n:'克里斯·伍德©',p:'FW',c:'诺丁汉森林（英格兰）',cap:true},{n:'伊利亚·贾斯特',p:'FW',c:'马瑟韦尔（苏格兰）'},{n:'科斯塔·巴巴洛塞斯',p:'FW',c:'西悉尼流浪者（澳大利亚）'},{n:'本·韦恩',p:'FW',c:'维尔港（英格兰）'},{n:'杰西·兰德尔',p:'FW',c:'奥克兰FC（新西兰）'}
+      ]
+    }
+  ]
+};
+
+
+function getPosLabel(p) {
+  if (p === 'GK') return '门将';
+  if (p === 'DF') return '后卫';
+  if (p === 'MF') return '中场';
+  return '前锋';
+}
+
+function renderTeamCard(team) {
+  let badge = '';
+  if (team.tag === '东道主') badge = '<span class="team-badge badge-host">东道主</span>';
+  else if (team.tag === '卫冕冠军') badge = '<span class="team-badge badge-champion">卫冕冠军</span>';
+  else if (team.tag === '新军') badge = '<span class="team-badge badge-first">新军</span>';
+
+  // Group players by position
+  const groups = { GK: [], DF: [], MF: [], FW: [] };
+  team.players.forEach(pl => {
+    groups[pl.p].push(pl);
+  });
+
+  let playersHtml = '';
+  ['GK', 'DF', 'MF', 'FW'].forEach(pos => {
+    const list = groups[pos];
+    if (list.length === 0) return;
+    const rows = list.map(pl => {
+      const isCap = pl.n.includes('©') || (pl.cap === true);
+      const nameClean = pl.n.replace('©', '');
+      const nameHtml = isCap ? `<span class="player-name">${nameClean}<span class="captain-mark"> ©</span></span>` : `<span class="player-name">${nameClean}</span>`;
+      return `<tr><td class="player-name">${nameHtml}</td><td class="player-club">${pl.c || ''}</td></tr>`;
+    }).join('');
+
+    playersHtml += `
+      <div class="player-position-group">
+        <div class="position-label">${getPosLabel(pos)} <span class="pos-count">${list.length}人</span></div>
+        <table class="players-table">${rows}</table>
+      </div>`;
+  });
+
+  return `<div class="team-card" onclick="this.classList.toggle('expanded')">
+    <div class="team-header">
+      <span class="team-flag">${team.flag}</span>
+      <span class="team-name">${team.name}</span>
+      ${badge}
+    </div>
+    <div class="team-meta">
+      <span>🏆 FIFA排名: ${team.rank}</span>
+      <span>👔 主帅: ${team.coach}</span>
+      <span>👥 ${team.players.length}人</span>
+    </div>
+    <div class="team-source">📋 名单来源: ${team.source} | 📅 公布: ${team.date}</div>
+    <div class="team-players">${playersHtml}</div>
+    <div class="expand-hint">👇 点击查看完整26人名单</div>
+  </div>`;
+}
+
+function renderTeams() {
+  const confs = ['uefa','caf','afc','conmebol','concacaf','ofc'];
+  confs.forEach(conf => {
+    const container = document.getElementById(conf + '-teams');
+    if (!container) return;
+    container.innerHTML = teamsData[conf].map(renderTeamCard).join('');
+  });
+}
+
+renderTeams();
+// ====================================================================
+//  小组赛分组数据（12组 × 4队 = 48队）
+// ====================================================================
+const WORLD_CUP_GROUPS = {
+  A: { teams: ['墨西哥','南非','韩国','捷克'], flag: ['🇲🇽','🇿🇦','🇰🇷','🇨🇿'] },
+  B: { teams: ['加拿大','波黑','卡塔尔','瑞士'], flag: ['🇨🇦','🇧🇦','🇶🇦','🇨🇭'] },
+  C: { teams: ['巴西','摩洛哥','海地','苏格兰'], flag: ['🇧🇷','🇲🇦','🇭🇹','🏴󠁧󠁢󠁳󠁣󠁴󠁿'] },
+  D: { teams: ['美国','巴拉圭','澳大利亚','土耳其'], flag: ['🇺🇸','🇵🇾','🇦🇺','🇹🇷'] },
+  E: { teams: ['德国','库拉索','科特迪瓦','厄瓜多尔'], flag: ['🇩🇪','🇨🇼','🇨🇮','🇪🇨'] },
+  F: { teams: ['荷兰','日本','瑞典','突尼斯'], flag: ['🇳🇱','🇯🇵','🇸🇪','🇹🇳'] },
+  G: { teams: ['比利时','埃及','伊朗','新西兰'], flag: ['🇧🇪','🇪🇬','🇮🇷','🇳🇿'] },
+  H: { teams: ['西班牙','佛得角','沙特','乌拉圭'], flag: ['🇪🇸','🇨🇻','🇸🇦','🇺🇾'] },
+  I: { teams: ['法国','塞内加尔','伊拉克','挪威'], flag: ['🇫🇷','🇸🇳','🇮🇶','🇳🇴'] },
+  J: { teams: ['阿根廷','阿尔及利亚','奥地利','约旦'], flag: ['🇦🇷','🇩🇿','🇦🇹','🇯🇴'] },
+  K: { teams: ['葡萄牙','民主刚果','乌兹别克斯坦','哥伦比亚'], flag: ['🇵🇹','🇨🇩','🇺🇿','🇨🇴'] },
+  L: { teams: ['英格兰','克罗地亚','加纳','巴拿马'], flag: ['🏴󠁧󠁢󠁥󠁮󠁧󠁿','🇭🇷','🇬🇭','🇵🇦'] },
+};
+
+// ====================================================================
+//  AI MODEL ARENA — 数据层（更新比赛结果只需修改以下 ROUNDS 数组）
+// ====================================================================
+
+const AI_MODELS = [
+  { id: 'gpt55', name: 'GPT-5.5', fullName: 'GPT-5.5 [1M] High Thinking', color: '#10a37f', context: '1M tokens', tier: 'High Thinking', provider: 'OpenAI' },
+  { id: 'glm51', name: 'GLM-5.1', fullName: 'GLM-5.1 [200K] Thinking', color: '#4f46e5', context: '200K tokens', tier: 'Thinking', provider: 'Zhipu AI' },
+  { id: 'qwen37', name: 'Qwen-3.7-Max', fullName: 'Qwen-3.7-Max [1M] Thinking', color: '#7c3aed', context: '1M tokens', tier: 'Thinking', provider: 'Alibaba' },
+  { id: 'deepseek', name: 'Deepseek-V4-Pro', fullName: 'Deepseek-V4-Pro [1M] Thinking', color: '#0284c7', context: '1M tokens', tier: 'Thinking', provider: 'DeepSeek' },
+  { id: 'mimo', name: 'Mimo-V2.5-Pro', fullName: 'Mimo-V2.5-Pro [1M] Thinking', color: '#ea580c', context: '1M tokens', tier: 'Thinking', provider: 'Xiaomi' },
+  { id: 'kimi', name: 'Kimi-K2.6', fullName: 'Kimi-K2.6 [200K] Thinking', color: '#0891b2', context: '200K tokens', tier: 'Thinking', provider: 'Moonshot AI' },
+];
+
+const AI_INITIAL_FUNDS = 150;
+
+/*
+ * ROUNDS 数据格式:
+ * {
+ *   round: 1,                          // 轮次编号
+ *   title: '小组赛第1轮',              // 轮次标题
+ *   dateRange: '6月12日 — 6月16日',    // 日期范围
+ *   status: 'completed',               // 'completed' | 'active' | 'upcoming'
+ *   predictions: {
+ *     gpt55: {                         // 模型 id
+ *       analysis: '分析摘要...',
+ *       strategy: '策略说明...',
+ *       bets: [
+ *         {
+ *           match: '美国 vs 摩洛哥',
+ *           matchId: 'M1',
+ *           playType: '胜平负',        // 胜平负/让球胜平负/比分/总进球/半全场
+ *           pick: '主胜',
+ *           amount: 10,                // 投注金额（元）
+ *           odds: 1.65,
+ *           过关: '2×1',
+ *           actualScore: '2:1',        // 赛后填
+ *           result: 'win',             // 'win' | 'loss' | 'pending'
+ *           prize: 12.50,              // 中奖金额
+ *         },
+ *       ],
+ *     },
+ *   },
+ * }
+ */
+const AI_ROUNDS = [
+  {
+    round: 1,
+    title: '小组赛第1轮',
+    dateRange: '6月12日 — 6月18日',
+    status: 'active',
+    predictions: {
+      gpt55: {
+        analysis: '东道主核心策略：以加拿大+美国两场东道主首战为锚点构建5张2×1过关票。核心票(T1)最大金额锁定东道主双胜，低赔回收票(T2/T3)用巴西和苏格兰稳胆对冲，增强票(T4/T5)用让球平冲排名收益。已排除M1/M2（早于购彩时间17:00）。',
+        strategy: '核心票60%+低赔回收25%+排名冲刺15%，5张2×1过关覆盖M3-M8',
+        bets: [
+          { match: '加拿大 vs 波黑', matchId: 'M3', playType: '胜平负', pick: '主胜', amount: 50, odds: 1.59, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '美国 vs 巴拉圭', matchId: 'M5', playType: '胜平负', pick: '主胜', amount: 0, odds: 1.80, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '巴西 vs 摩洛哥', matchId: 'M7', playType: '胜平负', pick: '主胜', amount: 36, odds: 1.31, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '海地 vs 苏格兰', matchId: 'M8', playType: '胜平负', pick: '客胜', amount: 0, odds: 1.31, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '澳大利亚 vs 土耳其', matchId: 'M6', playType: '胜平负', pick: '客胜', amount: 28, odds: 1.55, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '海地 vs 苏格兰', matchId: 'M8', playType: '胜平负', pick: '客胜', amount: 0, odds: 1.31, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '加拿大 vs 波黑', matchId: 'M3', playType: '让球胜平负', pick: '让平(-1)', amount: 20, odds: 3.30, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '美国 vs 巴拉圭', matchId: 'M5', playType: '胜平负', pick: '主胜', amount: 0, odds: 1.80, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '美国 vs 巴拉圭', matchId: 'M5', playType: '让球胜平负', pick: '让平(-1)', amount: 16, odds: 3.30, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '巴西 vs 摩洛哥', matchId: 'M7', playType: '胜平负', pick: '主胜', amount: 0, odds: 1.31, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+        ],
+      },
+      glm51: {
+        analysis: '价值投注+凯利公式仓位管理，3个完全独立方案覆盖6场不同比赛。方案A为高信心东道主+强队2×1过关，方案B为三支客队强队3×1过关（瑞士/乌拉圭/伊朗），方案C为卫冕冠军阿根廷单关保底。三方案无场次重叠，风险充分分散。',
+        strategy: '3个独立方案（2×1过关56元+3×1过关46元+单关48元），6场比赛完全独立',
+        bets: [
+          { match: '美国 vs 巴拉圭', matchId: 'M5', playType: '胜平负', pick: '主胜', amount: 56, odds: 1.40, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '德国 vs 库拉索', matchId: 'M9', playType: '让球胜平负', pick: '让胜(-2)', amount: 0, odds: 1.75, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '卡塔尔 vs 瑞士', matchId: 'M4', playType: '胜平负', pick: '客胜', amount: 46, odds: 1.55, 过关: '3×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '沙特 vs 乌拉圭', matchId: 'M14', playType: '胜平负', pick: '客胜', amount: 0, odds: 1.50, 过关: '3×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '伊朗 vs 新西兰', matchId: 'M16', playType: '胜平负', pick: '主胜', amount: 0, odds: 1.40, 过关: '3×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '阿根廷 vs 阿尔及利亚', matchId: 'M19', playType: '胜平负', pick: '主胜', amount: 48, odds: 1.30, 过关: '单关', actualScore: '', result: 'pending', prize: 0 },
+        ],
+      },
+      qwen37: {
+        analysis: '稳胆过关+让球价值+小注博冷策略。4条2×1过关以伊朗/法国/苏格兰/阿根廷/英格兰为稳胆锚点，比利时让-1球为本轮最佳价值（2.65）。5个单关中德国-3球重注博让球价值。原M2韩国vs捷克平局因早于购彩时间替换为M5美国主胜（东道主优势）。关注Mbappé伤情（影响过关A/C）和Neymar缺阵（影响过关D/单关G）。',
+        strategy: '4条2×1过关（56元）+5个单关（94元），覆盖13场比赛',
+        bets: [
+          { match: '伊朗 vs 新西兰', matchId: 'M16', playType: '胜平负', pick: '主胜', amount: 14, odds: 1.56, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '法国 vs 塞内加尔', matchId: 'M17', playType: '胜平负', pick: '主胜', amount: 0, odds: 1.38, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '海地 vs 苏格兰', matchId: 'M8', playType: '胜平负', pick: '客胜', amount: 14, odds: 1.31, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '阿根廷 vs 阿尔及利亚', matchId: 'M19', playType: '胜平负', pick: '主胜', amount: 0, odds: 1.28, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '伊朗 vs 新西兰', matchId: 'M16', playType: '胜平负', pick: '主胜', amount: 14, odds: 1.56, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '英格兰 vs 克罗地亚', matchId: 'M23', playType: '胜平负', pick: '主胜', amount: 0, odds: 1.93, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '比利时 vs 埃及', matchId: 'M15', playType: '让球胜平负', pick: '让胜(-1)', amount: 14, odds: 2.65, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '巴西 vs 摩洛哥', matchId: 'M7', playType: '胜平负', pick: '主胜', amount: 0, odds: 1.53, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '德国 vs 库拉索', matchId: 'M9', playType: '让球胜平负', pick: '让胜(-3)', amount: 26, odds: 1.94, 过关: '单关', actualScore: '', result: 'pending', prize: 0 },
+          { match: '沙特 vs 乌拉圭', matchId: 'M14', playType: '胜平负', pick: '客胜', amount: 22, odds: 1.55, 过关: '单关', actualScore: '', result: 'pending', prize: 0 },
+          { match: '比利时 vs 埃及', matchId: 'M15', playType: '胜平负', pick: '主胜', amount: 22, odds: 1.46, 过关: '单关', actualScore: '', result: 'pending', prize: 0 },
+          { match: '荷兰 vs 日本', matchId: 'M11', playType: '胜平负', pick: '主胜', amount: 12, odds: 1.75, 过关: '单关', actualScore: '', result: 'pending', prize: 0 },
+          { match: '美国 vs 巴拉圭', matchId: 'M5', playType: '胜平负', pick: '主胜', amount: 12, odds: 1.80, 过关: '单关', actualScore: '', result: 'pending', prize: 0 },
+        ],
+      },
+      deepseek: {
+        analysis: 'v4独立版策略：5组2×1过关覆盖10场比赛，稳胆60%+博胆31%+冷门9%。组合A(60元)以德国+巴西双强为锚点替代M1墨西哥，组合B(30元)西班牙+伊朗保底，组合C(30元)瑞士+乌拉圭中强组合，组合D(16元)厄瓜多尔+瑞典价值挖掘，组合E(14元)加拿大+美国双东道主冷门。已排除M1/M2（早于购彩时间17:00）。',
+        strategy: '5组2×1过关（稳胆60%+博胆31%+冷门9%），全150元投入，覆盖10场',
+        bets: [
+          { match: '德国 vs 库拉索', matchId: 'M9', playType: '胜平负', pick: '主胜', amount: 60, odds: 1.12, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '巴西 vs 摩洛哥', matchId: 'M7', playType: '胜平负', pick: '主胜', amount: 0, odds: 1.55, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '西班牙 vs 佛得角', matchId: 'M13', playType: '胜平负', pick: '主胜', amount: 30, odds: 1.08, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '伊朗 vs 新西兰', matchId: 'M16', playType: '胜平负', pick: '主胜', amount: 0, odds: 1.45, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '卡塔尔 vs 瑞士', matchId: 'M4', playType: '胜平负', pick: '客胜', amount: 30, odds: 1.75, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '沙特 vs 乌拉圭', matchId: 'M14', playType: '胜平负', pick: '客胜', amount: 0, odds: 1.70, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '科特迪瓦 vs 厄瓜多尔', matchId: 'M10', playType: '胜平负', pick: '客胜', amount: 16, odds: 2.15, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '瑞典 vs 突尼斯', matchId: 'M12', playType: '胜平负', pick: '主胜', amount: 0, odds: 2.15, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '加拿大 vs 波黑', matchId: 'M3', playType: '胜平负', pick: '主胜', amount: 14, odds: 2.20, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '美国 vs 巴拉圭', matchId: 'M5', playType: '胜平负', pick: '主胜', amount: 0, odds: 2.10, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+        ],
+      },
+      mimo: {
+        analysis: '稳中求进+分散风险策略，5组2×1过关覆盖10场次。以美国+德国双东道主/强队为稳胆锚定(Bet1最大注48元)，瑞士+苏格兰欧洲稳胆补充(Bet2)，巴西+荷兰中等信心(Bet3)。大胆配置冷门猎手(Bet4双平局30元@11.22)和冷门保护(Bet5)。⚠️使用估算赔率，部分与竞彩官方有偏差。',
+        strategy: '金字塔分配：稳胆32%+稳健24%+中等16%+冷门猎手20%+冷门保护8%，5组2×1过关',
+        bets: [
+          { match: '美国 vs 巴拉圭', matchId: 'M5', playType: '胜平负', pick: '主胜', amount: 48, odds: 1.45, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '德国 vs 库拉索', matchId: 'M9', playType: '胜平负', pick: '主胜', amount: 0, odds: 1.10, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '卡塔尔 vs 瑞士', matchId: 'M4', playType: '胜平负', pick: '客胜', amount: 36, odds: 1.55, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '海地 vs 苏格兰', matchId: 'M8', playType: '胜平负', pick: '客胜', amount: 0, odds: 1.40, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '巴西 vs 摩洛哥', matchId: 'M7', playType: '胜平负', pick: '主胜', amount: 24, odds: 1.50, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '荷兰 vs 日本', matchId: 'M11', playType: '胜平负', pick: '主胜', amount: 0, odds: 1.65, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '澳大利亚 vs 土耳其', matchId: 'M6', playType: '胜平负', pick: '平', amount: 30, odds: 3.30, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '科特迪瓦 vs 厄瓜多尔', matchId: 'M10', playType: '胜平负', pick: '平', amount: 0, odds: 3.40, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '瑞典 vs 突尼斯', matchId: 'M12', playType: '胜平负', pick: '主胜', amount: 12, odds: 1.90, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '加拿大 vs 波黑', matchId: 'M3', playType: '胜平负', pick: '平', amount: 0, odds: 3.40, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+        ],
+      },
+      kimi: {
+        analysis: '三等分分散投注策略，3组独立2×1过关各50元，覆盖6场不同比赛。组合A锁定北美东道主双胜（加拿大+美国），组合B配置欧洲稳胆（瑞士+苏格兰），组合C选择欧亚风格对抗（土耳其+瑞典）。三组跨区域不重叠，实现风险对冲。',
+        strategy: '三等分分散（3×50元），东道主+欧洲稳胆+欧亚对抗三条独立主线',
+        bets: [
+          { match: '加拿大 vs 波黑', matchId: 'M3', playType: '胜平负', pick: '主胜', amount: 50, odds: 1.55, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '美国 vs 巴拉圭', matchId: 'M5', playType: '胜平负', pick: '主胜', amount: 0, odds: 1.65, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '卡塔尔 vs 瑞士', matchId: 'M4', playType: '胜平负', pick: '客胜', amount: 50, odds: 1.45, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '海地 vs 苏格兰', matchId: 'M8', playType: '胜平负', pick: '客胜', amount: 0, odds: 1.35, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '澳大利亚 vs 土耳其', matchId: 'M6', playType: '胜平负', pick: '客胜', amount: 50, odds: 1.55, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+          { match: '瑞典 vs 突尼斯', matchId: 'M12', playType: '胜平负', pick: '主胜', amount: 0, odds: 1.65, 过关: '2×1', actualScore: '', result: 'pending', prize: 0 },
+        ],
+      },
+    },
+  },
+];
+
+// --- 计算 & 渲染 ---
+
+function aiGetStats(modelId) {
+  let funds = AI_INITIAL_FUNDS, totalPrize = 0, totalWagered = 0;
+  let wins = 0, losses = 0, pending = 0, betCount = 0, roundsParticipated = 0;
+  for (const round of AI_ROUNDS) {
+    const pred = round.predictions[modelId];
+    if (!pred) continue;
+    roundsParticipated++;
+    for (const bet of (pred.bets || [])) {
+      betCount++;
+      totalWagered += bet.amount || 0;
+      funds -= bet.amount || 0;
+      if (bet.result === 'win') { wins++; totalPrize += bet.prize || 0; funds += bet.prize || 0; }
+      else if (bet.result === 'loss') { losses++; }
+      else { pending++; }
+    }
+  }
+  const totalAssets = funds;
+  const roi = ((totalAssets - AI_INITIAL_FUNDS) / AI_INITIAL_FUNDS * 100);
+  const winRate = (wins + losses) > 0 ? (wins / (wins + losses) * 100) : 0;
+  return { funds, totalPrize, totalWagered, totalAssets, roi, wins, losses, pending, betCount, roundsParticipated, winRate };
+}
+
+function aiGetInitials(name) {
+  return name.split('-').map(w => w[0]).join('').toUpperCase().slice(0, 3);
+}
+
+function aiRenderLeaderboard() {
+  const entries = AI_MODELS.map(m => ({ ...m, stats: aiGetStats(m.id) }));
+  entries.sort((a, b) => b.stats.totalAssets - a.stats.totalAssets);
+  const currentRound = AI_ROUNDS.find(r => r.status === 'active');
+  const roundLabel = currentRound ? `第${currentRound.round}轮进行中`
+    : AI_ROUNDS.length > 0 ? `已完成${AI_ROUNDS.filter(r => r.status === 'completed').length}轮` : '等待开赛';
+
+  let html = `<div class="ai-lb-card"><div class="ai-lb-header"><h3>🏆 模型收益排行榜</h3><span class="ai-lb-badge">${roundLabel}</span></div>
+    <table class="ai-lb-table"><thead><tr>
+    <th style="text-align:center">排名</th><th>模型</th><th>剩余资金</th><th>累计奖金</th><th>已投注</th><th>总资产</th><th>收益率</th><th style="text-align:center">胜/负</th>
+    </tr></thead><tbody>`;
+
+  entries.forEach((e, i) => {
+    const rank = i + 1, s = e.stats;
+    const rankEmoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    const roiClass = s.roi > 0 ? 'ai-roi-pos' : s.roi < 0 ? 'ai-roi-neg' : 'ai-roi-zero';
+    const roiSign = s.roi > 0 ? '+' : '';
+    html += `<tr>
+      <td class="ai-rank ${rank <= 3 ? 'ai-rank-' + rank : ''}">${rankEmoji}</td>
+      <td><div class="ai-model-cell"><div class="ai-avatar" style="background:${e.color}">${aiGetInitials(e.name)}</div>
+        <div><div class="ai-model-name">${e.name}</div><div class="ai-model-sub">${e.context} · ${e.tier}</div></div></div></td>
+      <td>${s.funds.toFixed(2)}元</td>
+      <td class="${s.totalPrize > 0 ? 'ai-pos' : 'ai-zero'}">${s.totalPrize.toFixed(2)}元</td>
+      <td>${s.totalWagered.toFixed(2)}元</td>
+      <td class="ai-asset">${s.totalAssets.toFixed(2)}元</td>
+      <td><span class="ai-roi ${roiClass}">${roiSign}${s.roi.toFixed(1)}%</span></td>
+      <td style="text-align:center;font-size:0.88em">${s.wins}W ${s.losses}L${s.pending > 0 ? ' ' + s.pending + 'P' : ''}</td>
+    </tr>`;
+  });
+  html += `</tbody></table></div>`;
+  document.getElementById('ai-leaderboard').innerHTML = html;
+}
+
+function aiRenderProgress() {
+  let html = `<div class="ai-lb-card"><div class="ai-lb-header"><h3>📅 比赛轮次进度</h3><span class="ai-lb-badge">共 ${AI_ROUNDS.length} 轮</span></div><div style="padding:18px;">`;
+  if (AI_ROUNDS.length === 0) {
+    html += `<div class="ai-no-bets">🕐 暂无轮次数据，等待第一轮比赛开始...</div>`;
+  } else {
+    AI_ROUNDS.forEach(r => {
+      const dotCls = r.status === 'completed' ? 'ai-dot-done' : r.status === 'active' ? 'ai-dot-live' : 'ai-dot-wait';
+      const statusCls = r.status === 'completed' ? 'ai-status-done' : r.status === 'active' ? 'ai-status-live' : 'ai-status-wait';
+      const statusText = r.status === 'completed' ? '已完成' : r.status === 'active' ? '进行中' : '待开始';
+      html += `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-light);">
+        <span class="ai-dot ${dotCls}"></span>
+        <div style="flex:1"><strong style="color:var(--green-dark)">第${r.round}轮 · ${r.title}</strong>
+        <div style="font-size:0.82em;color:var(--gray)">${r.dateRange}</div></div>
+        <span class="ai-status ${statusCls}">${statusText}</span></div>`;
+    });
+  }
+  html += `</div></div>`;
+  document.getElementById('ai-progress').innerHTML = html;
+}
+
+let aiActiveRoundIndex = -1;
+
+function aiRenderRoundNav() {
+  if (AI_ROUNDS.length === 0) {
+    document.getElementById('ai-round-nav').innerHTML = '';
+    document.getElementById('ai-round-content').innerHTML =
+      `<div style="background:var(--card-bg);border-radius:16px;padding:40px;box-shadow:0 4px 20px rgba(0,0,0,0.08);text-align:center;color:var(--gray);">
+      <div style="font-size:3em;margin-bottom:10px;">🕐</div><p>暂无轮次数据，等待第一轮比赛开始...</p></div>`;
+    return;
+  }
+  if (aiActiveRoundIndex < 0 || aiActiveRoundIndex >= AI_ROUNDS.length) aiActiveRoundIndex = AI_ROUNDS.length - 1;
+
+  let navHtml = `<div class="ai-round-nav">`;
+  AI_ROUNDS.forEach((r, i) => {
+    const isActive = i === aiActiveRoundIndex;
+    const dotCls = r.status === 'completed' ? 'ai-dot-done' : r.status === 'active' ? 'ai-dot-live' : 'ai-dot-wait';
+    navHtml += `<button class="ai-round-btn ${isActive ? 'active' : ''}" onclick="aiSelectRound(${i})">第${r.round}轮<span class="ai-dot ${dotCls}"></span></button>`;
+  });
+  navHtml += `</div>`;
+  document.getElementById('ai-round-nav').innerHTML = navHtml;
+  aiRenderRoundContent(AI_ROUNDS[aiActiveRoundIndex]);
+}
+
+function aiSelectRound(index) {
+  aiActiveRoundIndex = index;
+  aiRenderRoundNav();
+}
+
+function aiRenderRoundContent(round) {
+  const statusCls = round.status === 'completed' ? 'ai-status-done' : round.status === 'active' ? 'ai-status-live' : 'ai-status-wait';
+  const statusText = round.status === 'completed' ? '✅ 已完成' : round.status === 'active' ? '🔴 进行中' : '⏳ 待开始';
+
+  let html = `<div class="ai-round-bar"><div><span class="ai-round-bar-title">第${round.round}轮 · ${round.title}</span>
+    <div class="ai-round-bar-meta">${round.dateRange}</div></div>
+    <span class="ai-status ${statusCls}">${statusText}</span></div>`;
+
+  html += `<div class="ai-pred-grid">`;
+  for (const model of AI_MODELS) {
+    const pred = round.predictions[model.id];
+    const stats = aiGetStats(model.id);
+    html += `<div class="ai-pred-card">`;
+    html += `<div class="ai-pred-header">
+      <div class="ai-avatar" style="background:${model.color}">${aiGetInitials(model.name)}</div>
+      <div class="ai-pred-info"><div class="ai-pred-name">${model.name}</div><div class="ai-pred-sub">${model.context} · ${model.tier}</div></div>
+      <div class="ai-pred-asset"><div class="ai-pred-asset-val">${stats.totalAssets.toFixed(2)}元</div><div class="ai-pred-asset-lbl">总资产</div></div>
+    </div>`;
+
+    if (!pred) {
+      html += `<div class="ai-no-bets">本轮暂未参与</div>`;
+    } else {
+      if (pred.analysis) {
+        html += `<div class="ai-pred-analysis"><div class="ai-pred-analysis-title">🧠 分析摘要</div><div class="ai-pred-analysis-text">${pred.analysis}</div></div>`;
+      }
+      if (pred.strategy) {
+        html += `<div class="ai-pred-strategy">💡 策略: ${pred.strategy}</div>`;
+      }
+      if (pred.bets && pred.bets.length > 0) {
+        html += `<div class="ai-pred-bets">`;
+        for (const bet of pred.bets) {
+          const resultTag = bet.result === 'win'
+            ? `<span class="ai-bet-tag ai-tag-win">✅ +${(bet.prize || 0).toFixed(2)}元</span>`
+            : bet.result === 'loss'
+              ? `<span class="ai-bet-tag ai-tag-loss">❌ 未中</span>`
+              : `<span class="ai-bet-tag ai-tag-pending">⏳ 待开奖</span>`;
+          html += `<div class="ai-bet-item">
+            <div class="ai-bet-match"><div class="ai-bet-teams">${bet.match}</div>
+              <div class="ai-bet-detail">${bet.matchId} · ${bet.playType}${bet.actualScore ? ' · 比分 ' + bet.actualScore : ''}</div>${resultTag}</div>
+            <div class="ai-bet-pick"><div class="ai-bet-pick-lbl">选择</div><div class="ai-bet-pick-val">${bet.pick}</div></div>
+            <div class="ai-bet-amt"><div class="ai-bet-amt-val">${bet.amount}元</div><div class="ai-bet-odds">@${bet.odds}${bet.过关 ? ' ' + bet.过关 : ''}</div></div>
+          </div>`;
+        }
+        html += `</div>`;
+
+        // Round summary
+        const rw = pred.bets.filter(b => b.result === 'win').length;
+        const rl = pred.bets.filter(b => b.result === 'loss').length;
+        const rp = pred.bets.filter(b => b.result === 'pending').length;
+        const rWagered = pred.bets.reduce((s, b) => s + (b.amount || 0), 0);
+        const rPrize = pred.bets.reduce((s, b) => s + (b.prize || 0), 0);
+        const rProfit = rPrize - rWagered;
+        const profitCls = rProfit > 0 ? 'ai-pos' : rProfit < 0 ? 'ai-neg' : '';
+        html += `<div class="ai-pred-results">
+          <div class="ai-result-item"><div class="ai-result-lbl">投注</div><div class="ai-result-val">${rWagered.toFixed(2)}元</div></div>
+          <div class="ai-result-item"><div class="ai-result-lbl">奖金</div><div class="ai-result-val ${rPrize > 0 ? 'ai-pos' : ''}">${rPrize.toFixed(2)}元</div></div>
+          <div class="ai-result-item"><div class="ai-result-lbl">盈亏</div><div class="ai-result-val ${profitCls}">${rProfit >= 0 ? '+' : ''}${rProfit.toFixed(2)}元</div></div>
+          <div class="ai-result-item"><div class="ai-result-lbl">结果</div><div class="ai-result-val">${rw}W ${rl}L${rp > 0 ? ' ' + rp + 'P' : ''}</div></div>
+        </div>`;
+      } else {
+        html += `<div class="ai-no-bets">本轮选择观望，不下注 🧘</div>`;
+      }
+    }
+    html += `</div>`;
+  }
+  html += `</div>`;
+  document.getElementById('ai-round-content').innerHTML = html;
+}
+
+function aiRenderGallery() {
+  let html = `<div class="ai-gallery">`;
+  for (const model of AI_MODELS) {
+    const stats = aiGetStats(model.id);
+    html += `<div class="ai-gallery-card">
+      <div class="ai-gallery-avatar" style="background:${model.color}">${aiGetInitials(model.name)}</div>
+      <div class="ai-gallery-info">
+        <div class="ai-gallery-name">${model.fullName}</div>
+        <div class="ai-gallery-ctx">${model.provider} · ${model.context} context</div>
+        <div class="ai-gallery-stats">
+          <span class="ai-gallery-stat">资金 <strong>${stats.totalAssets.toFixed(2)}元</strong></span>
+          <span class="ai-gallery-stat">投注 <strong>${stats.betCount}次</strong></span>
+          <span class="ai-gallery-stat">胜率 <strong>${stats.winRate.toFixed(0)}%</strong></span>
+          <span class="ai-gallery-stat">参与 <strong>${stats.roundsParticipated}轮</strong></span>
+        </div>
+      </div>
+    </div>`;
+  }
+  html += `</div>`;
+  document.getElementById('ai-model-gallery').innerHTML = html;
+}
+
+function renderPurchaseGuide() {
+  const el = document.getElementById('purchase-content');
+  if (!el) return;
+
+  // Find latest round with bets
+  const round = AI_ROUNDS.find(r => r.status === 'active') || AI_ROUNDS[AI_ROUNDS.length - 1];
+  if (!round) { el.innerHTML = '<p>暂无轮次数据</p>'; return; }
+
+  // Collect bets per model, separate parlays and singles
+  const allParlays = [];
+  const allSingles = [];
+  const matchTimes = { M1:'6/12 03:00', M2:'6/12 10:00' }; // before 17:00 purchase window
+
+  for (const model of AI_MODELS) {
+    const pred = round.predictions[model.id];
+    if (!pred || !pred.bets) continue;
+    let curParlay = null;
+    for (const bet of pred.bets) {
+      if (bet['过关'] === '单关') {
+        allSingles.push({ model: model.name, modelId: model.id, modelColor: model.color, ...bet });
+      } else {
+        if (bet.amount > 0) {
+          curParlay = { model: model.name, modelId: model.id, modelColor: model.color, amount: bet.amount, guoguan: bet['过关'], legs: [bet] };
+          allParlays.push(curParlay);
+        } else if (curParlay) {
+          curParlay.legs.push(bet);
+        }
+      }
+    }
+  }
+
+  // Group singles by matchId+playType+pick
+  const singleGroups = {};
+  for (const s of allSingles) {
+    const key = s.matchId + '|' + s.playType + '|' + s.pick;
+    if (!singleGroups[key]) singleGroups[key] = { ...s, models: [], totalAmount: 0 };
+    singleGroups[key].models.push({ name: s.model, amount: s.amount, color: s.modelColor });
+    singleGroups[key].totalAmount += s.amount;
+  }
+  const singleList = Object.values(singleGroups);
+
+  // Check for timing problems
+  const hasProblem = (legs) => legs.some(l => matchTimes[l.matchId]);
+
+  const parlayProblems = allParlays.filter(p => hasProblem(p.legs));
+  const parlayOk = allParlays.filter(p => !hasProblem(p.legs));
+  const singleProblems = singleList.filter(s => matchTimes[s.matchId]);
+  const singleOk = singleList.filter(s => !matchTimes[s.matchId]);
+
+  const totalOk = parlayOk.reduce((s,p) => s+p.amount, 0) + singleOk.reduce((s,p) => s+p.totalAmount, 0);
+  const totalProb = parlayProblems.reduce((s,p) => s+p.amount, 0) + singleProblems.reduce((s,p) => s+p.totalAmount, 0);
+  const totalAll = totalOk + totalProb;
+  const ticketOk = parlayOk.length + singleOk.length;
+  const ticketProb = parlayProblems.length + singleProblems.length;
+
+  // Build clerk instruction string for a bet
+  const clerkSay = (legs, guoguan, playType, pick) => {
+    if (guoguan === '单关') {
+      return `单关，${legs[0].matchId} ${legs[0].match}，${legs[0].playType}选${legs[0].pick}`;
+    }
+    const parts = legs.map(l => `${l.matchId} ${l.match}选${l.pick}`).join(' 串 ');
+    return `${guoguan}，${parts}`;
+  };
+
+  // Render
+  let html = '';
+
+  // Summary cards
+  html += `<div class="pg-summary">
+    <div class="pg-stat-card"><div class="pg-stat-val">${round.title}</div><div class="pg-stat-lbl">${round.dateRange}</div></div>
+    <div class="pg-stat-card"><div class="pg-stat-val">${ticketOk}张</div><div class="pg-stat-lbl">可购买彩票</div></div>
+    <div class="pg-stat-card"><div class="pg-stat-val">${totalOk}元</div><div class="pg-stat-lbl">可购买金额</div></div>
+    ${ticketProb > 0 ? `<div class="pg-stat-card danger"><div class="pg-stat-val">${ticketProb}张</div><div class="pg-stat-lbl">⛔ 问题票（已开赛）</div></div>
+    <div class="pg-stat-card warn"><div class="pg-stat-val">${totalProb}元</div><div class="pg-stat-lbl">⚠️ 问题金额</div></div>` : ''}
+  </div>`;
+
+  let ticketNum = 0;
+
+  // Parlay tickets
+  if (parlayOk.length > 0) {
+    html += `<div class="pg-ticket-group"><div class="pg-group-title">🎯 过关票 <span class="pg-badge">${parlayOk.length}张 · ${parlayOk.reduce((s,p)=>s+p.amount,0)}元</span></div>`;
+    for (const p of parlayOk) {
+      ticketNum++;
+      const mult = p.amount / 2;
+      const legsDesc = p.legs.map(l => `<strong>${l.matchId}</strong> ${l.match} → ${l.pick}@${l.odds}`).join(' ＋ ');
+      const say = clerkSay(p.legs, p.guoguan, '', '');
+      html += `<div class="pg-ticket">
+        <div class="pg-ticket-num">${ticketNum}</div>
+        <div class="pg-ticket-body">
+          <div class="pg-ticket-models"><span style="border-left:3px solid ${p.modelColor}">${p.model}</span></div>
+          <div class="pg-ticket-matches">${legsDesc}</div>
+          <div class="pg-ticket-detail">${p.guoguan} · 过关赔率 ${p.legs.reduce((a,l)=>a*l.odds,1).toFixed(3)}</div>
+          <div class="pg-ticket-say">💬 "${say}，${mult}倍"</div>
+        </div>
+        <div class="pg-ticket-amount">
+          <div class="pg-ticket-amt-val">${p.amount}元</div>
+          <div class="pg-ticket-mult">${mult}倍</div>
+        </div>
+      </div>`;
+    }
+    html += `</div>`;
+  }
+
+  // Single tickets
+  if (singleOk.length > 0) {
+    html += `<div class="pg-ticket-group"><div class="pg-group-title">🎲 单关票（已合并同选项） <span class="pg-badge">${singleOk.length}张 · ${singleOk.reduce((s,p)=>s+p.totalAmount,0)}元</span></div>`;
+    for (const s of singleOk) {
+      ticketNum++;
+      const mult = s.totalAmount / 2;
+      const modelsHtml = s.models.map(m => `<span style="border-left:3px solid ${m.color}">${m.name} ${m.amount}元</span>`).join('');
+      const say = clerkSay([{ matchId: s.matchId, match: s.match, playType: s.playType, pick: s.pick }], '单关', s.playType, s.pick);
+      html += `<div class="pg-ticket">
+        <div class="pg-ticket-num">${ticketNum}</div>
+        <div class="pg-ticket-body">
+          <div class="pg-ticket-models">${modelsHtml}</div>
+          <div class="pg-ticket-matches"><strong>${s.matchId}</strong> ${s.match} → ${s.pick}@${s.odds}</div>
+          <div class="pg-ticket-detail">${s.playType} · 单关</div>
+          <div class="pg-ticket-say">💬 "${say}，${mult}倍"</div>
+        </div>
+        <div class="pg-ticket-amount">
+          <div class="pg-ticket-amt-val">${s.totalAmount}元</div>
+          <div class="pg-ticket-mult">${mult}倍</div>
+        </div>
+      </div>`;
+    }
+    html += `</div>`;
+  }
+
+  // Problem tickets
+  const allProblems = [...parlayProblems, ...singleProblems];
+  if (allProblems.length > 0) {
+    html += `<div class="pg-ticket-group"><div class="pg-group-title" style="color:var(--red);border-color:#fca5a5;">⛔ 问题票（比赛早于购彩时间） <span class="pg-badge" style="background:var(--red);">${allProblems.length}张 · ${totalProb}元</span></div>`;
+    for (const p of parlayProblems) {
+      ticketNum++;
+      const mult = p.amount / 2;
+      const legsDesc = p.legs.map(l => {
+        const flag = matchTimes[l.matchId] ? ' ⛔' : '';
+        return `<strong>${l.matchId}</strong>${flag} ${l.match} → ${l.pick}@${l.odds}`;
+      }).join(' ＋ ');
+      html += `<div class="pg-ticket problem">
+        <div class="pg-ticket-num">${ticketNum}</div>
+        <div class="pg-ticket-body">
+          <div class="pg-ticket-models"><span style="border-left:3px solid ${p.modelColor}">${p.model}</span></div>
+          <div class="pg-ticket-matches">${legsDesc}</div>
+          <div class="pg-ticket-detail">⛔ 含已开赛比赛，无法购买</div>
+          <div class="pg-ticket-say">💬 跳过此票 或 联系该模型替换方案</div>
+        </div>
+        <div class="pg-ticket-amount">
+          <div class="pg-ticket-amt-val">${p.amount}元</div>
+          <div class="pg-ticket-mult">⛔</div>
+        </div>
+      </div>`;
+    }
+    for (const s of singleProblems) {
+      ticketNum++;
+      const mult = s.totalAmount / 2;
+      const modelsHtml = s.models.map(m => `<span style="border-left:3px solid ${m.color}">${m.name} ${m.amount}元</span>`).join('');
+      html += `<div class="pg-ticket problem">
+        <div class="pg-ticket-num">${ticketNum}</div>
+        <div class="pg-ticket-body">
+          <div class="pg-ticket-models">${modelsHtml}</div>
+          <div class="pg-ticket-matches"><strong>${s.matchId}</strong> ⛔ ${s.match} → ${s.pick}@${s.odds}</div>
+          <div class="pg-ticket-detail">⛔ ${matchTimes[s.matchId]} 开赛，早于购彩时间</div>
+          <div class="pg-ticket-say">💬 跳过此票 或 联系该模型替换方案</div>
+        </div>
+        <div class="pg-ticket-amount">
+          <div class="pg-ticket-amt-val">${s.totalAmount}元</div>
+          <div class="pg-ticket-mult">⛔</div>
+        </div>
+      </div>`;
+    }
+    html += `</div>`;
+  }
+
+  // Post-match instructions
+  html += `<div class="pg-instructions">
+    <h3>🔄 赛后兑换与数据更新</h3>
+    <ol>
+      <li>每场比赛踢完后，打开本页面 <strong>"🔄 逐轮分析"</strong> tab，查看各模型投注结果</li>
+      <li>编辑 <code>世界杯预测.html</code> 中 <code>AI_ROUNDS</code> 数组，找到对应 <code>matchId</code> 的条目</li>
+      <li>更新三个字段：<code>actualScore</code>（实际比分）、<code>result</code>（<code>'win'</code> 或 <code>'loss'</code>）、<code>prize</code>（彩票票面奖金）</li>
+      <li><strong>过关票</strong>：两腿全中 → <code>result: 'win'</code>，任一脚不中 → 整张 <code>result: 'loss'</code>。<code>prize</code> 写在 <code>amount > 0</code> 的条目上</li>
+      <li><strong>单关合并票</strong>：奖金按各模型投注金额比例分配，分别更新到各模型的对应条目</li>
+      <li>保存文件 → 刷新网页 → 排行榜自动重算</li>
+    </ol>
+  </div>`;
+
+  el.innerHTML = html;
+}
+
+function aiRenderAll() {
+  aiRenderLeaderboard();
+  aiRenderProgress();
+  aiRenderRoundNav();
+  aiRenderGallery();
+  renderPurchaseGuide();
+}
+
+aiRenderAll();
+</script>
+
+</body>
+</html>
